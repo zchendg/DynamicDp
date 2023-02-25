@@ -1,16 +1,23 @@
-import math
-
 import numpy as np
 import pandas as pd
 import sys
 import json
+import logging
 from mbi import Domain
 from approximation_instance import ApproximationInstance
 from node import Node
 from ipp import IPP
 from current_df import CurrentDf
 from query import Query
+from datetime import datetime
 
+time_format = "%Y-%b-%d_%H-%M-%S"
+# Initialize the logger
+logging_file_name = './log/' + datetime.now().strftime(time_format) + '.log'
+logging.basicConfig(filename=logging_file_name, format='[%(asctime)s][%(levelname)s] - %(message)s',
+                    datefmt="%m/%d/%Y %H:%M:%S %p", level=logging.INFO)
+logger = logging.getLogger()
+logger.info('************ Initialization ************')
 # pd.set_option('display.max_columns', 1000)
 pd.set_option('display.max_rows', 1000)
 
@@ -91,13 +98,13 @@ def query_nodes(node_list, index):
 
 
 # This function unit the query's answer on nodes
-def answer_queries(nodes, cur_index, queries, member, epsilon, delta=0):
+def answer_queries(nodes, node_list, cur_index, queries, member, epsilon, delta=0):
     epsilon_budge = {node: 6 * epsilon / (np.square(np.pi * (node.height + 1))) for node in nodes}
     delta_budge = {node: 6 * delta / (np.square(np.pi * (node.height + 1))) for node in nodes}
     answer = [0] * len(queries)
     answer_ground_truth = [0] * len(queries)
     for node in nodes:
-        queries_answer, queries_answer_ground_truth = answer_node_queries(node, nodes, cur_index, queries, member,
+        queries_answer, queries_answer_ground_truth = answer_node_queries(node, node_list, cur_index, queries, member,
                                                                           epsilon_budge, delta_budge)
         answer = np.array(answer) + np.array(queries_answer)
         answer_ground_truth = np.array(answer_ground_truth) + np.array(queries_answer_ground_truth)
@@ -127,7 +134,8 @@ def answer_node_queries(node, node_list, cur_index, queries, member, epsilon, de
                 D_v_answer_ground_truth += [len(query(node_df))]
         elif node.index < index <= cur_index:
             # Currently, I omit the restart procedure for simplicity
-            delete_df = pd.concat(delete_df, node_list[index].delete_df).drop_duplicates(keep=False)
+            # print("node_list length: ", len(node_list), " index: ", index)
+            delete_df = pd.concat([delete_df, node_list[index].delete_df]).drop_duplicates(keep=False)
     # deleted_df refers to the contents of the database stored
     # in the current node remaining at time T after deletion
     deleted_df = pd.merge(delete_df, node.df)
@@ -142,16 +150,23 @@ def answer_node_queries(node, node_list, cur_index, queries, member, epsilon, de
 
 
 def testing(node_list, ipp_instance, column_number=5, each_query_size=100, epsilon=1, delta=0):
-    print('Testing start')
+    # print('Testing start')
     query_instance = Query(config, column_number, each_query_size)
     # for each time stamp, we make some query test on it.
     for index in range(1, len(ipp_instance.get_segment()) - 1):
         querynodes = query_nodes(node_list[0: index + 1], index)
+        querynodes.reverse()
+        logger.info('At node with index %d, we implement queries on cliques:' % index % query_instance.queries.keys())
+        logger.info('Each clique consists of %d queries' % each_query_size)
         print('At node with index %d, we implement the testing:' % index)
+        for i in range(len(querynodes)):
+            print(querynodes[i])
         for member in query_instance.queries.keys():
-            answer, answer_ground_truth = answer_queries(querynodes, index, query_instance.queries[member], member,
+            answer, answer_ground_truth = answer_queries(querynodes, node_list, index, query_instance.queries[member],
+                                                         member,
                                                          epsilon, delta)
             mse = ((np.array(answer) - np.array(answer_ground_truth)) ** 2).mean()
+            logger.info('Testing on %s' % member, "Mean Square Error: %s" % mse)
             print("Testing on %s" % member, "Mean Square Error: %s" % mse)
 
 
@@ -160,10 +175,9 @@ def testing(node_list, ipp_instance, column_number=5, each_query_size=100, epsil
 # We should suppose all the entries is not duplicated, then we can use the difference
 # between left ancestor and current df
 def main(argv):
-    # Store the node list for the tree
     node_list = [Node(0, config.keys())]
     ipp_instance = IPP(df, 5, 0.05)
-    print('ipp_instance:', ipp_instance)
+    # print('ipp_instance:', ipp_instance)
     # For t in range(UPPERBOUND): When the segment is updated, we need to create a new node
     # Create a dataframe to store the data currently in the set
     cur_df = CurrentDf(config.keys())
@@ -194,14 +208,15 @@ def main(argv):
         # For linear query, we need to keep track of the deletion time of the item
         cur_df.current_df_update(df.iloc[[t]], t)
         cur_deletion_df.add_deletion_item(df.iloc[[t]], t)
-    print(node_list[1:])
-    # print(ipp_instance.get_segment())
+    logger.info('The dynamic interval tree consists of nodes: %d' % node_list[1:])
+    logger.info('Infinite Private Partitioning: %d' % ipp_instance)
+    logger.info('************ Testing Started ************')
     testing(node_list, ipp_instance, 5, 10)
-    print('Testing finished')
+    logger.info('************ Testing Finished ************')
 
 
 if __name__ == '__main__':
-    domain = "/Users/chenzijun/Library/CloudStorage/OneDrive-HKUSTConnect/Study/Program/DP/data/adult-domain.json"
+    domain = "./data/adult-domain.json"
     config = json.load(open(domain))
     domain = Domain(config.keys(), config.values())
     df = pd.read_csv('data/adult.csv', sep=',')
@@ -209,7 +224,7 @@ if __name__ == '__main__':
     df = df.iloc[0:100]
     df = sparse_data(df, 1, 10)
     df = insert_deletion_data(df, False)
-    # print(df)
+    logger.info('Data information: %d' % config)
     UPPERBOUND = len(df)
     main(sys.argv)
     # Data-structure has been constructed, following is the query performance estimation
