@@ -6,7 +6,7 @@ from ipp import IPP
 
 
 print("-- Starting @ %ss" % datetime.datetime.now())
-df = pd.read_csv('/Users/chenzijun/Library/CloudStorage/OneDrive-HKUSTConnect/Study/Program/DP/simple DP dataset.csv', sep=',')
+df = pd.read_csv('/data/simple DP dataset.csv', sep=',')
 # print(df.head(20))
 
 # BC = BasicCounting(df)

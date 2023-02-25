@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from scipy import sparse
 
-data = Dataset.load('/Users/chenzijun/Library/CloudStorage/OneDrive-HKUSTConnect/Study/Program/DP/bb_dataset.csv',
+data = Dataset.load('/data/bb_dataset.csv',
                     '/Users/chenzijun/Library/CloudStorage/OneDrive-HKUSTConnect/Study/Program/DP/bb_example.json')
 domain = data.domain
 total = data.df.shape[0]

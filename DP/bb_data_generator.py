@@ -40,6 +40,6 @@ df = pd.DataFrame(cond_list, columns=['x', 'y1', 'y2'])
 df.drop_duplicates()
 print(df.info())
 bb_example_s = {'x': 3, 'y1': UNIVERSE, 'y2': UNIVERSE}
-with open("/Users/chenzijun/Library/CloudStorage/OneDrive-HKUSTConnect/Study/Program/DP/bb_example.json", "w") as f:
+with open("/data/bb_example.json", "w") as f:
     json.dump(bb_example_s, f)
 df.to_csv("/Users/chenzijun/Library/CloudStorage/OneDrive-HKUSTConnect/Study/Program/DP/bb_dataset.csv", index=False)

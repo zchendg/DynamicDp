@@ -3,6 +3,7 @@ import pandas as pd
 import sys
 import json
 import logging
+import os
 from mbi import Domain
 from approximation_instance import ApproximationInstance
 from node import Node
@@ -11,19 +12,22 @@ from current_df import CurrentDf
 from query import Query
 from datetime import datetime
 
-time_format = "%Y-%b-%d_%H-%M-%S"
-# Initialize the logger
-logging_file_name = './log/' + datetime.now().strftime(time_format) + '.log'
-logging.basicConfig(filename=logging_file_name, format='[%(asctime)s][%(levelname)s] - %(message)s',
-                    datefmt="%m/%d/%Y %H:%M:%S %p", level=logging.INFO)
-logger = logging.getLogger()
-logger.info('************ Initialization ************')
 # pd.set_option('display.max_columns', 1000)
 pd.set_option('display.max_rows', 1000)
-
-
 # pd.set_option('display.width', 1000)
 # pd.set_option('display.max_colwidth', 1000)
+
+if 1:
+    if not os.path.exists('./log'):
+        os.mkdir('./log')
+    time_format = "%Y-%b-%d_%H-%M-%S"
+    logging_file_name = './log/' + datetime.now().strftime(time_format) + '.log'
+    logging.basicConfig(filename=logging_file_name,
+                        format='[%(asctime)s][%(levelname)s] - %(message)s',
+                        datefmt="%m/%d/%Y %H:%M:%S %p",
+                        level=logging.INFO)
+    logging.info("Arguments: ")
+
 
 def find_far_left_ancestor_index(index, height):
     if index / (2 ** height) % 4 == 1:
@@ -149,15 +153,16 @@ def answer_node_queries(node, node_list, cur_index, queries, member, epsilon, de
     return answer, answer_ground_truth
 
 
-def testing(node_list, ipp_instance, column_number=5, each_query_size=100, epsilon=1, delta=0):
+def testing(node_list, ipp_instance, column_number=1, each_query_size=100, epsilon=1, delta=0):
     # print('Testing start')
     query_instance = Query(config, column_number, each_query_size)
     # for each time stamp, we make some query test on it.
     for index in range(1, len(ipp_instance.get_segment()) - 1):
         querynodes = query_nodes(node_list[0: index + 1], index)
         querynodes.reverse()
-        logger.info('At node with index %d, we implement queries on cliques:' % index % query_instance.queries.keys())
-        logger.info('Each clique consists of %d queries' % each_query_size)
+        logging.info(
+            'At node with index %d, we implement queries on cliques %s:' % (index, query_instance.queries.keys()))
+        logging.info('Each clique consists of %d queries' % each_query_size)
         print('At node with index %d, we implement the testing:' % index)
         for i in range(len(querynodes)):
             print(querynodes[i])
@@ -166,7 +171,7 @@ def testing(node_list, ipp_instance, column_number=5, each_query_size=100, epsil
                                                          member,
                                                          epsilon, delta)
             mse = ((np.array(answer) - np.array(answer_ground_truth)) ** 2).mean()
-            logger.info('Testing on %s' % member, "Mean Square Error: %s" % mse)
+            logging.info('Testing on %s' % member, "Mean Square Error: %s" % mse)
             print("Testing on %s" % member, "Mean Square Error: %s" % mse)
 
 
@@ -174,7 +179,9 @@ def testing(node_list, ipp_instance, column_number=5, each_query_size=100, epsil
 # and each inserted data is deleted at some time node in the future
 # We should suppose all the entries is not duplicated, then we can use the difference
 # between left ancestor and current df
-def main(argv):
+def main():
+    print('************ Initialization ************')
+    logging.info('************ Initialization ************')
     node_list = [Node(0, config.keys())]
     ipp_instance = IPP(df, 5, 0.05)
     # print('ipp_instance:', ipp_instance)
@@ -208,25 +215,27 @@ def main(argv):
         # For linear query, we need to keep track of the deletion time of the item
         cur_df.current_df_update(df.iloc[[t]], t)
         cur_deletion_df.add_deletion_item(df.iloc[[t]], t)
-    logger.info('The dynamic interval tree consists of nodes: %d' % node_list[1:])
-    logger.info('Infinite Private Partitioning: %d' % ipp_instance)
-    logger.info('************ Testing Started ************')
+    logging.info('The dynamic interval tree consists of nodes: %s' % node_list[1:])
+    logging.info('Infinite Private Partitioning: %s' % ipp_instance)
+    print('************ Testing Started ************')
+    logging.info('************ Testing Started ************')
     testing(node_list, ipp_instance, 5, 10)
-    logger.info('************ Testing Finished ************')
+    print('************ Testing Finished ************')
+    logging.info('************ Testing Finished ************')
 
 
 if __name__ == '__main__':
     domain = "./data/adult-domain.json"
     config = json.load(open(domain))
     domain = Domain(config.keys(), config.values())
-    df = pd.read_csv('data/adult.csv', sep=',')
+    df = pd.read_csv('./data/adult.csv', sep=',')
     df_title = df.columns
-    df = df.iloc[0:100]
-    df = sparse_data(df, 1, 10)
+    df = df.iloc[0:1]
+    df = sparse_data(df, 1, 1)
     df = insert_deletion_data(df, False)
-    logger.info('Data information: %d' % config)
+    logging.info('Data information: %s' % config)
     UPPERBOUND = len(df)
-    main(sys.argv)
+    main()
     # Data-structure has been constructed, following is the query performance estimation
     # Outline:
     # 1. Generate queries list
