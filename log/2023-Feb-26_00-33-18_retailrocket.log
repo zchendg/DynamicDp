@@ -1,2 +1,0 @@
-[02/26/2023 00:33:18 AM][INFO] - Arguments: Namespace(batch_size=100, dataset='retailrocket', epoch=30, fast_mode=False, l2=1e-05, lr=0.001, lr_dc=0.1, lr_dc_step=3, n_hid=100, n_layers=1, seed=None, top_k=20, train_fraction=1, use_cpu=False, use_cuda=False, valid_portion=0.1)
-[02/26/2023 00:33:18 AM][INFO] - ************ Initialization ************
