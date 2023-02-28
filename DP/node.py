@@ -4,10 +4,12 @@ import math
 
 
 class Node:
-    def __init__(self, index, keys):
+    def __init__(self, index, keys, sj=1):
         self.df = pd.DataFrame(columns=keys)
         self.delete_df = pd.DataFrame(columns=keys)
         self.index = index
+        # self.sj refers to the end location of t when the node has been created
+        self.sj = sj
         self.height = 0
         temp_index = index
         # Get the height
@@ -47,7 +49,6 @@ class Node:
             self.delete_df = pd.concat([self.delete_df, items], ignore_index=True)
 
     def add_item(self, item):
-        print('the adding item is:', item)
         self.df.loc[(len(self.df))] = item
         # self.df = self.df.append(item, ignore_index=True)
 
