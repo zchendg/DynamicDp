@@ -74,6 +74,7 @@ class Dynamic_Tree:
     def answer_node_queries(self, node, cur_index, queries, member, epsilon=1, delta=0, beta=0.05, iteration=500):
         # Initiate new object delete_df to store the data in the deletion-only problem
         global widetilde_n_v
+        global D_v
         delete_df = pd.DataFrame(columns=self.config.keys())
         # These variables store the query answer for the approximated dataset
         D_v_answer = []
@@ -83,38 +84,45 @@ class Dynamic_Tree:
         D_sj_answer_golden_standard = []
         for index in range(cur_index + 1):
             if index == node.index:
-                node_df = node.df
+                D_v = node.df
                 r = 1
                 epsilon_r, delta_r = 3 * epsilon[node] / (2 * np.square(np.pi * r)), 2 * delta[node] / (
                         2 * np.square(np.pi * r))
-                widetilde_n_v = len(node_df) + np.random.laplace(loc=0, scale=1 / epsilon_r)
-                approximation_instance = ApproximationInstance(node_df, self.domain, 1, [member], 'Data', iteration)
+                widetilde_n_v = len(D_v) + np.random.laplace(loc=0, scale=1 / epsilon_r)
+                approximation_instance = ApproximationInstance(D_v, self.domain, epsilon_r, [member], 'Data', iteration)
                 for query in queries:
                     D_v_answer += [len(query(approximation_instance.approximated_data.df))]
-                    # D_v_answer_golden_standard += [len(query(node_df))]
+                    # D_v_answer_golden_standard += [len(query(D_v))]
             elif node.index < index <= cur_index:
                 # Currently, I omit the restart procedure for simplicity
-                delete_df = pd.merge(self.node_list[index].delete_df, node_df)
-                node_df = pd.concat([node_df, delete_df, delete_df]).drop_duplicates(keep=False)
+                delete_df = pd.merge(pd.concat([delete_df, self.node_list[index].delete_df]).drop_duplicates(keep=False), D_v)
                 widetilde_n_del = len(delete_df)
+                # The error bound of MBC at time sj
                 alpha_BC_sj = (1/epsilon) * (np.log2(self.node_list[index].sj) ** 1.5) * np.log2(1/beta)
                 if widetilde_n_del > (widetilde_n_v / 2 + 2 * alpha_BC_sj):
+                    # Remove all augmented items from D(v)
+                    D_v = pd.concat([D_v, delete_df, delete_df]).drop_duplicates(keep=False)
                     r = r + 1
                     epsilon_r, delta_r = 3 * epsilon[node] / (2 * np.square(np.pi * r)), 2 * delta[node] / (
                             2 * np.square(np.pi * r))
-                    widetilde_n_v = len(node_df) + np.random.laplace(loc=0, scale=1 / epsilon_r)
-                #     Remains to write Run(epsilon_r, delta_r)-DP M(D(v)) to release Q(D(v))
-                else:
+                    widetilde_n_v = len(D_v) + np.random.laplace(loc=0, scale=1 / epsilon_r)
+                    # Run(epsilon_r, delta_r)-DP M(D(v)) to release Q(D(v))
+                    approximation_instance = ApproximationInstance(D_v, self.domain, epsilon_r, [member], 'Data', iteration)
+                    # Re-publish the query answer for D_v
+                    D_v_answer = []
+                    for query in queries:
+                        D_v_answer += [len(query(approximation_instance.approximated_data.df))]
+                    # When this condition happens, we all the Q(D_t(v)) will return 0, hence just
+                    if widetilde_n_v < (2 * alpha_BC_sj):
+                        answer = np.array(D_v_answer)
+                        return answer
+                elif index == cur_index:
+                    approximation_instance_delete = ApproximationInstance(delete_df, self.domain, epsilon_r, [member], 'Data', iteration)
+                    for query in queries:
+                        D_sj_answer += [len(query(approximation_instance_delete.approximated_data))]
+                    answer = np.array(D_v_answer) - np.array(D_sj_answer)
+                    return answer
                 # print("node_list length: ", len(node_list), " index: ", index)
-                delete_df = pd.concat([delete_df, self.node_list[index].delete_df]).drop_duplicates(keep=False)
-        deleted_df = pd.concat([node_df, delete_df, delete_df]).drop_duplicates(keep=False)
-        approximation_instance_delete = ApproximationInstance(deleted_df, self.domain, 1, [member], 'Data', iteration)
-        for query in queries:
-            D_sj_answer += [len(query(approximation_instance_delete.approximated_data))]
-            D_sj_answer_golden_standard += [len(query(deleted_df))]
-        answer = np.array(D_v_answer) - np.array(D_sj_answer)
-        answer_golden_standard = np.array(D_v_answer_golden_standard) - np.array(D_sj_answer_golden_standard)
-        return answer, answer_golden_standard
     # Maybe the golden standard should only be computed with in the timestamp?... Which means I
     # need to implement a functionality to compute the golden standard rather than mix this version.
     # But if the result is not good, we can compute the golden standard by summing the result in different
@@ -122,9 +130,18 @@ class Dynamic_Tree:
     # Tomorrow you should complete the full version with re-start
 
     def answer_queries_golden_standard(self, nodes, cur_index, queries, member, epsilon=1, delta=0, iteration=500):
+        Dv_list = []
         for node in nodes:
-            delete_df = pd.DataFrame(columns=self.config.keys())
+            Dv = pd.DataFrame(columns=self.config.keys())
             for index in range(cur_index + 1):
                 if index == node.index:
-                    node_df = node.df
-
+                    Dv = node.df
+                elif node.index < index <= cur_index:
+                    Dv = pd.concate([D_v, self.node_list[index].delete_df, self.node_list[index].delete_df]).drop_duplicate(keep=False)
+            Dv_list += [Dv]
+        Dataset = pd.DataFrame(Dv_list).drop_duplicates(keep=False)
+        approximate_instance_golden_standard = ApproximationInstance(Dataset, self.domain, epsilon, [member], 'Data', iteration)
+        answer_golden_standard = []
+        for query in queries:
+            answer_golden_standard += [len(query(approximate_instance_golden_standard.approximated_data))]
+        return answer_golden_standard
