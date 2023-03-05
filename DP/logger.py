@@ -2,35 +2,25 @@ import os
 import logging
 from datetime import datetime
 
+if not os.path.exists('./log'):
+    os.mkdir('./log')
+time_format = "%Y-b-%d_%H-%M-%S"
 
 if 1:
-    if not os.path.exists('./log'):
-        os.mkdir('./log')
-    time_format = "%Y-%b-%d_%H-%M-%S"
+    # Command line arguments parser
+
     # Initialize the logger
     logging_file_name = './log/' + datetime.now().strftime(time_format) + '.log'
-    logging.basicConfig(filename=logging_file_name,
-                        format='[%(asctime)s][%(levelname)s] - %(message)s',
-                        datefmt="%m/%d/%Y %H:%M:%S %p",
-                        level=logging.INFO)
-
-    # logging.info("Arguments: ")
+    logging.basicConfig(filename=logging_file_name, datefmt="%m/%d/%Y %H:%M:%S %p", level=logging.INFO)
+    logger = logging.getLogger()
+    logger.info('Arguments: test 1')
+    # ------------------------------------------------------------------
 
 
 def main():
-    logging.debug('This is debug message')
-    logging.info('This is info message')
-    logging.warning('This is warning message')
-    print('success')
-    return
+    logger.info('finished')
+    return -1
 
 
 if __name__ == '__main__':
-    # time_format = "%Y-%b-%d_%H-%M-%S"
-    # logging_file_name = './log/' + datetime.now().strftime(time_format) + '.log'
-    # logging.basicConfig(filename=logging_file_name,
-    #                     format='[%(asctime)s][%(levelname)s] - %(message)s',
-    #                     datefmt="%m/%d/%Y %H:%M:%S %p",
-    #                     level=logging.INFO,
-    #                     filemode='w')
     main()

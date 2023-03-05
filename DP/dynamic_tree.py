@@ -36,7 +36,7 @@ class Dynamic_Tree:
 
     def create_node(self):
         # Create a node at the end of the tree in the sequential time order
-        self.node_list.append(Node(len(self.node_list)), self.config.keys())
+        self.node_list.append(Node(len(self.node_list), self.config.keys()))
 
     def df_after_closest_left_ancestor(self, index, current_df):
         set_diff_df = current_df.data
@@ -46,19 +46,20 @@ class Dynamic_Tree:
 
     def create_leftmost_node(self, cur_data, delete_data):
         self.create_node()
-        self.node_list[-1].add_items(cur_data)
-        self.node_list[-1].add_items(delete_data, delete_df=True)
+        self.node_list[-1].add_items(cur_data.data)
+        self.node_list[-1].add_items(delete_data.data, delete_df=True)
 
     def create_internal_node(self, cur_data, delete_data):
         self.create_node()
-        diff_df = self.df_after_closest_left_ancestor(self.node_list, len(self.node_list) - 1, cur_data)
+        print('length of node_list: ', len(self.node_list))
+        diff_df = self.df_after_closest_left_ancestor(len(self.node_list) - 1, cur_data)
         self.node_list[-1].add_items(diff_df)
-        self.node_list[-1].add_items(delete_data, delete_data==True)
+        self.node_list[-1].add_items(delete_data.data, delete_df=True)
 
     # Below is the function serves to queries
     def query_nodes(self, index):
         nodes = [self.node_list[index]]
-        if is_two_power(len(self.node_list) - 1):
+        if is_two_power(index):
             return nodes
         else:
             return nodes + self.query_nodes(
@@ -70,7 +71,7 @@ class Dynamic_Tree:
         query_instance = Query(self.config, column_number, each_query_size)
         for index in range(1, len(ipp_instance.get_segment()) - 1):
             query_nodes = self.query_nodes(index)
-            query_nodes.reserve()
+            query_nodes.reverse()
             logger.info(
                 'At node with index %d, we implement queries on cliques %s:' % (index, query_instance.queries.keys()))
             logger.info('Each lique consists of %d queries' % each_query_size)
@@ -88,9 +89,11 @@ class Dynamic_Tree:
         delta_budge = {node: 6 * delta / (np.square(np.pi * (node.height + 1))) for node in nodes}
         answer = [0] * len(queries)
         for node in nodes:
-            queries_answer, queries_answer_golden_standard = self.answer_node_queries(node, cur_index, queries, member,
-                                                                                      epsilon_budge[node],
-                                                                                      delta_budge[node], iteration)
+            queries_answer = self.answer_node_queries(node, cur_index, queries, member,
+                                                      epsilon_budge[node],
+                                                      delta_budge[node], iteration)
+            print('answer\n', answer)
+            print('queries_answer\n', queries_answer)
             answer = np.array(answer) + np.array(queries_answer)
         return answer
 
@@ -102,20 +105,18 @@ class Dynamic_Tree:
         # These variables store the query answer for the approximated dataset
         D_v_answer = []
         D_sj_answer = []
-        # These variables store the query answer for the ground truth
-        D_v_answer_golden_standard = []
-        D_sj_answer_golden_standard = []
+        answer = []
         for index in range(cur_index + 1):
             if index == node.index:
                 D_v = node.df
                 r = 1
-                epsilon_r, delta_r = 3 * epsilon[node] / (2 * np.square(np.pi * r)), 2 * delta[node] / (
+                epsilon_r, delta_r = 3 * epsilon / (2 * np.square(np.pi * r)), 2 * delta / (
                         2 * np.square(np.pi * r))
                 widetilde_n_v = len(D_v) + np.random.laplace(loc=0, scale=1 / epsilon_r)
                 approximation_instance = ApproximationInstance(D_v, self.domain, epsilon_r, [member], 'Data', iteration)
                 for query in queries:
                     D_v_answer += [len(query(approximation_instance.approximated_data.df))]
-                    # D_v_answer_golden_standard += [len(query(D_v))]
+                    answer = D_v_answer
             elif node.index < index <= cur_index:
                 # Currently, I omit the restart procedure for simplicity
                 delete_df = pd.merge(
@@ -127,7 +128,7 @@ class Dynamic_Tree:
                     # Remove all augmented items from D(v)
                     D_v = pd.concat([D_v, delete_df, delete_df]).drop_duplicates(keep=False)
                     r = r + 1
-                    epsilon_r, delta_r = 3 * epsilon[node] / (2 * np.square(np.pi * r)), 2 * delta[node] / (
+                    epsilon_r, delta_r = 3 * epsilon / (2 * np.square(np.pi * r)), 2 * delta / (
                             2 * np.square(np.pi * r))
                     widetilde_n_v = len(D_v) + np.random.laplace(loc=0, scale=1 / epsilon_r)
                     # Run(epsilon_r, delta_r)-DP M(D(v)) to release Q(D(v))
@@ -145,10 +146,11 @@ class Dynamic_Tree:
                     approximation_instance_delete = ApproximationInstance(delete_df, self.domain, epsilon_r, [member],
                                                                           'Data', iteration)
                     for query in queries:
-                        D_sj_answer += [len(query(approximation_instance_delete.approximated_data))]
+                        D_sj_answer += [len(query(approximation_instance_delete.approximated_data.df))]
                     answer = np.array(D_v_answer) - np.array(D_sj_answer)
                     return answer
                 # print("node_list length: ", len(node_list), " index: ", index)
+        return answer
 
     # But if the result is not good, we can compute the golden standard by summing the result in different
     # node up
@@ -162,19 +164,19 @@ class Dynamic_Tree:
                 if index == node.index:
                     Dv = node.df
                 elif node.index < index <= cur_index:
-                    Dv = pd.concate(
-                        [D_v, self.node_list[index].delete_df, self.node_list[index].delete_df]).drop_duplicate(
+                    Dv = pd.concat(
+                        [D_v, self.node_list[index].delete_df, self.node_list[index].delete_df]).drop_duplicates(
                         keep=False)
             Dv_list += [Dv]
-        Dataset = pd.DataFrame(Dv_list).drop_duplicates(keep=False)
+        Dataset = pd.concat(Dv_list).drop_duplicates(keep=False)
         approximate_instance_golden_standard = ApproximationInstance(Dataset, self.domain, epsilon, [member], 'Data',
                                                                      iteration)
         answer_golden_standard = []
         for query in queries:
-            answer_golden_standard += [len(query(approximate_instance_golden_standard.approximated_data))]
+            answer_golden_standard += [len(query(approximate_instance_golden_standard.approximated_data.df))]
         return answer_golden_standard
 
-    def compare_results(self, answer, answer_golden_standard, measurement='Distance'):
+    def compare_results(self, answer, answer_golden_standard, measurement=1):
         # Parameter: measurement:
         # measurement=1: give the average of the difference divides the golden_standard
         # measurement=2: give the mean difference between the queries
