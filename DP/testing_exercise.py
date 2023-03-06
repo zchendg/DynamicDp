@@ -5,22 +5,7 @@ from approximation_instance import ApproximationInstance
 from mbi import Domain, Dataset
 from query import Query
 from catboost.datasets import adult
-
-# adult = pd.read_csv('adult.csv')
-# adult_pii = adult[['age', "workclass", "fnlwgt", 'education-num']]
-# karries_row = adult_pii[adult_pii['age']==23, adult_pii['workclass']==5, adult_pii['fnlwgt']==4, adult_pii['education-num']==12]
-# result = pd.merge(adult, karries_row, left_on=['age', 'workclass', 'fnlwgt', 'education-num'], right_on=['age', 'workclass', 'fnlwgt', 'education-num'], how = "inner")
-# # print(adult.head(1))
-# result
-
-
-# path = '/Users/chenzijun/Library/CloudStorage/OneDrive-HKUSTConnect/Study/Program/DP/bb_dataset.csv'
-# df = pd.read_csv(path)
-# df = df.iloc[0:100]
-# domain = "/Users/chenzijun/Library/CloudStorage/OneDrive-HKUSTConnect/Study/Program/DP/bb_example.json"
-# config = json.load(open(domain))
-# domain = Domain(config.keys(), config.values())
-# instance = ApproximationInstance(df, domain, 1, ['y1'], 'Data')
+from my_logger import Logger
 
 domain = "/Users/chenzijun/Library/CloudStorage/OneDrive-HKUSTConnect/Study/Program/DP/data/adult-domain.json"
 config = json.load(open(domain))

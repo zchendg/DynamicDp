@@ -6,26 +6,7 @@ from approximation_instance import ApproximationInstance
 from mbi import Domain
 
 
-def find_far_left_ancestor_index(index, height):
-    if index / (2 ** height) % 4 == 1:
-        return find_far_left_ancestor_index(index + 2 ** height, height + 1)
-    elif index / (2 ** height) % 4 == 3:
-        return index - 2 ** height
-
-
-def is_two_power(n):
-    if n == 1:
-        return True
-    res = 1
-    while res < n:
-        res = res << 1
-    if res == n:
-        return True
-    else:
-        return False
-
-
-class Dynamic_Tree:
+class DynamicTree:
     def __init__(self, config):
         self.node_list = [Node(0, config.keys())]
         self.config = config
@@ -51,19 +32,35 @@ class Dynamic_Tree:
 
     def create_internal_node(self, cur_data, delete_data):
         self.create_node()
-        print('length of node_list: ', len(self.node_list))
         diff_df = self.df_after_closest_left_ancestor(len(self.node_list) - 1, cur_data)
         self.node_list[-1].add_items(diff_df)
         self.node_list[-1].add_items(delete_data.data, delete_df=True)
 
+    def find_far_left_ancestor_index(self, index, height):
+        if index / (2 ** height) % 4 == 1:
+            return self.find_far_left_ancestor_index(index + 2 ** height, height + 1)
+        elif index / (2 ** height) % 4 == 3:
+            return index - 2 ** height
+
+    def is_two_power(self, n):
+        if n == 1:
+            return True
+        res = 1
+        while res < n:
+            res = res << 1
+        if res == n:
+            return True
+        else:
+            return False
+
     # Below is the function serves to queries
     def query_nodes(self, index):
         nodes = [self.node_list[index]]
-        if is_two_power(index):
+        if self.is_two_power(index):
             return nodes
         else:
             return nodes + self.query_nodes(
-                find_far_left_ancestor_index(self.node_list[index].index, self.node_list[index].height))
+                self.find_far_left_ancestor_index(self.node_list[index].index, self.node_list[index].height))
 
     # Implement testing function in the data structure
     def testing(self, ipp_instance, column_number=1, each_query_size=100, epsilon=1, delta=0, iteration=500,
@@ -74,7 +71,7 @@ class Dynamic_Tree:
             query_nodes.reverse()
             logger.info(
                 'At node with index %d, we implement queries on cliques %s:' % (index, query_instance.queries.keys()))
-            logger.info('Each lique consists of %d queries' % each_query_size)
+            logger.info('Each clique consists of %d queries' % each_query_size)
             for member in query_instance.queries.keys():
                 answer = self.answer_queries(query_nodes, index, query_instance.queries[member], member, epsilon, delta,
                                              iteration)
@@ -82,7 +79,12 @@ class Dynamic_Tree:
                                                                              query_instance.queries[member], member,
                                                                              epsilon, delta, iteration)
                 mse = ((np.array(answer) - np.array(answer_golden_standard)) ** 2).mean()
-                logger.info('Testing on %s' % member, "Mean Square Error: %s" % mse)
+                logger.info('The testing is implemented at %s' % member)
+                logger.info('Our mechanism gives answer: \n' + str(answer))
+                logger.info('Static mechanism gives answer (golden standard): \n' + str(answer_golden_standard))
+                logger.info("Mean Square Error: %s" % mse)
+                logger.info('Measurement1: ' + str(self.compare_results(answer, answer_golden_standard, measurement=1)))
+                logger.info('Measurement2: ' + str(self.compare_results(answer, answer_golden_standard, measurement=2)))
 
     def answer_queries(self, nodes, cur_index, queries, member, epsilon=1, delta=0, iteration=500):
         epsilon_budge = {node: 6 * epsilon / (np.square(np.pi * (node.height + 1))) for node in nodes}
@@ -92,8 +94,6 @@ class Dynamic_Tree:
             queries_answer = self.answer_node_queries(node, cur_index, queries, member,
                                                       epsilon_budge[node],
                                                       delta_budge[node], iteration)
-            print('answer\n', answer)
-            print('queries_answer\n', queries_answer)
             answer = np.array(answer) + np.array(queries_answer)
         return answer
 
@@ -149,7 +149,6 @@ class Dynamic_Tree:
                         D_sj_answer += [len(query(approximation_instance_delete.approximated_data.df))]
                     answer = np.array(D_v_answer) - np.array(D_sj_answer)
                     return answer
-                # print("node_list length: ", len(node_list), " index: ", index)
         return answer
 
     # But if the result is not good, we can compute the golden standard by summing the result in different
@@ -174,7 +173,7 @@ class Dynamic_Tree:
         answer_golden_standard = []
         for query in queries:
             answer_golden_standard += [len(query(approximate_instance_golden_standard.approximated_data.df))]
-        return answer_golden_standard
+        return np.array(answer_golden_standard)
 
     def compare_results(self, answer, answer_golden_standard, measurement=1):
         # Parameter: measurement:

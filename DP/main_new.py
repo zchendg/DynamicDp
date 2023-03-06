@@ -1,14 +1,19 @@
-import numpy as np
+import sys
+
 import pandas as pd
 import json
 import logging
 import os
 import argparse
 import auxiliary
-from dynamic_tree import Dynamic_Tree
+import time
+from tqdm import tqdm
+from tqdm._tqdm import trange
+from dynamic_tree import DynamicTree
 from ipp import IPP
 from current_df import CurrentDf
 from datetime import datetime
+from my_logger import Logger
 
 if not os.path.exists('./log'):
     os.mkdir('./log')
@@ -21,28 +26,27 @@ if 1:
     # General configuration
     parser.add_argument('--dataset_path', type=str, default='./data/adult.csv')
     parser.add_argument('--domain_path', type=str, default='./data/adult-domain.json')
-    parser.add_argument('--data_size', type=int, default=100)
+    parser.add_argument('--data_size', type=int, default=10000)
     parser.add_argument('--sparse_ratio', type=int, default=10, help='The ratio between the Nan data and meaningful '
                                                                      'data')
-    parser.add_argument('--epsilon', type=float, default=1)
+    parser.add_argument('--epsilon', type=float, default=0.1)
     parser.add_argument('--delta', type=float, default=0.1)
     parser.add_argument('--beta', type=float, default=0.05)
-    parser.add_argument('--iteration', type=int, default=500)
+    parser.add_argument('--iteration', type=int, default=2500)
 
     # Command line arguments parser
     print('******** Parsing Parameter********')
     args = parser.parse_args()
 
     # Initialize the logger
-    logging_file_name = './log/' + datetime.now().strftime(time_format) + '.log'
-    logging.basicConfig(filename=logging_file_name, format='[%(asctime)s][%(levelname)s] - %(message)s',
-                        datefmt="%m/%d/%Y %H:%M:%S %p", level=logging.INFO)
-    logger = logging.getLogger()
+    logger_file_name = './log/' + datetime.now().strftime(time_format) + '.log'
+    logger = Logger(logger_file_name, sys.stdout)
     logger.info('Arguments: ' + str(args))
     # ------------------------------------------------------------------
 
 
 def main():
+
     # ---- Initialization Section --------
     print('******** Initialization ********')
     logger.info('******** Initialization ********')
@@ -55,7 +59,7 @@ def main():
     logger.info('Data information: %s' % config)
 
     # ---- Construction Section --------
-    dynamic_tree = Dynamic_Tree(config)
+    dynamic_tree = DynamicTree(config)
     ipp_instance = IPP(data, args.epsilon, args.beta)
     # Dataframe that stores the current dataset
     cur_data = CurrentDf(config.keys())
@@ -64,7 +68,7 @@ def main():
     # ---- Establish Dynamic Tree --------
     print('******** Create Dynamic Tree ********')
     logger.info('******** Create Dynamic Tree ********')
-    for t in range(UPPERBOUND):
+    for t in trange(UPPERBOUND):
         ipp_instance.update_segment(t)
         if t == len(data) - 1:
             cur_data.current_df_update(data.iloc[[t]], t)
@@ -80,7 +84,6 @@ def main():
                 dynamic_tree.create_leftmost_node(cur_data, cur_deletion_data)
                 cur_deletion_data.renew()
             else:
-                print('length of segment:', len(ipp_instance.get_segment()))
                 dynamic_tree.create_internal_node(cur_data, cur_deletion_data)
                 cur_deletion_data.renew()
         # For linear query, we need to keep track of the deletion time of the item

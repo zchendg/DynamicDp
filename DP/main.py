@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import sys
 import json
-import logging
+import my_logging
 import os
 from mbi import Domain
 from approximation_instance import ApproximationInstance

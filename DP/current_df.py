@@ -18,7 +18,6 @@ class CurrentDf:
     def delete_item(self, item):
         cur_item = item.drop(columns=['update'])
         self.data = pd.concat([self.data, cur_item, cur_item]).drop_duplicates(keep=False)
-        # self.data.drop(self.data[self.data['y'] == item.y].index, inplace=True)
 
     # This function only serves to cur_deletion_df
     def add_deletion_item(self, item, index):
