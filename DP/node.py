@@ -72,9 +72,9 @@ class Node:
         return self.left_child
 
     def __repr__(self):
-        return 'Node index: %s, height: %s, ' \
+        return '\nNode index: %s, height: %s, ' \
                'right_ancestor_index: %s, left_ancestor_index: %s, ' \
-               'right_child: %s, left_child: %s \n, df: %s, \n' % (self.index,
+               'right_child: %s, left_child: %s, \n df: %s\n' % (self.index,
                                                                    self.height, self.right_ancestor_index,
                                                                    self.left_ancestor_index, self.right_child,
                                                                    self.left_child, self.df)

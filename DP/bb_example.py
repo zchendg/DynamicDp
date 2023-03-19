@@ -3,8 +3,8 @@ import numpy as np
 import pandas as pd
 from scipy import sparse
 
-data = Dataset.load('/data/bb_dataset.csv',
-                    '/Users/chenzijun/Library/CloudStorage/OneDrive-HKUSTConnect/Study/Program/DP/bb_example.json')
+data = Dataset.load('/Users/chenzijun/Library/CloudStorage/OneDrive-HKUSTConnect/Study/Program/DP/data/bb_dataset.csv',
+                    '/Users/chenzijun/Library/CloudStorage/OneDrive-HKUSTConnect/Study/Program/DP/data/bb_example.json')
 domain = data.domain
 total = data.df.shape[0]
 
@@ -24,4 +24,4 @@ Iy1 = np.eye(y1.size)
 measurements = [(Iy1, yy1, sigma, ['y1'])]
 engine = FactoredInference(domain)
 model = engine.estimate(measurements, engine='MD')
-print('model:\n', model.synthetic_data(rows=200).df)
+print('model:\n', model.synthetic_data().df)

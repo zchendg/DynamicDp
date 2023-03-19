@@ -40,5 +40,5 @@ class IPP:
         return self.segment
 
     def __repr__(self):
-        return 's0: %s, j: %s, T: %s, beta: %s, C: %s, epsilon: %s' % (
-            self.s_0, self.j, self.T, self.beta, self.C, self.epsilon)
+        return 's0: %s, j: %s, T: %s, beta: %s, C: %s, epsilon: %s, \n segment: %s' % (
+            self.s_0, self.j, self.T, self.beta, self.C, self.epsilon, self.segment)

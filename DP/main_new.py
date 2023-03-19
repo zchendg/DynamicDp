@@ -26,13 +26,13 @@ if 1:
     # General configuration
     parser.add_argument('--dataset_path', type=str, default='./data/adult.csv')
     parser.add_argument('--domain_path', type=str, default='./data/adult-domain.json')
-    parser.add_argument('--data_size', type=int, default=10000)
+    parser.add_argument('--data_size', type=int, default=100)
     parser.add_argument('--sparse_ratio', type=int, default=10, help='The ratio between the Nan data and meaningful '
                                                                      'data')
     parser.add_argument('--epsilon', type=float, default=0.1)
     parser.add_argument('--delta', type=float, default=0.1)
     parser.add_argument('--beta', type=float, default=0.05)
-    parser.add_argument('--iteration', type=int, default=2500)
+    parser.add_argument('--iteration', type=int, default=500)
 
     # Command line arguments parser
     print('******** Parsing Parameter********')
@@ -54,13 +54,15 @@ def main():
     data = pd.read_csv(args.dataset_path, sep=',').iloc[0:args.data_size]
     data = auxiliary.sparse_data(data, 1, 10)
     data = auxiliary.insert_deletion_data(data, False)
+    logger.info('Data sparsification complete')
     config = json.load(open(args.domain_path))
     UPPERBOUND = len(data)
     logger.info('Data information: %s' % config)
 
     # ---- Construction Section --------
     dynamic_tree = DynamicTree(config)
-    ipp_instance = IPP(data, args.epsilon, args.beta)
+    ipp_instance = IPP(data, 0.1, args.beta)
+    # ipp_instance = IPP(data, args.epsilon, args.beta)
     # Dataframe that stores the current dataset
     cur_data = CurrentDf(config.keys())
     cur_deletion_data = CurrentDf(config.keys())
@@ -90,10 +92,13 @@ def main():
         cur_data.current_df_update(data.iloc[[t]], t)
         cur_deletion_data.add_deletion_item(data.iloc[[t]], t)
     logger.info('The dynamic interval tree consists of nodes: %s' % dynamic_tree.node_list[1:])
-    logger.info('InfinitePrivate Partitioning: %s' % ipp_instance)
+    logger.info('Infinite Private Partitioning: %s' % ipp_instance)
     print('******** Testing Started ********')
     logger.info('******** Testing Started ********')
-    dynamic_tree.testing(ipp_instance, logger=logger)
+    # Modification
+    dynamic_tree.node_list[4].df = pd.read_csv(args.dataset_path, sep=',').iloc[0:10000]
+    # Modification
+    dynamic_tree.testing_index(4, epsilon=args.epsilon, iteration=args.iteration, logger=logger)
     print('******** Testing Finished ********')
     logger.info('******** Testing Finished ********')
     return -1

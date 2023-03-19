@@ -12,12 +12,12 @@ class ApproximationInstance:
             self.data = Dataset(df, domain)
         self.domain = self.data.domain
         self.total = self.data.df.shape[0]
-        self.approximated_data = self.estimate_data_distribution(epsilon, cliques, iters)
+        self.approximated_data, self.model = self.estimate_data_distribution(epsilon, cliques, iters)
 
     def estimate_data_distribution(self, epsilon, cliques, iters=2500):
         # Need to know what is the differential budget for this algorithm
-        epsilon_budget = epsilon / (len(self.data.domain))
-        sigma = 1 / epsilon_budget
+        epsilon
+        sigma = np.sqrt(2) / epsilon
         measurements = []
         for cl in cliques:
             x = self.data.project(cl).datavector()
@@ -27,4 +27,4 @@ class ApproximationInstance:
         engine = FactoredInference(self.domain, log=True, iters=iters)
         # model = engine.estimate(measurements, total=self.total)
         model = engine.estimate(measurements, total=self.total+1)
-        return model.synthetic_data()
+        return model.synthetic_data(), model
