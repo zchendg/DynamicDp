@@ -3,7 +3,7 @@ import pandas as pd
 
 
 class BasicCounting:
-    def __init__(self, epsilon=0, delta=0):
+    def __init__(self, epsilon=1, delta=0):
         self.queries = []
         self.epsilon = epsilon
         self.delta = delta

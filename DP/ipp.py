@@ -22,9 +22,8 @@ class IPP:
         self.segment = [0]
 
     def update_segment(self, t):
-        # self.df 
         # here the query is just counting query for the number
-        queries = [BasicCounting().create_query()]
+        queries = [BasicCounting(self.epsilon).create_query()]
         # query asks |{sj-1 + 1 <= i <= t: xi not void}|
         cur_df = self.df[self.segment[self.j - 1] + 1: t + 1]
         output = self.SVT.above_threshold(queries, cur_df, self.C, self.epsilon)
