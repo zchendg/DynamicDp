@@ -96,10 +96,10 @@ def main():
     print('******** Testing Started ********')
     logger.info('******** Testing Started ********')
     # Modification
-    dynamic_tree.node_list[4].df = pd.read_csv(args.dataset_path, sep=',').iloc[0:10000]
+    # dynamic_tree.node_list[4].df = pd.read_csv(args.dataset_path, sep=',').iloc[0:10000]
     # Modification
-    # dynamic_tree.testing_index(4, epsilon=args.epsilon, iteration=args.iteration, logger=logger)
-    dynamic_tree.testing(ipp_instance, 1, 10, args.epsilon, args.delta, args.beta, args.iteration, logger)
+    dynamic_tree.testing_index(3, epsilon=args.epsilon, iteration=args.iteration, logger=logger)
+    # dynamic_tree.testing(ipp_instance, 1, 10, args.epsilon, args.delta, args.beta, args.iteration, logger)
     print('******** Testing Finished ********')
     logger.info('******** Testing Finished ********')
     return -1

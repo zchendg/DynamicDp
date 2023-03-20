@@ -121,6 +121,7 @@ class DynamicTree:
         Dv_list = []
         for node in nodes:
             Dv = pd.DataFrame(columns=self.config.keys())
+            delete_df = pd.DataFrame(columns=self.config.keys())
             for index in range(cur_index + 1):
                 if index == node.index:
                     Dv = node.df
@@ -144,6 +145,7 @@ class DynamicTree:
         Dv_list = []
         for node in nodes:
             Dv = pd.DataFrame(columns=self.config.keys())
+            delete_df = pd.DataFrame(columns=self.config.keys())
             for index in range(cur_index + 1):
                 if index == node.index:
                     Dv = node.df
@@ -187,6 +189,7 @@ class DynamicTree:
 
     def answer_node_queries_mechanism(self, node, cur_index, queries, member, epsilon=1, delta=0, beta=0.05,
                                       iteration=500, logger=None):
+        logger.info('-------- New Mechanism answer node query on node %s starts --------' % node.index)
         # Initiate delete_df to store the data in the deletion-only problem
         tilde_n_v = 0
         Dv = pd.DataFrame(columns=self.config.keys())
@@ -201,10 +204,19 @@ class DynamicTree:
                 r = 1
                 logger.info('Mechanism: \n%s' % Dv)
                 # Epsilon_r might be modified, as the number of restarts is fixed
+                if len(Dv) == 0:
+                    Dv_answer = [0] * len(queries)
+                    answer_mechanism = Dv_answer
+                    continue
+                elif len(Dv) == 1:
+                    for query in queries:
+                        Dv_answer = [len(query(Dv))]
+                        answer_mechanism = Dv_answer
+                        continue
                 epsilon_r = max(3 * epsilon / (2 * np.square(np.pi * r)), epsilon / np.log2(len(Dv)))
                 delta_r = max(2 * delta / (np.square(np.pi * r)), delta / np.log2(len(Dv)))
                 tilde_n_v = len(Dv) + np.random.laplace(loc=0, scale=1 / epsilon_r)
-                logger.info('Mechanism: epsilon during the algorithm %d' % epsilon_r)
+                logger.info('Mechanism: epsilon during the algorithm %f' % epsilon_r)
                 approximation_instance = ApproximationInstance(Dv, self.domain, epsilon_r, [member], 'Data', iteration)
                 for query in queries:
                     Dv_answer += [len(query(approximation_instance.approximated_data.df))]
@@ -241,6 +253,7 @@ class DynamicTree:
                         D_sj_answer += [len(query(approximation_instance_delete.approximated_data.df))]
                     answer_mechanism = np.array(Dv_answer) - np.array(D_sj_answer)
                     return np.array(answer_mechanism)
+        logger.info('-------- New Mechanism answer node query on node %s finished --------' % node.index)
         return np.array(answer_mechanism)
 
     def compare_results(self, answer1, answer2, measurement=1):
