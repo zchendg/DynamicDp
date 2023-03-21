@@ -61,7 +61,7 @@ def main():
 
     # ---- Construction Section --------
     dynamic_tree = DynamicTree(config)
-    ipp_instance = IPP(data, 0.1, args.beta)
+    ipp_instance = IPP(data, args.epsilon, args.beta)
     # ipp_instance = IPP(data, args.epsilon, args.beta)
     # Dataframe that stores the current dataset
     cur_data = CurrentDf(config.keys())
@@ -72,8 +72,9 @@ def main():
     logger.info('******** Create Dynamic Tree ********')
     for t in trange(UPPERBOUND):
         ipp_instance.update_segment(t)
-        if t == len(data) - 1:
+        if t == (UPPERBOUND - 1):
             cur_data.current_df_update(data.iloc[[t]], t)
+            cur_deletion_data.add_deletion_item(data.iloc[[t]], t)
             ipp_instance.segment.append(t)
         if ipp_instance.segment[-1] == t:
             # First, create a new node, store the data in the new node
@@ -83,10 +84,10 @@ def main():
                 cur_data.current_df_update(data.iloc[[t]], t)
                 continue
             elif auxiliary.is_two_power(len(ipp_instance.get_segment()) - 1):
-                dynamic_tree.create_leftmost_node(cur_data, cur_deletion_data)
+                dynamic_tree.create_leftmost_node(cur_data, cur_deletion_data, t)
                 cur_deletion_data.renew()
             else:
-                dynamic_tree.create_internal_node(cur_data, cur_deletion_data)
+                dynamic_tree.create_internal_node(cur_data, cur_deletion_data, t)
                 cur_deletion_data.renew()
         # For linear query, we need to keep track of the deletion time of the item
         cur_data.current_df_update(data.iloc[[t]], t)
@@ -98,8 +99,8 @@ def main():
     # Modification
     # dynamic_tree.node_list[4].df = pd.read_csv(args.dataset_path, sep=',').iloc[0:10000]
     # Modification
-    dynamic_tree.testing_index(3, epsilon=args.epsilon, iteration=args.iteration, logger=logger)
-    # dynamic_tree.testing(ipp_instance, 1, 10, args.epsilon, args.delta, args.beta, args.iteration, logger)
+    # dynamic_tree.testing_index(3, epsilon=args.epsilon, iteration=args.iteration, logger=logger)
+    dynamic_tree.testing(ipp_instance, 1, 100, args.epsilon, args.delta, args.beta, args.iteration, logger)
     print('******** Testing Finished ********')
     logger.info('******** Testing Finished ********')
     return -1

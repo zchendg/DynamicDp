@@ -16,16 +16,17 @@ def is_two_power(n):
     else:
         return False
 
+
 def sparse_data(data, frac=1, sparse_ratio=100):
     start = time.perf_counter()
     print('-------- Sparse data process starts --------')
     empty_data = pd.DataFrame(columns=data.columns, index=[i for i in range(sparse_ratio * len(data))])
     shuffle_data = pd.concat([data, empty_data]).sample(frac=frac).reset_index(drop=True)
     end = time.perf_counter()
-    print('dataset \n%s' % shuffle_data)
     print('Sparse time cost: %d' % (start - end))
     print('-------- Sparse data process ends ---------')
     return shuffle_data
+
 
 def sparse_data_new(data, sparse_ratio=100, shuffle=True):
     start = time.perf_counter()
@@ -35,6 +36,7 @@ def sparse_data_new(data, sparse_ratio=100, shuffle=True):
         row_index = np.random.randint(index, len(sparse_data))
     end = time.perf_counter()
     print('Sparse time costs: %d' % (start - end))
+
 
 def insert_deletion_data_original(data, concentrate=True):
     start = time.perf_counter()
@@ -66,6 +68,7 @@ def insert_deletion_data_original(data, concentrate=True):
     print('Insert deletion data costs: %d' % (start - end))
     return data
 
+
 def insert_deletion_data(data, concentrate=True):
     start = time.perf_counter()
     print('-------- Insert deletion data process starts ---------')
@@ -91,8 +94,11 @@ def insert_deletion_data(data, concentrate=True):
                 deletion_row = data.loc[i:i].copy()
                 deletion_row.loc[i, 'update'] = -1
                 # print('row_index %d' % row_index)
-                while (not pd.isnull(data.loc[row_index, 'update'])) and row_index < length:
-                    row_index += 1
+                while row_index < length:
+                    if pd.isnull(data.loc[row_index, 'update']):
+                        break
+                    else:
+                        row_index += 1
                 data.loc[row_index] = deletion_row.iloc[0]
         data.reset_index(drop=True)
     print('data: \n%s' % data)

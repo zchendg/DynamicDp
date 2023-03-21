@@ -4,7 +4,7 @@ import random
 class Query:
     def __init__(self, config, column_number=5, query_size=10):
         # self.clique = random.sample(config.keys(), column_number)
-        self.clique = ['age']
+        self.clique = ['workclass']
         self.config = config
         self.parameters = self.generate_query_parameters(query_size)
         self.queries = self.create_queries(query_size)

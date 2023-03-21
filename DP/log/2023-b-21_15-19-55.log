@@ -1,0 +1,5 @@
+[2023-03-21 15:19:55] - Arguments: Namespace(beta=0.05, data_size=5, dataset_path='./data/adult.csv', delta=0.1, domain_path='./data/adult-domain.json', epsilon=100.0, iteration=1500, sparse_ratio=10)
+[2023-03-21 15:19:55] - ******** Initialization ********
+[2023-03-21 15:19:55] - Data sparsification complete
+[2023-03-21 15:19:55] - Data information: {'age': 85, 'workclass': 9, 'fnlwgt': 100, 'education-num': 16, 'marital-status': 7, 'occupation': 15, 'relationship': 6, 'race': 5, 'sex': 2, 'capital-gain': 100, 'capital-loss': 100, 'hours-per-week': 99, 'native-country': 42, 'income>50K': 2}
+[2023-03-21 15:19:55] - ******** Create Dynamic Tree ********

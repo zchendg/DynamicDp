@@ -9,16 +9,16 @@ from basic_counting import BasicCounting
 
 class DynamicTree:
     def __init__(self, config):
-        self.node_list = [Node(0, config.keys())]
+        self.node_list = [Node(0, config.keys(), 0)]
         self.config = config
         self.domain = Domain(config.keys(), config.values())
 
     def insert_item(self, index, item):
         self.node_list[index - 1].add_item(item)
 
-    def create_node(self):
+    def create_node(self, sj):
         # Create a node at the end of the tree in the sequential time order
-        self.node_list.append(Node(len(self.node_list), self.config.keys()))
+        self.node_list.append(Node(len(self.node_list), self.config.keys(), sj))
 
     def df_after_closest_left_ancestor(self, index, current_df):
         set_diff_df = current_df.data
@@ -26,13 +26,13 @@ class DynamicTree:
             set_diff_df = pd.concat([set_diff_df, node.df, node.df]).drop_duplicates(keep=False)
         return set_diff_df
 
-    def create_leftmost_node(self, cur_data, delete_data):
-        self.create_node()
+    def create_leftmost_node(self, cur_data, delete_data, sj):
+        self.create_node(sj)
         self.node_list[-1].add_items(cur_data.data)
         self.node_list[-1].add_items(delete_data.data, delete_df=True)
 
-    def create_internal_node(self, cur_data, delete_data):
-        self.create_node()
+    def create_internal_node(self, cur_data, delete_data, sj):
+        self.create_node(sj)
         diff_df = self.df_after_closest_left_ancestor(len(self.node_list) - 1, cur_data)
         self.node_list[-1].add_items(diff_df)
         self.node_list[-1].add_items(delete_data.data, delete_df=True)
@@ -67,9 +67,9 @@ class DynamicTree:
     def testing(self, ipp_instance, column_number=1, each_query_size=10, epsilon=1, delta=0, beta=0.05, iteration=500,
                 logger=None):
         for index in range(1, len(ipp_instance.get_segment()) - 1):
-            logger.info('-------- Testing on node %d Started --------' % index)
+            logger.info('++++++++ Testing on node %d Started ++++++++' % index)
             self.testing_index(index, column_number, each_query_size, epsilon, delta, beta, iteration, logger)
-            logger.info('-------- Testing on node %d Finished --------' % index)
+            logger.info('++++++++ Testing on node %d Finished ++++++++' % index)
 
     # Implement testing for at particular position, this function
     def testing_index(self, index, column_number=1, each_query_size=100, epsilon=1, delta=0, beta=0.05, iteration=500,
@@ -100,10 +100,24 @@ class DynamicTree:
                 "Mean Square Error of ground truth and mechanism: %s" % self.mse(answer_ground_truth, answer_mechanism))
             logger.info("Mean Square Error of golden standard and mechanism: %s" % self.mse(answer_golden_standard,
                                                                                             answer_mechanism))
-            logger.info('Measurement1: ' + str(
+            logger.info('Measurement1: ground_truth and golden_standard\n' + str(
                 self.compare_results(answer_ground_truth, answer_golden_standard, measurement=1)))
-            logger.info('Measurement2: ' + str(
+            logger.info('Measurement1: ground_truth and mechanism\n' + str(
+                self.compare_results(answer_ground_truth, answer_mechanism, measurement=1)))
+            logger.info('Measurement1: golden_standard and mechanism\n' + str(
+                self.compare_results(answer_golden_standard, answer_mechanism, measurement=1)))
+            logger.info('Measurement2: ground_truth and golden_standard\n' + str(
                 self.compare_results(answer_ground_truth, answer_golden_standard, measurement=2)))
+            logger.info('Measurement2: ground_truth and mechanism\n' + str(
+                self.compare_results(answer_ground_truth, answer_mechanism, measurement=2)))
+            logger.info('Measurement2: golden_standard and mechanism\n' + str(
+                self.compare_results(answer_golden_standard, answer_mechanism, measurement=2)))
+            logger.info('Measurement3: ground_truth and golden_standard\n' + str(
+                self.compare_results(answer_ground_truth, answer_golden_standard, measurement=3)))
+            logger.info('Measurement3: ground_truth and mechanism\n' + str(
+                self.compare_results(answer_ground_truth, answer_mechanism, measurement=3)))
+            logger.info('Measurement3: golden_standard and mechanism\n' + str(
+                self.compare_results(answer_golden_standard, answer_mechanism, measurement=3)))
 
     def answer_queries(self, nodes, cur_index, queries, member, epsilon=1, delta=0, iteration=500):
         epsilon_budge = {node: 6 * epsilon / (np.square(np.pi * (node.height + 1))) for node in nodes}
@@ -125,6 +139,9 @@ class DynamicTree:
             for index in range(cur_index + 1):
                 if index == node.index:
                     Dv = node.df
+                    delete_df = pd.merge(
+                        pd.concat([delete_df, self.node_list[index].delete_df]).drop_duplicates(keep=False), Dv,
+                        how='inner')
                 elif node.index < index <= cur_index:
                     delete_df = pd.merge(
                         pd.concat([delete_df, self.node_list[index].delete_df]).drop_duplicates(keep=False), Dv,
@@ -136,7 +153,6 @@ class DynamicTree:
         answer_ground_truth = []
         for query in queries:
             answer_ground_truth += [len(query(Dataset_r))]
-        logger.info('Ground truth: gives answer: \n%s' % np.array(answer_ground_truth))
         return np.array(answer_ground_truth)
 
     # For golden standard, returns the queries' answer for golden standard (Approximated data)
@@ -149,6 +165,9 @@ class DynamicTree:
             for index in range(cur_index + 1):
                 if index == node.index:
                     Dv = node.df
+                    delete_df = pd.merge(
+                        pd.concat([delete_df, self.node_list[index].delete_df]).drop_duplicates(keep=False), Dv,
+                        how='inner')
                 elif node.index < index <= cur_index:
                     delete_df = pd.merge(
                         pd.concat([delete_df, self.node_list[index].delete_df]).drop_duplicates(keep=False), Dv,
@@ -171,7 +190,6 @@ class DynamicTree:
             # Modification
             answer_golden_standard += [len(query(approximate_instance.approximated_data.df))]
             # Modification
-        logger.info('Golden standard: gives answer: \n%s' % np.array(answer_golden_standard))
         return np.array(answer_golden_standard)
 
     # For new algorithm, returns the queries' answer for the new algorithm
@@ -181,7 +199,8 @@ class DynamicTree:
         delta_budget = {node: 6 * delta / (np.square(np.pi * (node.height + 1))) for node in nodes}
         answer_mechanism = [0] * len(queries)
         for node in nodes:
-            answer_mechanism_node = self.answer_node_queries_mechanism(node, cur_index, queries, member, epsilon_budget[node], delta_budget[node],
+            answer_mechanism_node = self.answer_node_queries_mechanism(node, cur_index, queries, member,
+                                                                       epsilon_budget[node], delta_budget[node],
                                                                        beta, iteration, logger)
             answer_mechanism = np.array(answer_mechanism) + np.array(answer_mechanism_node)
         logger.info('Mechanism: gives answer \n%s' % answer_mechanism)
@@ -200,19 +219,22 @@ class DynamicTree:
         answer_mechanism = []
         for index in range(cur_index + 1):
             if index == node.index:
+                logger.info('Testing on index %d, mechanism passed index %d' % (node.index, index))
                 Dv = node.df
+                delete_df = pd.merge(
+                    pd.concat([delete_df, self.node_list[index].delete_df]).drop_duplicates(keep=False), Dv,
+                    how='inner')
                 r = 1
-                logger.info('Mechanism: \n%s' % Dv)
-                # Epsilon_r might be modified, as the number of restarts is fixed
-                if len(Dv) == 0:
-                    Dv_answer = [0] * len(queries)
-                    answer_mechanism = Dv_answer
-                    continue
-                elif len(Dv) == 1:
+                if len(Dv) <= 1:
+                    epsilon_r = epsilon
+                    delta_r = delta
                     for query in queries:
-                        Dv_answer = [len(query(Dv))]
+                        Dv_answer += [len(query(Dv))]
                         answer_mechanism = Dv_answer
-                        continue
+                    # Initiate M_BC
+                    basic_counting_instance = BasicCounting(epsilon, delta_r, store_df=True, config=self.config)
+                    continue
+                # Epsilon_r might be modified, as the number of restarts is fixed
                 epsilon_r = max(3 * epsilon / (2 * np.square(np.pi * r)), epsilon / np.log2(len(Dv)))
                 delta_r = max(2 * delta / (np.square(np.pi * r)), delta / np.log2(len(Dv)))
                 tilde_n_v = len(Dv) + np.random.laplace(loc=0, scale=1 / epsilon_r)
@@ -221,17 +243,33 @@ class DynamicTree:
                 for query in queries:
                     Dv_answer += [len(query(approximation_instance.approximated_data.df))]
                     answer_mechanism = Dv_answer
+                # Initiate M_Ins
+                basic_counting_instance = BasicCounting(epsilon, delta_r, store_df=True, config=self.config)
             elif node.index < index <= cur_index:
+                logger.info('Testing on index %d, mechanism passed index %d' % (node.index, index))
                 delete_df = pd.merge(
                     pd.concat([delete_df, self.node_list[index].delete_df]).drop_duplicates(keep=False), Dv,
                     how='inner')
-                tilde_n_del = len(delete_df)
+                basic_counting_instance.update(pd.merge(self.node_list[index].delete_df, Dv, how='inner'))
+                tilde_n_del = basic_counting_instance.tilde_counter()
                 # The error bound of MBC at time sj
-                alpha_BC_sj = (1 / epsilon) * (np.log2(self.node_list[index].sj) ** 1.5) * np.log2(1 / beta)
+                alpha_BC_sj = basic_counting_instance.error_bound()
                 if tilde_n_del > (tilde_n_v / 2 + 2 * alpha_BC_sj):
+                    logger.info('Testing on index %d, mechanism passed index %d, the algorithm hit tilde_n_del > ('
+                                'tilde_n_v / 2 + 2 * alpha_BC_sj, with %f > (%f / 2 + 2 * %f)' % (node.index, index, tilde_n_del, tilde_n_v, alpha_BC_sj))
                     # Remove all augmented items from D(v)
                     Dv = pd.concat([Dv, delete_df, delete_df]).drop_duplicates(keep=False)
                     r = r + 1
+                    if len(Dv) <= 1:
+                        # epsilon_r and delta_r remains unchanged
+                        tilde_n_v = len(Dv) + np.random.laplace(loc=0, scale=1 / epsilon_r)
+                        approximation_instance = ApproximationInstance(Dv, self.domain, epsilon_r, [member], 'Data', iteration)
+                        Dv_answer = []
+                        for query in queries:
+                            Dv_answer += [len(approximation_instance.approximated_data.df)]
+                        if tilde_n_v < (2 * alpha_BC_sj):
+                            answer_mechanism = [0] * len(queries)
+                            break
                     epsilon_r = max(3 * epsilon / (2 * np.square(np.pi * r)), epsilon / np.log2(len(Dv)))
                     delta_r = max(2 * delta / (np.square(np.pi * r)), delta / np.log2(len(Dv)))
                     tilde_n_v = len(Dv) + np.random.laplace(loc=0, scale=1 / epsilon_r)
@@ -245,16 +283,19 @@ class DynamicTree:
                     # When this condition happens, we all the Q(D_t(v)) will return 0, hence just
                     if tilde_n_v < (2 * alpha_BC_sj):
                         answer_mechanism = np.array(Dv_answer)
-                        return np.array(answer_mechanism)
-                elif index == cur_index:
-                    approximation_instance_delete = ApproximationInstance(delete_df, self.domain, epsilon_r, [member],
-                                                                          'Data', iteration)
+                        break
+                else:
+                    logger.info('Testing on index %d, mechanism passed index %d, the algorithm does not hit '
+                                'tilde_n_del > (tilde_n_v / 2 + 2 * alpha_BC_sj' % (node.index, index))
+                    D_sj_answer = []
                     for query in queries:
-                        D_sj_answer += [len(query(approximation_instance_delete.approximated_data.df))]
+                        D_sj_answer += [len(query(delete_df))]
                     answer_mechanism = np.array(Dv_answer) - np.array(D_sj_answer)
-                    return np.array(answer_mechanism)
+                    if index == cur_index:
+                        break
         logger.info('-------- New Mechanism answer node query on node %s finished --------' % node.index)
         return np.array(answer_mechanism)
+
 
     def compare_results(self, answer1, answer2, measurement=1):
         # For golden standard, returns the queries' answer with pgm mechanism on single static dataset.
@@ -269,6 +310,9 @@ class DynamicTree:
             return np.mean(result)
         if measurement == 2:
             return (np.mean(m_answer1)) / np.mean(m_answer2)
+        if measurement == 3:
+            difference = np.absolute(np.array(m_answer1) - np.array(m_answer2))
+            return np.sum(difference) / np.sum(m_answer1)
         return -1
 
     def return_golden_standard(self, queries, dataset, approximate_instance=None, logger=None):

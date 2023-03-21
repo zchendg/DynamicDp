@@ -1,0 +1,141 @@
+[2023-03-21 15:22:45] - Arguments: Namespace(beta=0.05, data_size=5, dataset_path='./data/adult.csv', delta=0.1, domain_path='./data/adult-domain.json', epsilon=100.0, iteration=1500, sparse_ratio=10)
+[2023-03-21 15:22:45] - ******** Initialization ********
+[2023-03-21 15:22:45] - Data sparsification complete
+[2023-03-21 15:22:45] - Data information: {'age': 85, 'workclass': 9, 'fnlwgt': 100, 'education-num': 16, 'marital-status': 7, 'occupation': 15, 'relationship': 6, 'race': 5, 'sex': 2, 'capital-gain': 100, 'capital-loss': 100, 'hours-per-week': 99, 'native-country': 42, 'income>50K': 2}
+[2023-03-21 15:22:45] - ******** Create Dynamic Tree ********
+[2023-03-21 15:22:46] - The dynamic interval tree consists of nodes: [
+-------- Node index: 1 --------
+height: 0, sj: 2, right_ancestor_index: 2, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 0, delete_df size: 0
+df: Empty DataFrame
+Columns: [age, workclass, fnlwgt, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income>50K]
+Index: [], 
+delete_df: Empty DataFrame
+Columns: [age, workclass, fnlwgt, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income>50K]
+Index: []-----------------------------------, 
+-------- Node index: 2 --------
+height: 1, sj: 4, right_ancestor_index: 4, left_ancestor_index: None, right_child: 3, left_child: 1, 
+df size: 0, delete_df size: 0
+df: Empty DataFrame
+Columns: [age, workclass, fnlwgt, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income>50K]
+Index: [], 
+delete_df: Empty DataFrame
+Columns: [age, workclass, fnlwgt, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income>50K]
+Index: []-----------------------------------, 
+-------- Node index: 3 --------
+height: 0, sj: 6, right_ancestor_index: None, left_ancestor_index: 2, right_child: None, left_child: None, 
+df size: 0, delete_df size: 0
+df: Empty DataFrame
+Columns: [age, workclass, fnlwgt, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income>50K]
+Index: [], 
+delete_df: Empty DataFrame
+Columns: [age, workclass, fnlwgt, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income>50K]
+Index: []-----------------------------------, 
+-------- Node index: 4 --------
+height: 2, sj: 9, right_ancestor_index: 8, left_ancestor_index: None, right_child: 6, left_child: 2, 
+df size: 1, delete_df size: 0
+df:   age workclass fnlwgt education-num marital-status occupation relationship race sex capital-gain capital-loss hours-per-week native-country income>50K
+0  22         0     13             8              1          6            3    0   1            0            0             39              0          0, 
+delete_df: Empty DataFrame
+Columns: [age, workclass, fnlwgt, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income>50K]
+Index: []-----------------------------------, 
+-------- Node index: 5 --------
+height: 0, sj: 12, right_ancestor_index: 6, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 0, delete_df size: 0
+df: Empty DataFrame
+Columns: [age, workclass, fnlwgt, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income>50K]
+Index: [], 
+delete_df: Empty DataFrame
+Columns: [age, workclass, fnlwgt, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income>50K]
+Index: []-----------------------------------, 
+-------- Node index: 6 --------
+height: 1, sj: 15, right_ancestor_index: None, left_ancestor_index: 4, right_child: 7, left_child: 5, 
+df size: 0, delete_df size: 0
+df: Empty DataFrame
+Columns: [age, workclass, fnlwgt, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income>50K]
+Index: [], 
+delete_df: Empty DataFrame
+Columns: [age, workclass, fnlwgt, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income>50K]
+Index: []-----------------------------------, 
+-------- Node index: 7 --------
+height: 0, sj: 18, right_ancestor_index: None, left_ancestor_index: 6, right_child: None, left_child: None, 
+df size: 0, delete_df size: 0
+df: Empty DataFrame
+Columns: [age, workclass, fnlwgt, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income>50K]
+Index: [], 
+delete_df: Empty DataFrame
+Columns: [age, workclass, fnlwgt, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income>50K]
+Index: []-----------------------------------, 
+-------- Node index: 8 --------
+height: 3, sj: 22, right_ancestor_index: 16, left_ancestor_index: None, right_child: 12, left_child: 4, 
+df size: 1, delete_df size: 0
+df:   age workclass fnlwgt education-num marital-status occupation relationship race sex capital-gain capital-loss hours-per-week native-country income>50K
+0  22         0     13             8              1          6            3    0   1            0            0             39              0          0, 
+delete_df: Empty DataFrame
+Columns: [age, workclass, fnlwgt, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income>50K]
+Index: []-----------------------------------, 
+-------- Node index: 9 --------
+height: 0, sj: 26, right_ancestor_index: 10, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 2, delete_df size: 0
+df:   age workclass fnlwgt education-num marital-status occupation relationship race sex capital-gain capital-loss hours-per-week native-country income>50K
+0  12         0     22            12              0          5            0    4   0            0            0             39             12          0
+1  37         0     15             6              0          6            2    4   1            0            0             39              0          0, 
+delete_df: Empty DataFrame
+Columns: [age, workclass, fnlwgt, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income>50K]
+Index: []-----------------------------------, 
+-------- Node index: 10 --------
+height: 1, sj: 31, right_ancestor_index: 12, left_ancestor_index: None, right_child: 11, left_child: 9, 
+df size: 2, delete_df size: 2
+df:   age workclass fnlwgt education-num marital-status occupation relationship race sex capital-gain capital-loss hours-per-week native-country income>50K
+0  12         0     22            12              0          5            0    4   0            0            0             39             12          0
+1  34         1      4            12              0          4            2    0   1            0            0             12              0          0, 
+delete_df:   age workclass fnlwgt education-num marital-status occupation relationship race sex capital-gain capital-loss hours-per-week native-country income>50K
+0  22         0     13             8              1          6            3    0   1            0            0             39              0          0
+1  37         0     15             6              0          6            2    4   1            0            0             39              0          0-----------------------------------, 
+-------- Node index: 11 --------
+height: 0, sj: 36, right_ancestor_index: None, left_ancestor_index: 10, right_child: None, left_child: None, 
+df size: 0, delete_df size: 1
+df: Empty DataFrame
+Columns: [age, workclass, fnlwgt, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income>50K]
+Index: [], 
+delete_df:   age workclass fnlwgt education-num marital-status occupation relationship race sex capital-gain capital-loss hours-per-week native-country income>50K
+0  12         0     22            12              0          5            0    4   0            0            0             39             12          0-----------------------------------, 
+-------- Node index: 12 --------
+height: 2, sj: 41, right_ancestor_index: None, left_ancestor_index: 8, right_child: 14, left_child: 10, 
+df size: 0, delete_df size: 1
+df: Empty DataFrame
+Columns: [age, workclass, fnlwgt, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income>50K]
+Index: [], 
+delete_df:   age workclass fnlwgt education-num marital-status occupation relationship race sex capital-gain capital-loss hours-per-week native-country income>50K
+0  34         1      4            12              0          4            2    0   1            0            0             12              0          0-----------------------------------, 
+-------- Node index: 13 --------
+height: 0, sj: 47, right_ancestor_index: 14, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 0, delete_df size: 0
+df: Empty DataFrame
+Columns: [age, workclass, fnlwgt, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income>50K]
+Index: [], 
+delete_df: Empty DataFrame
+Columns: [age, workclass, fnlwgt, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income>50K]
+Index: []-----------------------------------, 
+-------- Node index: 14 --------
+height: 1, sj: 53, right_ancestor_index: None, left_ancestor_index: 12, right_child: 15, left_child: 13, 
+df size: 0, delete_df size: 0
+df: Empty DataFrame
+Columns: [age, workclass, fnlwgt, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income>50K]
+Index: [], 
+delete_df: Empty DataFrame
+Columns: [age, workclass, fnlwgt, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income>50K]
+Index: []-----------------------------------, 
+-------- Node index: 15 --------
+height: 0, sj: 54, right_ancestor_index: None, left_ancestor_index: 14, right_child: None, left_child: None, 
+df size: 0, delete_df size: 0
+df: Empty DataFrame
+Columns: [age, workclass, fnlwgt, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income>50K]
+Index: [], 
+delete_df: Empty DataFrame
+Columns: [age, workclass, fnlwgt, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income>50K]
+Index: []-----------------------------------]
+[2023-03-21 15:22:46] - Infinite Private Partitioning: s0: 0, j: 15, T: 2809, beta: 1.6739533738285644e-29, C: 5.242545741017279, epsilon: 100.0, 
+ segment: [0, 2, 4, 6, 9, 12, 15, 18, 22, 26, 31, 36, 41, 47, 53, 54]
+[2023-03-21 15:22:46] - ******** Testing Started ********
+[2023-03-21 15:22:46] - ******** Testing Finished ********
