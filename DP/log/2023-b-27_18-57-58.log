@@ -1,0 +1,108 @@
+[2023-03-27 18:57:58] - Arguments: Namespace(beta=0.05, data_size=100, dataset_path='./data/adult.csv', delta=0.1, domain_path='./data/adult-domain.json', epsilon=5.0, iteration=500, sparse_ratio=10)
+[2023-03-27 18:57:58] - ******** Initialization ********
+[2023-03-27 18:57:59] - Data sparsification complete
+[2023-03-27 18:57:59] - Data information: {'age': 85, 'workclass': 9, 'fnlwgt': 100, 'education-num': 16, 'marital-status': 7, 'occupation': 15, 'relationship': 6, 'race': 5, 'sex': 2, 'capital-gain': 100, 'capital-loss': 100, 'hours-per-week': 99, 'native-country': 42, 'income>50K': 2}
+[2023-03-27 18:57:59] - ******** Create Dynamic Tree ********
+[2023-03-27 18:57:59] - The dynamic interval tree consists of nodes: [
+-------- Node index: 1 --------
+height: 0, sj: 2, 
+right_ancestor_index: 2, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 2, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 2 --------
+height: 1, sj: 4, 
+right_ancestor_index: 4, left_ancestor_index: None, right_child: 3, left_child: 1, 
+df size: 4, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 3 --------
+height: 0, sj: 16, 
+right_ancestor_index: None, left_ancestor_index: 2, right_child: None, left_child: None, 
+df size: 10, delete_df size: 1
+-----------------------------------, 
+-------- Node index: 4 --------
+height: 2, sj: 42, 
+right_ancestor_index: 8, left_ancestor_index: None, right_child: 6, left_child: 2, 
+df size: 32, delete_df size: 4
+-----------------------------------, 
+-------- Node index: 5 --------
+height: 0, sj: 74, 
+right_ancestor_index: 6, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 19, delete_df size: 8
+-----------------------------------, 
+-------- Node index: 6 --------
+height: 1, sj: 115, 
+right_ancestor_index: None, left_ancestor_index: 4, right_child: 7, left_child: 5, 
+df size: 29, delete_df size: 20
+-----------------------------------, 
+-------- Node index: 7 --------
+height: 0, sj: 164, 
+right_ancestor_index: None, left_ancestor_index: 6, right_child: None, left_child: None, 
+df size: 8, delete_df size: 34
+-----------------------------------, 
+-------- Node index: 8 --------
+height: 3, sj: 199, 
+right_ancestor_index: 16, left_ancestor_index: None, right_child: 12, left_child: 4, 
+df size: 0, delete_df size: 33
+-----------------------------------]
+[2023-03-27 18:57:59] - Infinite Private Partitioning: s0: 0, j: 8, T: 26896, beta: 5.737741753080488e-13, C: 54.71118874902631, epsilon: 5.0, 
+ segment: [0, 2, 4, 16, 42, 74, 115, 164, 199]
+[2023-03-27 18:57:59] - ******** Testing Started ********
+[2023-03-27 18:57:59] - At node with index 4, we implement queries on cliques dict_keys(['workclass']):
+[2023-03-27 18:58:06] - -------- New Mechanism: Testing on 4, node 4 is accessed --------
+[2023-03-27 18:58:06] - New Mechanism: Testing on 4, querying node 4, node 4 is passed
+
+[2023-03-27 18:58:06] - New Mechanism: epsilon during the algorithm 0.067547
+[2023-03-27 18:58:12] - -------- New Mechanism answer node query on node 4 finished --------
+[2023-03-27 18:58:12] - The testing is implemented at workclass
+[2023-03-27 18:58:12] - Range size 1, answer:
+[2023-03-27 18:58:12] - [21  2  0  3  1  2  0  0  3]
+[2023-03-27 18:58:12] - Range size 2, answer:
+[2023-03-27 18:58:12] - [23  4  2  3]
+[2023-03-27 18:58:12] - Range size 3, answer:
+[2023-03-27 18:58:12] - [23]
+[2023-03-27 18:58:12] - Range size 4, answer:
+[2023-03-27 18:58:12] - [5]
+[2023-03-27 18:58:12] - Range size 5, answer:
+[2023-03-27 18:58:12] - [27]
+[2023-03-27 18:58:12] - Range size 9, answer:
+[2023-03-27 18:58:12] - [32]
+[2023-03-27 18:58:12] - Ground truth: gives answer: 
+-1
+[2023-03-27 18:58:12] - Range size 1, answer:
+[2023-03-27 18:58:12] - [22  2  0  4  0  2  0  0  3]
+[2023-03-27 18:58:12] - Range size 2, answer:
+[2023-03-27 18:58:12] - [24  4  2  3]
+[2023-03-27 18:58:12] - Range size 3, answer:
+[2023-03-27 18:58:12] - [24]
+[2023-03-27 18:58:12] - Range size 4, answer:
+[2023-03-27 18:58:12] - [5]
+[2023-03-27 18:58:12] - Range size 5, answer:
+[2023-03-27 18:58:12] - [28]
+[2023-03-27 18:58:12] - Range size 9, answer:
+[2023-03-27 18:58:12] - [33]
+[2023-03-27 18:58:12] - Golden standard: gives answer: 
+-1
+[2023-03-27 18:58:12] - Range size 1, answer:
+[2023-03-27 18:58:12] - [ 0 33  0  0  0  0  0  0  0]
+[2023-03-27 18:58:12] - Range size 2, answer:
+[2023-03-27 18:58:12] - [33  0  0  0]
+[2023-03-27 18:58:12] - Range size 3, answer:
+[2023-03-27 18:58:12] - [33]
+[2023-03-27 18:58:12] - Range size 4, answer:
+[2023-03-27 18:58:12] - [0]
+[2023-03-27 18:58:12] - Range size 5, answer:
+[2023-03-27 18:58:12] - [33]
+[2023-03-27 18:58:12] - Range size 9, answer:
+[2023-03-27 18:58:12] - [33]
+[2023-03-27 18:58:12] - Mechanism: gives answer: 
+-1
+[2023-03-27 18:58:12] - Mean Square Error of ground truth and golden standard: 0.4117647058823529
+[2023-03-27 18:58:12] - Mean Square Error of ground truth and mechanism: 100.94117647058823
+[2023-03-27 18:58:12] - Mean Square Error of golden standard and mechanism: 100.88235294117646
+[2023-03-27 18:58:12] - Measurement1: ground_truth and golden_standard
+0.041666666666666664
+[2023-03-27 18:58:12] - Measurement1: ground_truth and mechanism
+0.6071428571428571
+[2023-03-27 18:58:12] - Measurement1: golden_standard and mechanism
+0.5722543352601156
+[2023-03-27 18:58:12] - ******** Testing Finished ********

@@ -52,13 +52,15 @@ def main():
     logger.info('******** Initialization ********')
     # Loading dataset
     data = pd.read_csv(args.dataset_path, sep=',').iloc[0:args.data_size]
-    data = auxiliary.sparse_data(data, 1, 10)
-    data = auxiliary.insert_deletion_data(data, False)
+    print(data)
+    data = auxiliary.process_data(data, sparse=False)
+    # data = auxiliary.sparse_data(data, 1, 10)
+    # data = auxiliary.insert_deletion_data(data, False)
+    print('\n', data)
     logger.info('Data sparsification complete')
     config = json.load(open(args.domain_path))
     UPPERBOUND = len(data)
     logger.info('Data information: %s' % config)
-
     # ---- Construction Section --------
     dynamic_tree = DynamicTree(config)
     ipp_instance = IPP(data, args.epsilon, args.beta)
@@ -99,7 +101,7 @@ def main():
     # Modification
     # dynamic_tree.node_list[4].df = pd.read_csv(args.dataset_path, sep=',').iloc[0:10000]
     # Modification
-    # dynamic_tree.testing_index(3, epsilon=args.epsilon, iteration=args.iteration, logger=logger)
+    # dynamic_tree.testing_index(8, epsilon=args.epsilon, iteration=args.iteration, logger=logger)
     dynamic_tree.testing(ipp_instance, 1, 100, args.epsilon, args.delta, args.beta, args.iteration, logger)
     print('******** Testing Finished ********')
     logger.info('******** Testing Finished ********')

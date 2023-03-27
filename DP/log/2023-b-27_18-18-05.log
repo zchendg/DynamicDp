@@ -1,0 +1,3 @@
+[2023-03-27 18:18:05] - Arguments: Namespace(beta=0.05, data_size=100, dataset_path='./data/adult.csv', delta=0.1, domain_path='./data/adult-domain.json', epsilon=100.0, iteration=500, sparse_ratio=10)
+[2023-03-27 18:18:05] - ******** Initialization ********
+[2023-03-27 18:18:05] - Data sparsification complete

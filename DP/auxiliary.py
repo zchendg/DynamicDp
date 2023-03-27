@@ -17,6 +17,14 @@ def is_two_power(n):
         return False
 
 
+def process_data(data, frac=1, sparse_ratio=100, sparse=False):
+    if sparse:
+        data = sparse_data_new(data, sparse_ratio)
+        data = insert_deletion_data(data, False)
+    else:
+        data = insert_deletion_data_original(data, False)
+    return data
+
 def sparse_data(data, frac=1, sparse_ratio=100):
     start = time.perf_counter()
     print('-------- Sparse data process starts --------')
@@ -35,10 +43,11 @@ def sparse_data_new(data, sparse_ratio=100, shuffle=True):
     for index in trange(data):
         row_index = np.random.randint(index, len(sparse_data))
     end = time.perf_counter()
-    print('Sparse time costs: %d' % (start - end))
+    print('Sparse time costs: %ds' % (end - start))
 
 
 def insert_deletion_data_original(data, concentrate=True):
+    data = data.sample(frac=1).reset_index(drop=True)
     start = time.perf_counter()
     print('-------- Insert deletion data process starts ---------')
     if concentrate:
@@ -52,7 +61,7 @@ def insert_deletion_data_original(data, concentrate=True):
                 data.loc[len(data) - 1, 'update'] = -1
     else:
         data.insert(data.shape[1], 'update', np.nan)
-        for i in reversed(trange(len(data))):
+        for i in tqdm(reversed(range(len(data)))):
             if data.loc[i].all():
                 continue
             else:
@@ -65,7 +74,7 @@ def insert_deletion_data_original(data, concentrate=True):
                 data = pd.concat([data_part1, deletion_row, data_part2], ignore_index=True)
     print('-------- Insert deletion data process ends ---------')
     end = time.perf_counter()
-    print('Insert deletion data costs: %d' % (start - end))
+    print('Insert deletion data costs: %ds' % (end - start))
     return data
 
 
@@ -104,5 +113,5 @@ def insert_deletion_data(data, concentrate=True):
     print('data: \n%s' % data)
     print('-------- Insert deletion data process ends ---------')
     end = time.perf_counter()
-    print('Insert deletion data costs: %d' % (start - end))
+    print('Insert deletion data costs: %ds' % (end - start))
     return data

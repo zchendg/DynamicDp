@@ -1,0 +1,380 @@
+[2023-03-27 19:08:42] - Arguments: Namespace(beta=0.05, data_size=100, dataset_path='./data/adult.csv', delta=0.1, domain_path='./data/adult-domain.json', epsilon=1000.0, iteration=500, sparse_ratio=10)
+[2023-03-27 19:08:42] - ******** Initialization ********
+[2023-03-27 19:08:43] - Data sparsification complete
+[2023-03-27 19:08:43] - Data information: {'age': 85, 'workclass': 9, 'fnlwgt': 100, 'education-num': 16, 'marital-status': 7, 'occupation': 15, 'relationship': 6, 'race': 5, 'sex': 2, 'capital-gain': 100, 'capital-loss': 100, 'hours-per-week': 99, 'native-country': 42, 'income>50K': 2}
+[2023-03-27 19:08:43] - ******** Create Dynamic Tree ********
+[2023-03-27 19:08:44] - The dynamic interval tree consists of nodes: [
+-------- Node index: 1 --------
+height: 0, sj: 2, 
+right_ancestor_index: 2, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 2, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 2 --------
+height: 1, sj: 4, 
+right_ancestor_index: 4, left_ancestor_index: None, right_child: 3, left_child: 1, 
+df size: 4, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 3 --------
+height: 0, sj: 6, 
+right_ancestor_index: None, left_ancestor_index: 2, right_child: None, left_child: None, 
+df size: 2, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 4 --------
+height: 2, sj: 8, 
+right_ancestor_index: 8, left_ancestor_index: None, right_child: 6, left_child: 2, 
+df size: 8, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 5 --------
+height: 0, sj: 10, 
+right_ancestor_index: 6, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 2, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 6 --------
+height: 1, sj: 12, 
+right_ancestor_index: None, left_ancestor_index: 4, right_child: 7, left_child: 5, 
+df size: 4, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 7 --------
+height: 0, sj: 14, 
+right_ancestor_index: None, left_ancestor_index: 6, right_child: None, left_child: None, 
+df size: 2, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 8 --------
+height: 3, sj: 16, 
+right_ancestor_index: 16, left_ancestor_index: None, right_child: 12, left_child: 4, 
+df size: 14, delete_df size: 1
+-----------------------------------, 
+-------- Node index: 9 --------
+height: 0, sj: 18, 
+right_ancestor_index: 10, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 1, delete_df size: 1
+-----------------------------------, 
+-------- Node index: 10 --------
+height: 1, sj: 20, 
+right_ancestor_index: 12, left_ancestor_index: None, right_child: 11, left_child: 9, 
+df size: 3, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 11 --------
+height: 0, sj: 22, 
+right_ancestor_index: None, left_ancestor_index: 10, right_child: None, left_child: None, 
+df size: 1, delete_df size: 1
+-----------------------------------, 
+-------- Node index: 12 --------
+height: 2, sj: 24, 
+right_ancestor_index: None, left_ancestor_index: 8, right_child: 14, left_child: 10, 
+df size: 6, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 13 --------
+height: 0, sj: 26, 
+right_ancestor_index: 14, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 2, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 14 --------
+height: 1, sj: 28, 
+right_ancestor_index: None, left_ancestor_index: 12, right_child: 15, left_child: 13, 
+df size: 4, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 15 --------
+height: 0, sj: 30, 
+right_ancestor_index: None, left_ancestor_index: 14, right_child: None, left_child: None, 
+df size: 2, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 16 --------
+height: 4, sj: 32, 
+right_ancestor_index: 32, left_ancestor_index: None, right_child: 24, left_child: 8, 
+df size: 26, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 17 --------
+height: 0, sj: 34, 
+right_ancestor_index: 18, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 2, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 18 --------
+height: 1, sj: 36, 
+right_ancestor_index: 20, left_ancestor_index: None, right_child: 19, left_child: 17, 
+df size: 4, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 19 --------
+height: 0, sj: 38, 
+right_ancestor_index: None, left_ancestor_index: 18, right_child: None, left_child: None, 
+df size: 2, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 20 --------
+height: 2, sj: 40, 
+right_ancestor_index: 24, left_ancestor_index: None, right_child: 22, left_child: 18, 
+df size: 7, delete_df size: 1
+-----------------------------------, 
+-------- Node index: 21 --------
+height: 0, sj: 42, 
+right_ancestor_index: 22, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 2, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 22 --------
+height: 1, sj: 44, 
+right_ancestor_index: None, left_ancestor_index: 20, right_child: 23, left_child: 21, 
+df size: 2, delete_df size: 2
+-----------------------------------, 
+-------- Node index: 23 --------
+height: 0, sj: 46, 
+right_ancestor_index: None, left_ancestor_index: 22, right_child: None, left_child: None, 
+df size: 2, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 24 --------
+height: 3, sj: 48, 
+right_ancestor_index: None, left_ancestor_index: 16, right_child: 28, left_child: 20, 
+df size: 13, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 25 --------
+height: 0, sj: 50, 
+right_ancestor_index: 26, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 2, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 26 --------
+height: 1, sj: 53, 
+right_ancestor_index: 28, left_ancestor_index: None, right_child: 27, left_child: 25, 
+df size: 3, delete_df size: 2
+-----------------------------------, 
+-------- Node index: 27 --------
+height: 0, sj: 56, 
+right_ancestor_index: None, left_ancestor_index: 26, right_child: None, left_child: None, 
+df size: 2, delete_df size: 1
+-----------------------------------, 
+-------- Node index: 28 --------
+height: 2, sj: 59, 
+right_ancestor_index: None, left_ancestor_index: 24, right_child: 30, left_child: 26, 
+df size: 8, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 29 --------
+height: 0, sj: 62, 
+right_ancestor_index: 30, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 3, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 30 --------
+height: 1, sj: 65, 
+right_ancestor_index: None, left_ancestor_index: 28, right_child: 31, left_child: 29, 
+df size: 5, delete_df size: 1
+-----------------------------------, 
+-------- Node index: 31 --------
+height: 0, sj: 68, 
+right_ancestor_index: None, left_ancestor_index: 30, right_child: None, left_child: None, 
+df size: 3, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 32 --------
+height: 5, sj: 71, 
+right_ancestor_index: 64, left_ancestor_index: None, right_child: 48, left_child: 16, 
+df size: 51, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 33 --------
+height: 0, sj: 74, 
+right_ancestor_index: 34, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 2, delete_df size: 1
+-----------------------------------, 
+-------- Node index: 34 --------
+height: 1, sj: 77, 
+right_ancestor_index: 36, left_ancestor_index: None, right_child: 35, left_child: 33, 
+df size: 5, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 35 --------
+height: 0, sj: 80, 
+right_ancestor_index: None, left_ancestor_index: 34, right_child: None, left_child: None, 
+df size: 2, delete_df size: 1
+-----------------------------------, 
+-------- Node index: 36 --------
+height: 2, sj: 83, 
+right_ancestor_index: 40, left_ancestor_index: None, right_child: 38, left_child: 34, 
+df size: 10, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 37 --------
+height: 0, sj: 86, 
+right_ancestor_index: 38, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 2, delete_df size: 1
+-----------------------------------, 
+-------- Node index: 38 --------
+height: 1, sj: 89, 
+right_ancestor_index: None, left_ancestor_index: 36, right_child: 39, left_child: 37, 
+df size: 2, delete_df size: 3
+-----------------------------------, 
+-------- Node index: 39 --------
+height: 0, sj: 92, 
+right_ancestor_index: None, left_ancestor_index: 38, right_child: None, left_child: None, 
+df size: 3, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 40 --------
+height: 3, sj: 95, 
+right_ancestor_index: 48, left_ancestor_index: None, right_child: 44, left_child: 36, 
+df size: 16, delete_df size: 1
+-----------------------------------, 
+-------- Node index: 41 --------
+height: 0, sj: 98, 
+right_ancestor_index: 42, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 0, delete_df size: 3
+-----------------------------------, 
+-------- Node index: 42 --------
+height: 1, sj: 101, 
+right_ancestor_index: 44, left_ancestor_index: None, right_child: 43, left_child: 41, 
+df size: 0, delete_df size: 3
+-----------------------------------, 
+-------- Node index: 43 --------
+height: 0, sj: 104, 
+right_ancestor_index: None, left_ancestor_index: 42, right_child: None, left_child: None, 
+df size: 2, delete_df size: 1
+-----------------------------------, 
+-------- Node index: 44 --------
+height: 2, sj: 107, 
+right_ancestor_index: None, left_ancestor_index: 40, right_child: 46, left_child: 42, 
+df size: 3, delete_df size: 2
+-----------------------------------, 
+-------- Node index: 45 --------
+height: 0, sj: 111, 
+right_ancestor_index: 46, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 2, delete_df size: 2
+-----------------------------------, 
+-------- Node index: 46 --------
+height: 1, sj: 115, 
+right_ancestor_index: None, left_ancestor_index: 44, right_child: 47, left_child: 45, 
+df size: 5, delete_df size: 1
+-----------------------------------, 
+-------- Node index: 47 --------
+height: 0, sj: 119, 
+right_ancestor_index: None, left_ancestor_index: 46, right_child: None, left_child: None, 
+df size: 2, delete_df size: 2
+-----------------------------------, 
+-------- Node index: 48 --------
+height: 4, sj: 123, 
+right_ancestor_index: None, left_ancestor_index: 32, right_child: 56, left_child: 40, 
+df size: 25, delete_df size: 2
+-----------------------------------, 
+-------- Node index: 49 --------
+height: 0, sj: 127, 
+right_ancestor_index: 50, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 1, delete_df size: 3
+-----------------------------------, 
+-------- Node index: 50 --------
+height: 1, sj: 131, 
+right_ancestor_index: 52, left_ancestor_index: None, right_child: 51, left_child: 49, 
+df size: 2, delete_df size: 3
+-----------------------------------, 
+-------- Node index: 51 --------
+height: 0, sj: 135, 
+right_ancestor_index: None, left_ancestor_index: 50, right_child: None, left_child: None, 
+df size: 0, delete_df size: 4
+-----------------------------------, 
+-------- Node index: 52 --------
+height: 2, sj: 139, 
+right_ancestor_index: 56, left_ancestor_index: None, right_child: 54, left_child: 50, 
+df size: 3, delete_df size: 3
+-----------------------------------, 
+-------- Node index: 53 --------
+height: 0, sj: 143, 
+right_ancestor_index: 54, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 0, delete_df size: 4
+-----------------------------------, 
+-------- Node index: 54 --------
+height: 1, sj: 147, 
+right_ancestor_index: None, left_ancestor_index: 52, right_child: 55, left_child: 53, 
+df size: 1, delete_df size: 3
+-----------------------------------, 
+-------- Node index: 55 --------
+height: 0, sj: 151, 
+right_ancestor_index: None, left_ancestor_index: 54, right_child: None, left_child: None, 
+df size: 1, delete_df size: 3
+-----------------------------------, 
+-------- Node index: 56 --------
+height: 3, sj: 155, 
+right_ancestor_index: None, left_ancestor_index: 48, right_child: 60, left_child: 52, 
+df size: 5, delete_df size: 4
+-----------------------------------, 
+-------- Node index: 57 --------
+height: 0, sj: 159, 
+right_ancestor_index: 58, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 0, delete_df size: 4
+-----------------------------------, 
+-------- Node index: 58 --------
+height: 1, sj: 163, 
+right_ancestor_index: 60, left_ancestor_index: None, right_child: 59, left_child: 57, 
+df size: 1, delete_df size: 3
+-----------------------------------, 
+-------- Node index: 59 --------
+height: 0, sj: 167, 
+right_ancestor_index: None, left_ancestor_index: 58, right_child: None, left_child: None, 
+df size: 1, delete_df size: 3
+-----------------------------------, 
+-------- Node index: 60 --------
+height: 2, sj: 171, 
+right_ancestor_index: None, left_ancestor_index: 56, right_child: 62, left_child: 58, 
+df size: 2, delete_df size: 4
+-----------------------------------, 
+-------- Node index: 61 --------
+height: 0, sj: 176, 
+right_ancestor_index: 62, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 1, delete_df size: 4
+-----------------------------------, 
+-------- Node index: 62 --------
+height: 1, sj: 181, 
+right_ancestor_index: None, left_ancestor_index: 60, right_child: 63, left_child: 61, 
+df size: 1, delete_df size: 3
+-----------------------------------, 
+-------- Node index: 63 --------
+height: 0, sj: 186, 
+right_ancestor_index: None, left_ancestor_index: 62, right_child: None, left_child: None, 
+df size: 0, delete_df size: 5
+-----------------------------------, 
+-------- Node index: 64 --------
+height: 6, sj: 191, 
+right_ancestor_index: 128, left_ancestor_index: None, right_child: 96, left_child: 32, 
+df size: 9, delete_df size: 5
+-----------------------------------, 
+-------- Node index: 65 --------
+height: 0, sj: 196, 
+right_ancestor_index: 66, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 0, delete_df size: 5
+-----------------------------------, 
+-------- Node index: 66 --------
+height: 1, sj: 199, 
+right_ancestor_index: 68, left_ancestor_index: None, right_child: 67, left_child: 65, 
+df size: 0, delete_df size: 4
+-----------------------------------]
+[2023-03-27 19:08:44] - Infinite Private Partitioning: s0: 0, j: 66, T: 38416, beta: 9.149997069805346e-202, C: 3.3191046820733945, epsilon: 1000.0, 
+ segment: [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 53, 56, 59, 62, 65, 68, 71, 74, 77, 80, 83, 86, 89, 92, 95, 98, 101, 104, 107, 111, 115, 119, 123, 127, 131, 135, 139, 143, 147, 151, 155, 159, 163, 167, 171, 176, 181, 186, 191, 196, 199]
+[2023-03-27 19:08:44] - ******** Testing Started ********
+[2023-03-27 19:08:44] - At node with index 4, we implement queries on cliques dict_keys(['workclass']):
+[2023-03-27 19:08:50] - -------- New Mechanism: Testing on 4, node 4 is accessed --------
+[2023-03-27 19:08:50] - New Mechanism: Testing on 4, querying node 4, node 4 is passed
+
+[2023-03-27 19:08:50] - New Mechanism: epsilon during the algorithm 22.515819
+[2023-03-27 19:08:56] - -------- New Mechanism answer node query on node 4 finished --------
+[2023-03-27 19:08:56] - The testing is implemented at workclass
+[2023-03-27 19:08:56] - Range size 1, answer [7 1 0 0 0 0 0 0 0]:
+[2023-03-27 19:08:56] - Range size 2, answer [8 0 0 0]:
+[2023-03-27 19:08:56] - Range size 3, answer [8]:
+[2023-03-27 19:08:56] - Range size 4, answer [0]:
+[2023-03-27 19:08:56] - Range size 5, answer [8]:
+[2023-03-27 19:08:56] - Range size 9, answer [8]:
+[2023-03-27 19:08:56] - Ground truth: gives answer: 
+None
+[2023-03-27 19:08:56] - Range size 1, answer [9 0 0 0 0 0 0 0 0]:
+[2023-03-27 19:08:56] - Range size 2, answer [9 0 0 0]:
+[2023-03-27 19:08:56] - Range size 3, answer [9]:
+[2023-03-27 19:08:56] - Range size 4, answer [0]:
+[2023-03-27 19:08:56] - Range size 5, answer [9]:
+[2023-03-27 19:08:56] - Range size 9, answer [9]:
+[2023-03-27 19:08:56] - Golden standard: gives answer: 
+None
+[2023-03-27 19:08:56] - Range size 1, answer [7 2 0 0 0 0 0 0 0]:
+[2023-03-27 19:08:56] - Range size 2, answer [9 0 0 0]:
+[2023-03-27 19:08:56] - Range size 3, answer [9]:
+[2023-03-27 19:08:56] - Range size 4, answer [0]:
+[2023-03-27 19:08:56] - Range size 5, answer [9]:
+[2023-03-27 19:08:56] - Range size 9, answer [9]:
+[2023-03-27 19:08:56] - Mechanism: gives answer: 
+None
+[2023-03-27 19:08:56] - Mean Square Error of ground truth and golden standard: 0.5294117647058824
+[2023-03-27 19:08:56] - Mean Square Error of ground truth and mechanism: 0.29411764705882354
+[2023-03-27 19:08:56] - Mean Square Error of golden standard and mechanism: 0.47058823529411764
+[2023-03-27 19:08:56] - Measurement1: ground_truth and golden_standard
+0.12280701754385964
+[2023-03-27 19:08:56] - Measurement2: ground_truth and mechanism
+0.08771929824561403
+[2023-03-27 19:08:56] - Measurement3: golden_standard and mechanism
+0.06451612903225806
+[2023-03-27 19:08:56] - ******** Testing Finished ********

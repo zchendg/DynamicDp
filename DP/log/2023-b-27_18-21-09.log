@@ -1,0 +1,51 @@
+[2023-03-27 18:21:09] - Arguments: Namespace(beta=0.05, data_size=5, dataset_path='./data/adult.csv', delta=0.1, domain_path='./data/adult-domain.json', epsilon=100.0, iteration=500, sparse_ratio=10)
+[2023-03-27 18:21:09] - ******** Initialization ********
+[2023-03-27 18:21:09] - Data sparsification complete
+[2023-03-27 18:21:09] - Data information: {'age': 85, 'workclass': 9, 'fnlwgt': 100, 'education-num': 16, 'marital-status': 7, 'occupation': 15, 'relationship': 6, 'race': 5, 'sex': 2, 'capital-gain': 100, 'capital-loss': 100, 'hours-per-week': 99, 'native-country': 42, 'income>50K': 2}
+[2023-03-27 18:21:09] - ******** Create Dynamic Tree ********
+[2023-03-27 18:21:09] - The dynamic interval tree consists of nodes: [
+-------- Node index: 1 --------
+height: 0, sj: 2, 
+right_ancestor_index: 2, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 2, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 2 --------
+height: 1, sj: 4, 
+right_ancestor_index: 4, left_ancestor_index: None, right_child: 3, left_child: 1, 
+df size: 4, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 3 --------
+height: 0, sj: 6, 
+right_ancestor_index: None, left_ancestor_index: 2, right_child: None, left_child: None, 
+df size: 0, delete_df size: 1
+-----------------------------------, 
+-------- Node index: 4 --------
+height: 2, sj: 9, 
+right_ancestor_index: 8, left_ancestor_index: None, right_child: 6, left_child: 2, 
+df size: 0, delete_df size: 2
+-----------------------------------]
+[2023-03-27 18:21:09] - Infinite Private Partitioning: s0: 0, j: 5, T: 81, beta: 2.883135391252616e-07, C: 1.4102769524692933, epsilon: 100.0, 
+ segment: [0, 2, 4, 6, 9, 9]
+[2023-03-27 18:21:09] - ******** Testing Started ********
+[2023-03-27 18:21:09] - At node with index 4, we implement queries on cliques dict_keys(['workclass']):
+[2023-03-27 18:21:16] - -------- New Mechanism: Testing on 4, node 4 is accessed --------
+[2023-03-27 18:21:16] - New Mechanism: Testing on 4, querying node 4, node 4 is passed
+
+[2023-03-27 18:21:16] - -------- New Mechanism answer node query on node 4 finished --------
+[2023-03-27 18:21:16] - The testing is implemented at workclass
+[2023-03-27 18:21:16] - Ground truth: gives answer: 
+-1
+[2023-03-27 18:21:16] - Golden standard: gives answer: 
+-1
+[2023-03-27 18:21:16] - Mechanism: gives answer: 
+-1
+[2023-03-27 18:21:16] - Mean Square Error of ground truth and golden standard: 0.23529411764705882
+[2023-03-27 18:21:16] - Mean Square Error of ground truth and mechanism: 0.0
+[2023-03-27 18:21:16] - Mean Square Error of golden standard and mechanism: 0.23529411764705882
+[2023-03-27 18:21:16] - Measurement1: ground_truth and golden_standard
+0.23529411764705882
+[2023-03-27 18:21:16] - Measurement1: ground_truth and mechanism
+0.0
+[2023-03-27 18:21:16] - Measurement1: golden_standard and mechanism
+0.19047619047619047
+[2023-03-27 18:21:16] - ******** Testing Finished ********

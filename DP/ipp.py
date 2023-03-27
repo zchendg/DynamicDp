@@ -32,7 +32,8 @@ class IPP:
             self.j += 1
             self.T = t * t
             self.beta = 6 * self.beta / (np.square(np.pi) * np.square(self.j))
-            self.C = 7 * np.log(2 * self.T / self.beta) / self.epsilon
+            temp = 2 * self.T / self.beta
+            self.C = 7 * np.log(temp) / self.epsilon
             self.SVT = SparseVectorMachine(self.C)
 
     def get_segment(self):
