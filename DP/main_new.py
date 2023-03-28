@@ -15,9 +15,13 @@ from current_df import CurrentDf
 from datetime import datetime
 from my_logger import Logger
 
-if not os.path.exists('./log'):
-    os.mkdir('./log')
+if not os.path.exists('./result'):
+    os.mkdir('./result')
 time_format = "%Y-b-%d_%H-%M-%S"
+result_path = './result/' + datetime.now().strftime(time_format)
+os.mkdir(result_path)
+logger_file_name = result_path + '/data.log'
+figure_file_name = result_path + '/figure.jpg'
 
 if 1:
     # ----Command Line Arguments Section--------
@@ -39,7 +43,7 @@ if 1:
     args = parser.parse_args()
 
     # Initialize the logger
-    logger_file_name = './log/' + datetime.now().strftime(time_format) + '.log'
+    # logger_file_name = './log/' + datetime.now().strftime(time_format) + '.log'
     logger = Logger(logger_file_name, sys.stdout)
     logger.info('Arguments: ' + str(args))
     # ------------------------------------------------------------------
@@ -105,6 +109,9 @@ def main():
     dynamic_tree.testing(ipp_instance, 1, 100, args.epsilon, args.delta, args.beta, args.iteration, logger)
     print('******** Testing Finished ********')
     logger.info('******** Testing Finished ********')
+    logger.info('******** Drawing Figure start ********')
+    dynamic_tree.draw_diagram(ipp_instance, figure_file_name)
+    logger.info('******** Drawing Figure finish ********')
     return -1
 
 

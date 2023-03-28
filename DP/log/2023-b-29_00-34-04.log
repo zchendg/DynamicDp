@@ -1,0 +1,138 @@
+[2023-03-29 00:34:04] - Arguments: Namespace(beta=0.05, data_size=10, dataset_path='./data/adult.csv', delta=0.1, domain_path='./data/adult-domain.json', epsilon=5.0, iteration=50, sparse_ratio=10)
+[2023-03-29 00:34:04] - ******** Initialization ********
+[2023-03-29 00:34:04] - Data sparsification complete
+[2023-03-29 00:34:04] - Data information: {'age': 85, 'workclass': 9, 'fnlwgt': 100, 'education-num': 16, 'marital-status': 7, 'occupation': 15, 'relationship': 6, 'race': 5, 'sex': 2, 'capital-gain': 100, 'capital-loss': 100, 'hours-per-week': 99, 'native-country': 42, 'income>50K': 2}
+[2023-03-29 00:34:04] - ******** Create Dynamic Tree ********
+[2023-03-29 00:34:04] - The dynamic interval tree consists of nodes: [
+-------- Node index: 1 --------
+height: 0, sj: 2, 
+right_ancestor_index: 2, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 2, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 2 --------
+height: 1, sj: 4, 
+right_ancestor_index: 4, left_ancestor_index: None, right_child: 3, left_child: 1, 
+df size: 2, delete_df size: 1
+-----------------------------------, 
+-------- Node index: 3 --------
+height: 0, sj: 16, 
+right_ancestor_index: None, left_ancestor_index: 2, right_child: None, left_child: None, 
+df size: 3, delete_df size: 5
+-----------------------------------, 
+-------- Node index: 4 --------
+height: 2, sj: 19, 
+right_ancestor_index: 8, left_ancestor_index: None, right_child: 6, left_child: 2, 
+df size: 0, delete_df size: 4
+-----------------------------------]
+[2023-03-29 00:34:04] - Infinite Private Partitioning: s0: 0, j: 4, T: 256, beta: 1.1856419061018045e-05, C: 24.613352076841316, epsilon: 5.0, 
+ segment: [0, 2, 4, 16, 19]
+[2023-03-29 00:34:04] - ******** Testing Started ********
+[2023-03-29 00:34:04] - ++++++++ Testing on node 1 Started ++++++++
+[2023-03-29 00:34:04] - At node with index 1, we implement queries on cliques dict_keys(['workclass']):
+[2023-03-29 00:34:05] - -------- New Mechanism: Testing on 1, node 1 is accessed --------
+[2023-03-29 00:34:06] - -------- New Mechanism answer node query on node 1 finished --------
+[2023-03-29 00:34:06] - The testing is implemented at workclass
+[2023-03-29 00:34:06] - Range size 1, answer [1 0 0 0 0 1 0 0 0]:
+[2023-03-29 00:34:06] - Range size 2, answer [1 0 1 0]:
+[2023-03-29 00:34:06] - Range size 3, answer [1]:
+[2023-03-29 00:34:06] - Range size 4, answer [1]:
+[2023-03-29 00:34:06] - Range size 5, answer [1]:
+[2023-03-29 00:34:06] - Range size 9, answer [2]:
+[2023-03-29 00:34:06] - Ground truth: gives answer: 
+None
+[2023-03-29 00:34:06] - Range size 1, answer [1 0 0 1 0 1 0 0 0]:
+[2023-03-29 00:34:06] - Range size 2, answer [1 1 1 0]:
+[2023-03-29 00:34:06] - Range size 3, answer [1]:
+[2023-03-29 00:34:06] - Range size 4, answer [1]:
+[2023-03-29 00:34:06] - Range size 5, answer [2]:
+[2023-03-29 00:34:06] - Range size 9, answer [3]:
+[2023-03-29 00:34:06] - Golden standard: gives answer: 
+None
+[2023-03-29 00:34:06] - Range size 1, answer [1 0 1 0 0 1 0 0 0]:
+[2023-03-29 00:34:06] - Range size 2, answer [1 0 1 0]:
+[2023-03-29 00:34:06] - Range size 3, answer [2]:
+[2023-03-29 00:34:06] - Range size 4, answer [1]:
+[2023-03-29 00:34:06] - Range size 5, answer [2]:
+[2023-03-29 00:34:06] - Range size 9, answer [3]:
+[2023-03-29 00:34:06] - Mechanism: gives answer: 
+None
+[2023-03-29 00:34:06] - Mean Square Error of ground truth and golden standard: 0.23529411764705882
+[2023-03-29 00:34:06] - Mean Square Error of ground truth and mechanism: 0.23529411764705882
+[2023-03-29 00:34:06] - Mean Square Error of golden standard and mechanism: 0.23529411764705882
+[2023-03-29 00:34:06] - Measurement3: golden_standard and mechanism
+0.0
+[2023-03-29 00:34:06] - ++++++++ Testing on node 1 Finished ++++++++
+[2023-03-29 00:34:06] - ++++++++ Testing on node 2 Started ++++++++
+[2023-03-29 00:34:06] - At node with index 2, we implement queries on cliques dict_keys(['workclass']):
+[2023-03-29 00:34:06] - -------- New Mechanism: Testing on 2, node 2 is accessed --------
+[2023-03-29 00:34:07] - -------- New Mechanism answer node query on node 2 finished --------
+[2023-03-29 00:34:07] - The testing is implemented at workclass
+[2023-03-29 00:34:07] - Range size 1, answer [1 1 0 0 0 0 0 0 0]:
+[2023-03-29 00:34:07] - Range size 2, answer [2 0 0 0]:
+[2023-03-29 00:34:07] - Range size 3, answer [2]:
+[2023-03-29 00:34:07] - Range size 4, answer [0]:
+[2023-03-29 00:34:07] - Range size 5, answer [2]:
+[2023-03-29 00:34:07] - Range size 9, answer [2]:
+[2023-03-29 00:34:07] - Ground truth: gives answer: 
+None
+[2023-03-29 00:34:07] - Range size 1, answer [0 1 1 0 0 0 1 0 0]:
+[2023-03-29 00:34:07] - Range size 2, answer [1 0 1 0]:
+[2023-03-29 00:34:07] - Range size 3, answer [2]:
+[2023-03-29 00:34:07] - Range size 4, answer [1]:
+[2023-03-29 00:34:07] - Range size 5, answer [2]:
+[2023-03-29 00:34:07] - Range size 9, answer [3]:
+[2023-03-29 00:34:07] - Golden standard: gives answer: 
+None
+[2023-03-29 00:34:07] - Range size 1, answer [0 2 1 0 0 0 0 0 0]:
+[2023-03-29 00:34:07] - Range size 2, answer [2 0 0 0]:
+[2023-03-29 00:34:07] - Range size 3, answer [3]:
+[2023-03-29 00:34:07] - Range size 4, answer [0]:
+[2023-03-29 00:34:07] - Range size 5, answer [3]:
+[2023-03-29 00:34:07] - Range size 9, answer [3]:
+[2023-03-29 00:34:07] - Mechanism: gives answer: 
+None
+[2023-03-29 00:34:07] - Mean Square Error of ground truth and golden standard: 0.4117647058823529
+[2023-03-29 00:34:07] - Mean Square Error of ground truth and mechanism: 0.35294117647058826
+[2023-03-29 00:34:07] - Mean Square Error of golden standard and mechanism: 0.4117647058823529
+[2023-03-29 00:34:07] - Measurement3: golden_standard and mechanism
+0.0
+[2023-03-29 00:34:07] - ++++++++ Testing on node 2 Finished ++++++++
+[2023-03-29 00:34:07] - ++++++++ Testing on node 3 Started ++++++++
+[2023-03-29 00:34:07] - At node with index 3, we implement queries on cliques dict_keys(['workclass']):
+[2023-03-29 00:34:08] - -------- New Mechanism: Testing on 3, node 2 is accessed --------
+[2023-03-29 00:34:08] - -------- New Mechanism answer node query on node 2 finished --------
+[2023-03-29 00:34:08] - -------- New Mechanism: Testing on 3, node 3 is accessed --------
+[2023-03-29 00:34:09] - -------- New Mechanism answer node query on node 3 finished --------
+[2023-03-29 00:34:09] - The testing is implemented at workclass
+[2023-03-29 00:34:09] - Range size 1, answer [2 2 0 0 0 0 0 0 0]:
+[2023-03-29 00:34:09] - Range size 2, answer [4 0 0 0]:
+[2023-03-29 00:34:09] - Range size 3, answer [4]:
+[2023-03-29 00:34:09] - Range size 4, answer [0]:
+[2023-03-29 00:34:09] - Range size 5, answer [4]:
+[2023-03-29 00:34:09] - Range size 9, answer [4]:
+[2023-03-29 00:34:09] - Ground truth: gives answer: 
+None
+[2023-03-29 00:34:09] - Range size 1, answer [2 1 0 0 0 1 0 0 1]:
+[2023-03-29 00:34:09] - Range size 2, answer [3 0 1 1]:
+[2023-03-29 00:34:09] - Range size 3, answer [3]:
+[2023-03-29 00:34:09] - Range size 4, answer [2]:
+[2023-03-29 00:34:09] - Range size 5, answer [3]:
+[2023-03-29 00:34:09] - Range size 9, answer [5]:
+[2023-03-29 00:34:09] - Golden standard: gives answer: 
+None
+[2023-03-29 00:34:09] - Range size 1, answer [1 1 0 0 0 2 2 0 0]:
+[2023-03-29 00:34:09] - Range size 2, answer [2 0 4 0]:
+[2023-03-29 00:34:09] - Range size 3, answer [2]:
+[2023-03-29 00:34:09] - Range size 4, answer [4]:
+[2023-03-29 00:34:09] - Range size 5, answer [2]:
+[2023-03-29 00:34:09] - Range size 9, answer [6]:
+[2023-03-29 00:34:09] - Mechanism: gives answer: 
+None
+[2023-03-29 00:34:09] - Mean Square Error of ground truth and golden standard: 0.7647058823529411
+[2023-03-29 00:34:09] - Mean Square Error of ground truth and mechanism: 3.411764705882353
+[2023-03-29 00:34:09] - Mean Square Error of golden standard and mechanism: 1.4705882352941178
+[2023-03-29 00:34:09] - Measurement3: golden_standard and mechanism
+0.0
+[2023-03-29 00:34:09] - ++++++++ Testing on node 3 Finished ++++++++
+[2023-03-29 00:34:09] - ******** Testing Finished ********
+[2023-03-29 00:34:09] - ******** Drawing Figure start ********

@@ -1,0 +1,51 @@
+[2023-03-28 23:58:43] - Arguments: Namespace(beta=0.05, data_size=100, dataset_path='./data/adult.csv', delta=0.1, domain_path='./data/adult-domain.json', epsilon=5.0, iteration=1500, sparse_ratio=10)
+[2023-03-28 23:58:43] - ******** Initialization ********
+[2023-03-28 23:58:44] - Data sparsification complete
+[2023-03-28 23:58:44] - Data information: {'age': 85, 'workclass': 9, 'fnlwgt': 100, 'education-num': 16, 'marital-status': 7, 'occupation': 15, 'relationship': 6, 'race': 5, 'sex': 2, 'capital-gain': 100, 'capital-loss': 100, 'hours-per-week': 99, 'native-country': 42, 'income>50K': 2}
+[2023-03-28 23:58:44] - ******** Create Dynamic Tree ********
+[2023-03-28 23:58:44] - The dynamic interval tree consists of nodes: [
+-------- Node index: 1 --------
+height: 0, sj: 2, 
+right_ancestor_index: 2, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 2, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 2 --------
+height: 1, sj: 4, 
+right_ancestor_index: 4, left_ancestor_index: None, right_child: 3, left_child: 1, 
+df size: 4, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 3 --------
+height: 0, sj: 16, 
+right_ancestor_index: None, left_ancestor_index: 2, right_child: None, left_child: None, 
+df size: 8, delete_df size: 2
+-----------------------------------, 
+-------- Node index: 4 --------
+height: 2, sj: 43, 
+right_ancestor_index: 8, left_ancestor_index: None, right_child: 6, left_child: 2, 
+df size: 33, delete_df size: 3
+-----------------------------------, 
+-------- Node index: 5 --------
+height: 0, sj: 74, 
+right_ancestor_index: 6, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 25, delete_df size: 6
+-----------------------------------, 
+-------- Node index: 6 --------
+height: 1, sj: 113, 
+right_ancestor_index: None, left_ancestor_index: 4, right_child: 7, left_child: 5, 
+df size: 32, delete_df size: 21
+-----------------------------------, 
+-------- Node index: 7 --------
+height: 0, sj: 162, 
+right_ancestor_index: None, left_ancestor_index: 6, right_child: None, left_child: None, 
+df size: 10, delete_df size: 32
+-----------------------------------, 
+-------- Node index: 8 --------
+height: 3, sj: 199, 
+right_ancestor_index: 16, left_ancestor_index: None, right_child: 12, left_child: 4, 
+df size: 0, delete_df size: 36
+-----------------------------------]
+[2023-03-28 23:58:44] - Infinite Private Partitioning: s0: 0, j: 8, T: 26244, beta: 5.737741753080488e-13, C: 54.67683248976923, epsilon: 5.0, 
+ segment: [0, 2, 4, 16, 43, 74, 113, 162, 199]
+[2023-03-28 23:58:44] - ******** Testing Started ********
+[2023-03-28 23:58:44] - ++++++++ Testing on node 1 Started ++++++++
+[2023-03-28 23:58:44] - At node with index 1, we implement queries on cliques dict_keys(['workclass']):

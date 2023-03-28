@@ -1,10 +1,13 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
+import os
 from node import Node
 from query import Query
 from approximation_instance import ApproximationInstance
 from mbi import Domain, Dataset
 from basic_counting import BasicCounting
+from datetime import datetime
 
 
 class DynamicTree:
@@ -12,6 +15,10 @@ class DynamicTree:
         self.node_list = [Node(0, config.keys(), 0)]
         self.config = config
         self.domain = Domain(config.keys(), config.values())
+        self.answer_ground_truth = {}
+        self.answer_golden_standard = {}
+        self.answer_mechanism = {}
+        self.query_instance = None
 
     def insert_item(self, index, item):
         self.node_list[index - 1].add_item(item)
@@ -66,46 +73,60 @@ class DynamicTree:
     # Implement testing function in the data structure
     def testing(self, ipp_instance, column_number=1, each_query_size=10, epsilon=1, delta=0, beta=0.05, iteration=500,
                 logger=None):
+        query_instance = Query(self.config, column_number, each_query_size)
+        self.query_instance = query_instance
+        for member in query_instance.queries.keys():
+            self.answer_ground_truth[member] = {}
+            self.answer_golden_standard[member] = {}
+            self.answer_mechanism[member] = {}
         for index in range(1, len(ipp_instance.get_segment()) - 1):
             logger.info('++++++++ Testing on node %d Started ++++++++' % index)
-            self.testing_index(index, column_number, each_query_size, epsilon, delta, beta, iteration, logger)
+            self.testing_index(index, query_instance, epsilon, delta, beta, iteration, logger)
             logger.info('++++++++ Testing on node %d Finished ++++++++' % index)
 
     # Implement testing for at particular position, this function
-    def testing_index(self, index, column_number=1, each_query_size=100, epsilon=1, delta=0, beta=0.05, iteration=500,
+    def testing_index(self, index, query_instance, epsilon=1, delta=0, beta=0.05, iteration=500,
                       logger=None):
-        query_instance = Query(self.config, column_number, each_query_size)
         query_nodes = self.query_nodes(index)
         query_nodes.reverse()
         logger.info(
             'At node with index %d, we implement queries on cliques %s:' % (index, query_instance.queries.keys()))
         for member in query_instance.queries.keys():
-            # answer = self.answer_queries(query_nodes, index, query_instance.queries[member], member, epsilon,
-            #                                   delta,
-            #                                   iteration)
-            answer_ground_truth = self.answer_queries_ground_truth(query_nodes, index, query_instance.queries, member,
-                                                                   logger=logger)
-            answer_golden_standard = self.answer_queries_golden_standard(query_nodes, index,
-                                                                         query_instance.queries, member,
-                                                                         epsilon, delta, iteration, logger=logger)
-            answer_mechanism = self.answer_queries_mechanism(query_nodes, index, query_instance.queries, member,
-                                                             epsilon, delta, beta, iteration, logger)
+            self.answer_ground_truth[member][index] = self.answer_queries_ground_truth(query_nodes, index,
+                                                                                       query_instance.queries, member,
+                                                                                       logger=logger)
+            self.answer_golden_standard[member][index] = self.answer_queries_golden_standard(query_nodes, index,
+                                                                                             query_instance.queries,
+                                                                                             member,
+                                                                                             epsilon, delta, iteration,
+                                                                                             logger=logger)
+            self.answer_mechanism[member][index] = self.answer_queries_mechanism(query_nodes, index,
+                                                                                 query_instance.queries, member,
+                                                                                 epsilon, delta, beta, iteration,
+                                                                                 logger)
             logger.info('The testing is implemented at %s' % member)
-            logger.info('Ground truth: gives answer: \n%s' % np.array(self.output_answer(answer_ground_truth, member, query_instance, logger)))
-            logger.info('Golden standard: gives answer: \n%s' % np.array(self.output_answer(answer_golden_standard, member, query_instance, logger)))
-            logger.info('Mechanism: gives answer: \n%s' % np.array(self.output_answer(answer_mechanism, member, query_instance, logger)))
-            logger.info("Mean Square Error of ground truth and golden standard: %s" % self.mse(answer_ground_truth,
-                                                                                               answer_golden_standard))
+            logger.info('Ground truth: gives answer: \n%s' % np.array(
+                self.output_answer(self.answer_ground_truth[member][index], member, query_instance, logger)))
+            logger.info('Golden standard: gives answer: \n%s' % np.array(
+                self.output_answer(self.answer_golden_standard[member][index], member, query_instance, logger)))
+            logger.info('Mechanism: gives answer: \n%s' % np.array(
+                self.output_answer(self.answer_mechanism[member][index], member, query_instance, logger)))
+            logger.info("Mean Square Error of ground truth and golden standard: %s" % self.mse(
+                self.answer_ground_truth[member][index],
+                self.answer_golden_standard[member][index]))
             logger.info(
-                "Mean Square Error of ground truth and mechanism: %s" % self.mse(answer_ground_truth, answer_mechanism))
-            logger.info("Mean Square Error of golden standard and mechanism: %s" % self.mse(answer_golden_standard,
-                                                                                            answer_mechanism))
-            logger.info('Measurement1: ground_truth and golden_standard\n' + str(
-                self.compare_results(answer_ground_truth, answer_golden_standard, measurement=3)))
-            logger.info('Measurement2: ground_truth and mechanism\n' + str(
-                self.compare_results(answer_ground_truth, answer_mechanism, measurement=3)))
+                "Mean Square Error of ground truth and mechanism: %s" % self.mse(
+                    self.answer_ground_truth[member][index], self.answer_mechanism[member][index]))
+            logger.info("Mean Square Error of golden standard and mechanism: %s" % self.mse(
+                self.answer_golden_standard[member][index],
+                self.answer_mechanism[member][index]))
+            # logger.info('Measurement1: ground_truth and golden_standard\n' + str(
+            #     self.compare_results(self.answer_ground_truth[member], self.answer_golden_standard[member], measurement=3)))
+            # logger.info('Measurement2: ground_truth and mechanism\n' + str(
+            #     self.compare_results(self.answer_ground_truth[member], self.answer_mechanism[member], measurement=3)))
             logger.info('Measurement3: golden_standard and mechanism\n' + str(
-                self.compare_results(answer_golden_standard, answer_mechanism, measurement=3)))
+                self.compare_results(self.answer_golden_standard[member], self.answer_mechanism[member],
+                                     measurement=3)))
 
     # For ground truth, returns the queries' answer for original data.
     def answer_queries_ground_truth(self, nodes, cur_index, queries, member, logger=None):
@@ -126,7 +147,6 @@ class DynamicTree:
                     Dv = pd.concat([Dv, delete_df, delete_df]).drop_duplicates(keep=False)
             Dv_list += [Dv]
         Dataset_r = pd.concat(Dv_list).drop_duplicates(keep=False)
-        # logger.info('Ground truth: the original dataset is: \n%s ' % Dataset_r)
         answer_ground_truth = self.answer_queries(Dataset_r, member, queries)
         return np.array(answer_ground_truth)
 
@@ -150,15 +170,7 @@ class DynamicTree:
                     Dv = pd.concat([Dv, delete_df, delete_df]).drop_duplicates(keep=False)
             Dv_list += [Dv]
         Dataset_r = pd.concat(Dv_list).drop_duplicates(keep=False)
-        # Modification
         approximate_instance = ApproximationInstance(Dataset_r, self.domain, epsilon, [member], 'Data', iteration)
-        # logger.info('Golden standard: the original dataset is: \n%s ' % Dataset_r)
-        data = Dataset(Dataset_r, self.domain)
-        # logger.info('Golden standard: the approximated dataset is: \n%s ' % approximate_instance.approximated_data.df)
-        # logger.info('Golden standard: data vector for original dataset is: \n%s' % data.project([member]).datavector())
-        # logger.info('Golden standard: data vector for approximate dataset is: \n%s' % np.round(
-        #     approximate_instance.model.project([member]).datavector()))
-        answer_golden_standard = []
         answer_golden_standard = self.answer_queries(approximate_instance.approximated_data.df, member, queries)
         return np.array(answer_golden_standard)
 
@@ -188,8 +200,6 @@ class DynamicTree:
         answer_mechanism = []
         for index in range(cur_index + 1):
             if index == node.index:
-                logger.info('New Mechanism: Testing on %s, querying node %s, node %s is passed\n' % (
-                    cur_index, node.index, index))
                 Dv = node.df
                 delete_df = pd.merge(
                     pd.concat([delete_df, self.node_list[index].delete_df]).drop_duplicates(keep=False), Dv,
@@ -207,15 +217,12 @@ class DynamicTree:
                 epsilon_r = max(3 * epsilon / (2 * np.square(np.pi * r)), epsilon / np.log2(len(Dv)))
                 delta_r = max(2 * delta / (np.square(np.pi * r)), delta / np.log2(len(Dv)))
                 tilde_n_v = len(Dv) + np.random.laplace(loc=0, scale=1 / epsilon_r)
-                logger.info('New Mechanism: epsilon during the algorithm %f' % epsilon_r)
                 approximation_instance = ApproximationInstance(Dv, self.domain, epsilon_r, [member], 'Data', iteration)
                 Dv_answer = self.answer_queries(approximation_instance.approximated_data.df, member, queries)
                 answer_mechanism = Dv_answer
                 # Initiate M_Ins
                 basic_counting_instance = BasicCounting(epsilon, delta_r, store_df=True, config=self.config)
             elif node.index < index <= cur_index:
-                logger.info('New Mechanism: Testing on %s, querying node %s, node %s is passed' % (
-                    cur_index, node.index, index))
                 delete_df = pd.merge(
                     pd.concat([delete_df, self.node_list[index].delete_df]).drop_duplicates(keep=False), Dv,
                     how='inner')
@@ -239,7 +246,6 @@ class DynamicTree:
                     epsilon_r = max(3 * epsilon / (2 * np.square(np.pi * r)), epsilon / np.log2(len(Dv)))
                     delta_r = max(2 * delta / (np.square(np.pi * r)), delta / np.log2(len(Dv)))
                     tilde_n_v = len(Dv) + np.random.laplace(loc=0, scale=1 / epsilon_r)
-                    logger.info('New Mechanism: epsilon during the algorithm %f' % epsilon_r)
                     # Run(epsilon_r, delta_r)-DP M(D(v)) to release Q(D(v))
                     approximation_instance = ApproximationInstance(Dv, self.domain, epsilon_r, [member], 'Data',
                                                                    iteration)
@@ -262,6 +268,14 @@ class DynamicTree:
 
     # Pack the way for answering the query.
     # queries: being a dict that maps the member to a dict, for the contained dict, key is length, value is the queries
+    def answer_queries_dict(self, dataset, member, queries):
+        answer = {}
+        for length in queries[member].keys():
+            answer[length] = []
+            for query in queries[member][length]:
+                answer[length] += [len(query(dataset))]
+        return answer
+
     def answer_queries(self, dataset, member, queries):
         answer = []
         for length in queries[member].keys():
@@ -302,3 +316,31 @@ class DynamicTree:
 
     def mse(self, array1, array2):
         return ((np.array(array1) - np.array(array2)) ** 2).mean()
+
+    def update_answer_data(self, member, index, answer1, answer2, answer3):
+        self.answer_queries_ground_truth[member][index] = answer1
+        self.answer_golden_standard[member][index] = answer2
+        self.answer_mechanism[member][index] = answer3
+
+    def draw_diagram(self, ipp_instance, figure_file_name, query_length=1):
+        for member in self.query_instance.clique:
+            cut_range = self.query_instance.length_size[member][query_length]
+            index_range = range(1, len(ipp_instance.get_segment()) - 1)
+            sum_1, sum_2, sum_3 = {}, {}, {}
+            for index in index_range:
+                sum_1_temp = 0
+                sum_2_temp = 0
+                sum_3_temp = 0
+                for i in range(cut_range):
+                    sum_1_temp += self.answer_ground_truth[member][index][i] * i
+                    sum_2_temp += self.answer_golden_standard[member][index][i] * i
+                    sum_3_temp += self.answer_mechanism[member][index][i] * i
+                sum_1[index] = sum_1_temp / sum(self.answer_ground_truth[member][index][0:cut_range])
+                sum_2[index] = sum_2_temp / sum(self.answer_golden_standard[member][index][0:cut_range])
+                sum_3[index] = sum_3_temp / sum(self.answer_mechanism[member][index][0:cut_range])
+            plt.title('Testing on %s' % member)
+            plt.plot(index_range, sum_1.values())
+            plt.plot(index_range, sum_2.values())
+            plt.plot(index_range, sum_3.values())
+            plt.legend(['ground truth', 'golden standard', 'mechanism'], loc='upper left')
+            plt.savefig(figure_file_name)
