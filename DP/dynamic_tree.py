@@ -7,6 +7,7 @@ from query import Query
 from approximation_instance import ApproximationInstance
 from mbi import Domain, Dataset
 from basic_counting import BasicCounting
+import auxiliary
 from datetime import datetime
 
 
@@ -64,7 +65,7 @@ class DynamicTree:
     # Below is the function serves to queries
     def query_nodes(self, index):
         nodes = [self.node_list[index]]
-        if self.is_two_power(index):
+        if auxiliary.is_two_power(index):
             return nodes
         else:
             return nodes + self.query_nodes(
@@ -103,7 +104,7 @@ class DynamicTree:
             self.answer_mechanism[member][index] = self.answer_queries_mechanism(query_nodes, index,
                                                                                  query_instance.queries, member,
                                                                                  epsilon, delta, beta, iteration,
-                                                                                 logger)
+                                                                                 logger=logger)
             logger.info('The testing is implemented at %s' % member)
             logger.info('Ground truth: gives answer: \n%s' % np.array(
                 self.output_answer(self.answer_ground_truth[member][index], member, query_instance, logger)))
@@ -179,7 +180,7 @@ class DynamicTree:
                                  logger=None):
         epsilon_budget = {node: 6 * epsilon / (np.square(np.pi * (node.height + 1))) for node in nodes}
         delta_budget = {node: 6 * delta / (np.square(np.pi * (node.height + 1))) for node in nodes}
-        answer_mechanism = [0] * len(queries)
+        answer_mechanism = self.answer_queries(pd.DataFrame(columns=self.config.keys()), member, queries)
         for node in nodes:
             answer_mechanism_node = self.answer_node_queries_mechanism(node, cur_index, queries, member,
                                                                        epsilon_budget[node], delta_budget[node],
@@ -196,7 +197,7 @@ class DynamicTree:
         delete_df = pd.DataFrame(columns=self.config.keys())
         # These variables store the query answer for the approximated dataset
         Dv_answer = []
-        D_sj_answer = []
+        # D_sj_answer = []
         answer_mechanism = []
         for index in range(cur_index + 1):
             if index == node.index:
@@ -241,7 +242,7 @@ class DynamicTree:
                                                                        iteration)
                         Dv_answer = self.answer_queries(approximation_instance.approximated_data.df, member, queries)
                         if tilde_n_v < (2 * alpha_BC_sj):
-                            answer_mechanism = [0] * len(queries)
+                            ansewr_mechanism = self.ansewr_queries(pd.DataFrame(columns=self.config.keys()), member, queries)
                             break
                     epsilon_r = max(3 * epsilon / (2 * np.square(np.pi * r)), epsilon / np.log2(len(Dv)))
                     delta_r = max(2 * delta / (np.square(np.pi * r)), delta / np.log2(len(Dv)))
@@ -287,8 +288,11 @@ class DynamicTree:
     def output_answer(self, answer, member, query_instance, logger=None):
         head = 0
         tail = 0
+        logger.info('output_answer:%s' % answer)
         for length in query_instance.length_size[member]:
+            logger.info('query_instance.length_size[member]:%s' % query_instance.length_size[member])
             tail = query_instance.length_size[member][length]
+            logger.info('tail, head: %s %s' %(head, tail))
             if logger is not None:
                 logger.info('Range size %d, answer %s:' % (length, str(answer[head: tail])))
             else:
@@ -343,4 +347,4 @@ class DynamicTree:
             plt.plot(index_range, sum_2.values())
             plt.plot(index_range, sum_3.values())
             plt.legend(['ground truth', 'golden standard', 'mechanism'], loc='upper left')
-            plt.savefig(figure_file_name)
+            plt.savefig(figure_file_name + str(member) + '.jpg')

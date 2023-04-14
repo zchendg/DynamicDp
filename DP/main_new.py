@@ -1,5 +1,4 @@
 import sys
-
 import pandas as pd
 import json
 import logging
@@ -21,7 +20,7 @@ time_format = "%Y-b-%d_%H-%M-%S"
 result_path = './result/' + datetime.now().strftime(time_format)
 os.mkdir(result_path)
 logger_file_name = result_path + '/data.log'
-figure_file_name = result_path + '/figure.jpg'
+figure_file_name = result_path + '/figure_'
 
 if 1:
     # ----Command Line Arguments Section--------
@@ -56,8 +55,11 @@ def main():
     logger.info('******** Initialization ********')
     # Loading dataset
     data = pd.read_csv(args.dataset_path, sep=',').iloc[0:args.data_size]
+    # print(data)
+    # data = auxiliary.process_data(data, sparse=False)
+    data = auxiliary.generate_fixed_size_data(data, 10)
     print(data)
-    data = auxiliary.process_data(data, sparse=False)
+    return
     # data = auxiliary.sparse_data(data, 1, 10)
     # data = auxiliary.insert_deletion_data(data, False)
     print('\n', data)
@@ -106,7 +108,7 @@ def main():
     # dynamic_tree.node_list[4].df = pd.read_csv(args.dataset_path, sep=',').iloc[0:10000]
     # Modification
     # dynamic_tree.testing_index(8, epsilon=args.epsilon, iteration=args.iteration, logger=logger)
-    dynamic_tree.testing(ipp_instance, 1, 100, args.epsilon, args.delta, args.beta, args.iteration, logger)
+    dynamic_tree.testing(ipp_instance, 2, 100, args.epsilon, args.delta, args.beta, args.iteration, logger)
     print('******** Testing Finished ********')
     logger.info('******** Testing Finished ********')
     logger.info('******** Drawing Figure start ********')

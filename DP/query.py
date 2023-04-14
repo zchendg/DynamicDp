@@ -4,7 +4,8 @@ import random
 class Query:
     def __init__(self, config, column_number=5, query_size=10, random_query=False):
         # self.clique = random.sample(config.keys(), column_number)
-        self.clique = ['workclass']
+        self.clique = ['marital-status', 'age']
+        print('clique %s' % self.clique)
         self.config = config
         if random_query:
             self.queries = self.create_queries(query_size)
@@ -31,6 +32,7 @@ class Query:
         size = 0
         for member in self.clique:
             length_size[member] = {}
+            size = 0
             for length in self.parameters[member].keys():
                 size += len(self.parameters[member][length])
                 length_size[member][length] = size

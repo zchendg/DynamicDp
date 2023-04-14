@@ -16,6 +16,12 @@ def is_two_power(n):
     else:
         return False
 
+def find_far_left_ancestor_index(index, height):
+    if index / (2 ** height) % 4 == 1:
+        return find_far_left_ancestor_index(index + 2 ** height, height + 1)
+    elif index / (2 ** height) % 4 == 3:
+        return index - 2 ** height
+
 
 def process_data(data, frac=1, sparse_ratio=100, sparse=False):
     if sparse:
@@ -115,3 +121,26 @@ def insert_deletion_data(data, concentrate=True):
     end = time.perf_counter()
     print('Insert deletion data costs: %ds' % (end - start))
     return data
+
+
+    # This funding wants to generate the dynamic data with fixed size：
+def generate_fixed_size_data(data, size=1000):
+    start = time.perf_counter()
+    data.insert(data.shape[1], 'update', 1)
+    # data_output = pd.DataFrame(columns=data.shape[1])
+    # data_current = pd.DataFrame(columns=data.shape[1])
+    # Initially, set data_output and data_current to be the first size row
+    data_output = data[0: size]
+    data_current = data[0: size]
+    data = pd.concat([data, data[0: size]], ignore_index=True).drop_duplicates(keep=False).reset_index(drop=True)
+    for i in trange(len(data)):
+        index = np.random.randint(0, size)
+        deletion_row = data_current.loc[index: index].copy()
+        deletion_row.loc[:, 'update'] = -1
+        insertion_row = data.loc[i: i].copy()
+        data_output = pd.concat([data_output, deletion_row, insertion_row], ignore_index=True)
+        deletion_row.loc[:, 'update'] = 1
+        data_current = pd.concat([data_current, deletion_row, insertion_row], ignore_index=True).drop_duplicates(keep=False)
+    end = time.perf_counter()
+    print('Generating dynamic data with fix size cost: %ds' % (end - start))
+    return data_output

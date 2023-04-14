@@ -1,0 +1,286 @@
+[2023-03-30 00:00:01] - Arguments: Namespace(beta=0.05, data_size=100, dataset_path='./data/adult.csv', delta=0.1, domain_path='./data/adult-domain.json', epsilon=5.0, iteration=50, sparse_ratio=10)
+[2023-03-30 00:00:01] - ******** Initialization ********
+[2023-03-30 00:00:01] - Data sparsification complete
+[2023-03-30 00:00:01] - Data information: {'age': 85, 'workclass': 9, 'fnlwgt': 100, 'education-num': 16, 'marital-status': 7, 'occupation': 15, 'relationship': 6, 'race': 5, 'sex': 2, 'capital-gain': 100, 'capital-loss': 100, 'hours-per-week': 99, 'native-country': 42, 'income>50K': 2}
+[2023-03-30 00:00:01] - ******** Create Dynamic Tree ********
+[2023-03-30 00:00:02] - The dynamic interval tree consists of nodes: [
+-------- Node index: 1 --------
+height: 0, sj: 2, 
+right_ancestor_index: 2, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 2, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 2 --------
+height: 1, sj: 4, 
+right_ancestor_index: 4, left_ancestor_index: None, right_child: 3, left_child: 1, 
+df size: 4, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 3 --------
+height: 0, sj: 16, 
+right_ancestor_index: None, left_ancestor_index: 2, right_child: None, left_child: None, 
+df size: 12, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 4 --------
+height: 2, sj: 42, 
+right_ancestor_index: 8, left_ancestor_index: None, right_child: 6, left_child: 2, 
+df size: 28, delete_df size: 7
+-----------------------------------, 
+-------- Node index: 5 --------
+height: 0, sj: 76, 
+right_ancestor_index: 6, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 25, delete_df size: 8
+-----------------------------------, 
+-------- Node index: 6 --------
+height: 1, sj: 118, 
+right_ancestor_index: None, left_ancestor_index: 4, right_child: 7, left_child: 5, 
+df size: 31, delete_df size: 21
+-----------------------------------, 
+-------- Node index: 7 --------
+height: 0, sj: 168, 
+right_ancestor_index: None, left_ancestor_index: 6, right_child: None, left_child: None, 
+df size: 7, delete_df size: 34
+-----------------------------------, 
+-------- Node index: 8 --------
+height: 3, sj: 199, 
+right_ancestor_index: 16, left_ancestor_index: None, right_child: 12, left_child: 4, 
+df size: 0, delete_df size: 30
+-----------------------------------]
+[2023-03-30 00:00:02] - Infinite Private Partitioning: s0: 0, j: 8, T: 28224, beta: 5.737741753080488e-13, C: 54.77866189344769, epsilon: 5.0, 
+ segment: [0, 2, 4, 16, 42, 76, 118, 168, 199]
+[2023-03-30 00:00:02] - ******** Testing Started ********
+[2023-03-30 00:00:02] - ++++++++ Testing on node 1 Started ++++++++
+[2023-03-30 00:00:02] - At node with index 1, we implement queries on cliques dict_keys(['marital-status']):
+[2023-03-30 00:00:02] - -------- New Mechanism: Testing on 1, node 1 is accessed --------
+[2023-03-30 00:00:03] - -------- New Mechanism answer node query on node 1 finished --------
+[2023-03-30 00:00:03] - The testing is implemented at marital-status
+[2023-03-30 00:00:03] - Range size 1, answer [1 0 1 0 0 0 0]:
+[2023-03-30 00:00:03] - Range size 2, answer [1 1 0]:
+[2023-03-30 00:00:03] - Range size 3, answer [0]:
+[2023-03-30 00:00:03] - Range size 4, answer [2]:
+[2023-03-30 00:00:03] - Range size 7, answer [2]:
+[2023-03-30 00:00:03] - Ground truth: gives answer: 
+None
+[2023-03-30 00:00:03] - Range size 1, answer [1 0 0 1 0 1 0]:
+[2023-03-30 00:00:03] - Range size 2, answer [1 1 1]:
+[2023-03-30 00:00:03] - Range size 3, answer [1]:
+[2023-03-30 00:00:03] - Range size 4, answer [2]:
+[2023-03-30 00:00:03] - Range size 7, answer [3]:
+[2023-03-30 00:00:03] - Golden standard: gives answer: 
+None
+[2023-03-30 00:00:03] - Range size 1, answer [2 0 1 0 0 0 0]:
+[2023-03-30 00:00:03] - Range size 2, answer [2 1 0]:
+[2023-03-30 00:00:03] - Range size 3, answer [0]:
+[2023-03-30 00:00:03] - Range size 4, answer [3]:
+[2023-03-30 00:00:03] - Range size 7, answer [3]:
+[2023-03-30 00:00:03] - Mechanism: gives answer: 
+None
+[2023-03-30 00:00:03] - Mean Square Error of ground truth and golden standard: 0.46153846153846156
+[2023-03-30 00:00:03] - Mean Square Error of ground truth and mechanism: 0.3076923076923077
+[2023-03-30 00:00:03] - Mean Square Error of golden standard and mechanism: 0.6153846153846154
+[2023-03-30 00:00:03] - Measurement3: golden_standard and mechanism
+0.0
+[2023-03-30 00:00:03] - ++++++++ Testing on node 1 Finished ++++++++
+[2023-03-30 00:00:03] - ++++++++ Testing on node 2 Started ++++++++
+[2023-03-30 00:00:03] - At node with index 2, we implement queries on cliques dict_keys(['marital-status']):
+[2023-03-30 00:00:04] - -------- New Mechanism: Testing on 2, node 2 is accessed --------
+[2023-03-30 00:00:04] - -------- New Mechanism answer node query on node 2 finished --------
+[2023-03-30 00:00:04] - The testing is implemented at marital-status
+[2023-03-30 00:00:04] - Range size 1, answer [3 0 1 0 0 0 0]:
+[2023-03-30 00:00:04] - Range size 2, answer [3 1 0]:
+[2023-03-30 00:00:04] - Range size 3, answer [0]:
+[2023-03-30 00:00:04] - Range size 4, answer [4]:
+[2023-03-30 00:00:04] - Range size 7, answer [4]:
+[2023-03-30 00:00:04] - Ground truth: gives answer: 
+None
+[2023-03-30 00:00:04] - Range size 1, answer [3 0 1 0 0 0 1]:
+[2023-03-30 00:00:04] - Range size 2, answer [3 1 0]:
+[2023-03-30 00:00:04] - Range size 3, answer [1]:
+[2023-03-30 00:00:04] - Range size 4, answer [4]:
+[2023-03-30 00:00:04] - Range size 7, answer [5]:
+[2023-03-30 00:00:04] - Golden standard: gives answer: 
+None
+[2023-03-30 00:00:04] - Range size 1, answer [0 0 0 0 0 3 2]:
+[2023-03-30 00:00:04] - Range size 2, answer [0 0 3]:
+[2023-03-30 00:00:04] - Range size 3, answer [5]:
+[2023-03-30 00:00:04] - Range size 4, answer [0]:
+[2023-03-30 00:00:04] - Range size 7, answer [5]:
+[2023-03-30 00:00:04] - Mechanism: gives answer: 
+None
+[2023-03-30 00:00:04] - Mean Square Error of ground truth and golden standard: 0.23076923076923078
+[2023-03-30 00:00:04] - Mean Square Error of ground truth and mechanism: 6.461538461538462
+[2023-03-30 00:00:04] - Mean Square Error of golden standard and mechanism: 5.461538461538462
+[2023-03-30 00:00:04] - Measurement3: golden_standard and mechanism
+0.0
+[2023-03-30 00:00:04] - ++++++++ Testing on node 2 Finished ++++++++
+[2023-03-30 00:00:04] - ++++++++ Testing on node 3 Started ++++++++
+[2023-03-30 00:00:04] - At node with index 3, we implement queries on cliques dict_keys(['marital-status']):
+[2023-03-30 00:00:05] - -------- New Mechanism: Testing on 3, node 2 is accessed --------
+[2023-03-30 00:00:05] - -------- New Mechanism answer node query on node 2 finished --------
+[2023-03-30 00:00:05] - -------- New Mechanism: Testing on 3, node 3 is accessed --------
+[2023-03-30 00:00:06] - -------- New Mechanism answer node query on node 3 finished --------
+[2023-03-30 00:00:06] - The testing is implemented at marital-status
+[2023-03-30 00:00:06] - Range size 1, answer [10  4  2  0  0  0  0]:
+[2023-03-30 00:00:06] - Range size 2, answer [14  2  0]:
+[2023-03-30 00:00:06] - Range size 3, answer [0]:
+[2023-03-30 00:00:06] - Range size 4, answer [16]:
+[2023-03-30 00:00:06] - Range size 7, answer [16]:
+[2023-03-30 00:00:06] - Ground truth: gives answer: 
+None
+[2023-03-30 00:00:06] - Range size 1, answer [10  4  2  1  0  0  0]:
+[2023-03-30 00:00:06] - Range size 2, answer [14  3  0]:
+[2023-03-30 00:00:06] - Range size 3, answer [0]:
+[2023-03-30 00:00:06] - Range size 4, answer [17]:
+[2023-03-30 00:00:06] - Range size 7, answer [17]:
+[2023-03-30 00:00:06] - Golden standard: gives answer: 
+None
+[2023-03-30 00:00:06] - Range size 1, answer [14  0  0  2  1  1  0]:
+[2023-03-30 00:00:06] - Range size 2, answer [14  2  2]:
+[2023-03-30 00:00:06] - Range size 3, answer [2]:
+[2023-03-30 00:00:06] - Range size 4, answer [16]:
+[2023-03-30 00:00:06] - Range size 7, answer [18]:
+[2023-03-30 00:00:06] - Mechanism: gives answer: 
+None
+[2023-03-30 00:00:06] - Mean Square Error of ground truth and golden standard: 0.3076923076923077
+[2023-03-30 00:00:06] - Mean Square Error of ground truth and mechanism: 4.153846153846154
+[2023-03-30 00:00:06] - Mean Square Error of golden standard and mechanism: 3.8461538461538463
+[2023-03-30 00:00:06] - Measurement3: golden_standard and mechanism
+0.0
+[2023-03-30 00:00:06] - ++++++++ Testing on node 3 Finished ++++++++
+[2023-03-30 00:00:06] - ++++++++ Testing on node 4 Started ++++++++
+[2023-03-30 00:00:06] - At node with index 4, we implement queries on cliques dict_keys(['marital-status']):
+[2023-03-30 00:00:07] - -------- New Mechanism: Testing on 4, node 4 is accessed --------
+[2023-03-30 00:00:07] - -------- New Mechanism answer node query on node 4 finished --------
+[2023-03-30 00:00:07] - The testing is implemented at marital-status
+[2023-03-30 00:00:07] - Range size 1, answer [10  8  9  0  0  1  0]:
+[2023-03-30 00:00:07] - Range size 2, answer [18  9  1]:
+[2023-03-30 00:00:07] - Range size 3, answer [1]:
+[2023-03-30 00:00:07] - Range size 4, answer [27]:
+[2023-03-30 00:00:07] - Range size 7, answer [28]:
+[2023-03-30 00:00:07] - Ground truth: gives answer: 
+None
+[2023-03-30 00:00:07] - Range size 1, answer [10  8  9  1  0  1  0]:
+[2023-03-30 00:00:07] - Range size 2, answer [18 10  1]:
+[2023-03-30 00:00:07] - Range size 3, answer [1]:
+[2023-03-30 00:00:07] - Range size 4, answer [28]:
+[2023-03-30 00:00:07] - Range size 7, answer [29]:
+[2023-03-30 00:00:07] - Golden standard: gives answer: 
+None
+[2023-03-30 00:00:07] - Range size 1, answer [ 1  0  3  0  0 24  1]:
+[2023-03-30 00:00:07] - Range size 2, answer [ 1  3 24]:
+[2023-03-30 00:00:07] - Range size 3, answer [25]:
+[2023-03-30 00:00:07] - Range size 4, answer [4]:
+[2023-03-30 00:00:07] - Range size 7, answer [29]:
+[2023-03-30 00:00:07] - Mechanism: gives answer: 
+None
+[2023-03-30 00:00:07] - Mean Square Error of ground truth and golden standard: 0.3076923076923077
+[2023-03-30 00:00:07] - Mean Square Error of ground truth and mechanism: 205.46153846153845
+[2023-03-30 00:00:07] - Mean Square Error of golden standard and mechanism: 210.07692307692307
+[2023-03-30 00:00:07] - Measurement3: golden_standard and mechanism
+0.0
+[2023-03-30 00:00:07] - ++++++++ Testing on node 4 Finished ++++++++
+[2023-03-30 00:00:07] - ++++++++ Testing on node 5 Started ++++++++
+[2023-03-30 00:00:07] - At node with index 5, we implement queries on cliques dict_keys(['marital-status']):
+[2023-03-30 00:00:08] - -------- New Mechanism: Testing on 5, node 4 is accessed --------
+[2023-03-30 00:00:08] - -------- New Mechanism answer node query on node 4 finished --------
+[2023-03-30 00:00:08] - -------- New Mechanism: Testing on 5, node 5 is accessed --------
+[2023-03-30 00:00:09] - -------- New Mechanism answer node query on node 5 finished --------
+[2023-03-30 00:00:09] - The testing is implemented at marital-status
+[2023-03-30 00:00:09] - Range size 1, answer [17  9 17  1  0  1  1]:
+[2023-03-30 00:00:09] - Range size 2, answer [26 18  1]:
+[2023-03-30 00:00:09] - Range size 3, answer [2]:
+[2023-03-30 00:00:09] - Range size 4, answer [44]:
+[2023-03-30 00:00:09] - Range size 7, answer [46]:
+[2023-03-30 00:00:09] - Ground truth: gives answer: 
+None
+[2023-03-30 00:00:09] - Range size 1, answer [17 10 17  1  0  0  2]:
+[2023-03-30 00:00:09] - Range size 2, answer [27 18  0]:
+[2023-03-30 00:00:09] - Range size 3, answer [2]:
+[2023-03-30 00:00:09] - Range size 4, answer [45]:
+[2023-03-30 00:00:09] - Range size 7, answer [47]:
+[2023-03-30 00:00:09] - Golden standard: gives answer: 
+None
+[2023-03-30 00:00:09] - Range size 1, answer [ 6  6 23  6  3  2  2]:
+[2023-03-30 00:00:09] - Range size 2, answer [12 29  5]:
+[2023-03-30 00:00:09] - Range size 3, answer [7]:
+[2023-03-30 00:00:09] - Range size 4, answer [41]:
+[2023-03-30 00:00:09] - Range size 7, answer [48]:
+[2023-03-30 00:00:09] - Mechanism: gives answer: 
+None
+[2023-03-30 00:00:09] - Mean Square Error of ground truth and golden standard: 0.5384615384615384
+[2023-03-30 00:00:09] - Mean Square Error of ground truth and mechanism: 44.07692307692308
+[2023-03-30 00:00:09] - Mean Square Error of golden standard and mechanism: 48.0
+[2023-03-30 00:00:09] - Measurement3: golden_standard and mechanism
+0.0
+[2023-03-30 00:00:09] - ++++++++ Testing on node 5 Finished ++++++++
+[2023-03-30 00:00:09] - ++++++++ Testing on node 6 Started ++++++++
+[2023-03-30 00:00:09] - At node with index 6, we implement queries on cliques dict_keys(['marital-status']):
+[2023-03-30 00:00:10] - -------- New Mechanism: Testing on 6, node 4 is accessed --------
+[2023-03-30 00:00:10] - -------- New Mechanism answer node query on node 4 finished --------
+[2023-03-30 00:00:10] - -------- New Mechanism: Testing on 6, node 6 is accessed --------
+[2023-03-30 00:00:11] - -------- New Mechanism answer node query on node 6 finished --------
+[2023-03-30 00:00:11] - The testing is implemented at marital-status
+[2023-03-30 00:00:11] - Range size 1, answer [23  6 13  1  0  2  1]:
+[2023-03-30 00:00:11] - Range size 2, answer [29 14  2]:
+[2023-03-30 00:00:11] - Range size 3, answer [3]:
+[2023-03-30 00:00:11] - Range size 4, answer [43]:
+[2023-03-30 00:00:11] - Range size 7, answer [46]:
+[2023-03-30 00:00:11] - Ground truth: gives answer: 
+None
+[2023-03-30 00:00:11] - Range size 1, answer [23  6 14  1  0  2  1]:
+[2023-03-30 00:00:11] - Range size 2, answer [29 15  2]:
+[2023-03-30 00:00:11] - Range size 3, answer [3]:
+[2023-03-30 00:00:11] - Range size 4, answer [44]:
+[2023-03-30 00:00:11] - Range size 7, answer [47]:
+[2023-03-30 00:00:11] - Golden standard: gives answer: 
+None
+[2023-03-30 00:00:11] - Range size 1, answer [20 -1  3  0 17  8  1]:
+[2023-03-30 00:00:11] - Range size 2, answer [19  3 25]:
+[2023-03-30 00:00:11] - Range size 3, answer [26]:
+[2023-03-30 00:00:11] - Range size 4, answer [22]:
+[2023-03-30 00:00:11] - Range size 7, answer [48]:
+[2023-03-30 00:00:11] - Mechanism: gives answer: 
+None
+[2023-03-30 00:00:11] - Mean Square Error of ground truth and golden standard: 0.3076923076923077
+[2023-03-30 00:00:11] - Mean Square Error of ground truth and mechanism: 169.84615384615384
+[2023-03-30 00:00:11] - Mean Square Error of golden standard and mechanism: 176.30769230769232
+[2023-03-30 00:00:11] - Measurement3: golden_standard and mechanism
+0.0
+[2023-03-30 00:00:11] - ++++++++ Testing on node 6 Finished ++++++++
+[2023-03-30 00:00:11] - ++++++++ Testing on node 7 Started ++++++++
+[2023-03-30 00:00:11] - At node with index 7, we implement queries on cliques dict_keys(['marital-status']):
+[2023-03-30 00:00:12] - -------- New Mechanism: Testing on 7, node 4 is accessed --------
+[2023-03-30 00:00:12] - -------- New Mechanism answer node query on node 4 finished --------
+[2023-03-30 00:00:12] - -------- New Mechanism: Testing on 7, node 6 is accessed --------
+[2023-03-30 00:00:13] - -------- New Mechanism answer node query on node 6 finished --------
+[2023-03-30 00:00:13] - -------- New Mechanism: Testing on 7, node 7 is accessed --------
+[2023-03-30 00:00:14] - -------- New Mechanism answer node query on node 7 finished --------
+[2023-03-30 00:00:14] - The testing is implemented at marital-status
+[2023-03-30 00:00:14] - Range size 1, answer [15  4  7  1  0  1  0]:
+[2023-03-30 00:00:14] - Range size 2, answer [19  8  1]:
+[2023-03-30 00:00:14] - Range size 3, answer [1]:
+[2023-03-30 00:00:14] - Range size 4, answer [27]:
+[2023-03-30 00:00:14] - Range size 7, answer [28]:
+[2023-03-30 00:00:14] - Ground truth: gives answer: 
+None
+[2023-03-30 00:00:14] - Range size 1, answer [15  4  7  2  0  1  0]:
+[2023-03-30 00:00:14] - Range size 2, answer [19  9  1]:
+[2023-03-30 00:00:14] - Range size 3, answer [1]:
+[2023-03-30 00:00:14] - Range size 4, answer [28]:
+[2023-03-30 00:00:14] - Range size 7, answer [29]:
+[2023-03-30 00:00:14] - Golden standard: gives answer: 
+None
+[2023-03-30 00:00:14] - Range size 1, answer [12 16 -6  9  0 -1  1]:
+[2023-03-30 00:00:14] - Range size 2, answer [28  3 -1]:
+[2023-03-30 00:00:14] - Range size 3, answer [0]:
+[2023-03-30 00:00:14] - Range size 4, answer [31]:
+[2023-03-30 00:00:14] - Range size 7, answer [31]:
+[2023-03-30 00:00:14] - Mechanism: gives answer: 
+None
+[2023-03-30 00:00:14] - Mean Square Error of ground truth and golden standard: 0.3076923076923077
+[2023-03-30 00:00:14] - Mean Square Error of ground truth and mechanism: 40.53846153846154
+[2023-03-30 00:00:14] - Mean Square Error of golden standard and mechanism: 39.30769230769231
+[2023-03-30 00:00:14] - Measurement3: golden_standard and mechanism
+0.0
+[2023-03-30 00:00:14] - ++++++++ Testing on node 7 Finished ++++++++
+[2023-03-30 00:00:14] - ******** Testing Finished ********
+[2023-03-30 00:00:14] - ******** Drawing Figure start ********
+[2023-03-30 00:00:14] - ******** Drawing Figure finish ********
