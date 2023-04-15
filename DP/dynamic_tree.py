@@ -51,17 +51,6 @@ class DynamicTree:
         elif index / (2 ** height) % 4 == 3:
             return index - 2 ** height
 
-    def is_two_power(self, n):
-        if n == 1:
-            return True
-        res = 1
-        while res < n:
-            res = res << 1
-        if res == n:
-            return True
-        else:
-            return False
-
     # Below is the function serves to queries
     def query_nodes(self, index):
         nodes = [self.node_list[index]]

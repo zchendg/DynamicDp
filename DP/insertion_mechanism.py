@@ -11,11 +11,13 @@ from mbi import Domain, Dataset
 # This mechanmism implement the baseline mechanism, that using insertion and deletion only mechanmism
 
 class Insertion_Mechanism:
-    def __init__(self, config):
+    def __init__(self, config, query_instance=None):
         self.node_list = [Node(0, config.keys(), 0)]
         self.config = config
         self.domain = Domain(config.keys(), config.values())
-        self.query_instance
+        self.answer_ground_truth = {}
+        self.answer_mechanism = {}
+        self.query_instance = query_instance
 
     def create_node(self, sj):
         self.node_list.append(Node(len(self.node_list), self.config.keys(), sj))
@@ -43,3 +45,15 @@ class Insertion_Mechanism:
             return nodes + self.query_nodes(auxiliary.find_far_left_ancestor_index(self.node_list[index].index, self.node_list[index].height))
 
     def testing(self, ipp_instance, column_number=1, each_query_size=10, epsilon=1, delta=0, beta=0.05, iteration=500, logger=None):
+        for member in self.query_instance.queries.keys():
+            self.answer_ground_truth[member] = {}
+            self.answer_mechanism[member] = {}
+        for index in range(1, len(ipp_instance.get_segment()) - 1):
+            logger.info('++++++++ Testing on node %d Started ++++++++' % index)
+
+    def testing_index(self, index, query_instance, epsilon=1, delta=0, beta=0.05, iteration=500, logger=None):
+        query_nodes = self.query_nodes(index)
+        query_nodes.reserve()
+        logger.info(
+            'At node with index %d, we implement queries on cliques %s:' % (index, query_instance.queries.keys()))
+        for member in query_instance.queries.keys():
