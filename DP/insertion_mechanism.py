@@ -56,4 +56,13 @@ class Insertion_Mechanism:
         query_nodes.reserve()
         logger.info(
             'At node with index %d, we implement queries on cliques %s:' % (index, query_instance.queries.keys()))
-        for member in query_instance.queries.keys():
+        for member in self.query_instance.queries.keys():
+
+    def answer_queries_ground_truth(self, nodes, cur_index, queries, member, logger=None):
+        Dv_list = []
+        for node in nodes:
+            Dv = pd.DataFrame(columns=self.config.keys())
+            for index in range(cur_index + 1):
+                if index == node.index:
+                    Dv = node.df
+                elif node.index < index <= cur_index:
