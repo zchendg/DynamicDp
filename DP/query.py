@@ -2,16 +2,14 @@ import random
 
 
 class Query:
-    def __init__(self, config, column_number=5, query_size=10, random_query=False):
+    def __init__(self, config, random_query=False, column_number=2, query_size=10):
         # self.clique = random.sample(config.keys(), column_number)
         self.clique = ['marital-status', 'age']
-        print('clique %s' % self.clique)
         self.config = config
         if random_query:
-            self.queries = self.create_queries(query_size)
             self.parameters = self.generate_query_parameters(query_size)
+            self.queries = self.create_queries(query_size)
         else:
-            print('random query is called')
             self.parameters = self.generate_query_parameters_non_randomly()
             self.length_size = self.get_length_size()
             self.queries = self.create_queries_non_randomly()

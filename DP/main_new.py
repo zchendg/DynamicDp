@@ -9,7 +9,9 @@ import time
 from tqdm import tqdm
 from tqdm._tqdm import trange
 from dynamic_tree import DynamicTree
+from insertion_mechanism import Insertion_Mechanism
 from ipp import IPP
+from query import Query
 from current_df import CurrentDf
 from datetime import datetime
 from my_logger import Logger
@@ -36,6 +38,8 @@ if 1:
     parser.add_argument('--delta', type=float, default=0.1)
     parser.add_argument('--beta', type=float, default=0.05)
     parser.add_argument('--iteration', type=int, default=500)
+    parser.add_argument('--column_number', type=int, default=1)
+    parser.add_argument('--each_query_size', type=int, default=10)
 
     # Command line arguments parser
     print('******** Parsing Parameter********')
@@ -59,7 +63,6 @@ def main():
     # data = auxiliary.process_data(data, sparse=False)
     data = auxiliary.generate_fixed_size_data(data, 10)
     print(data)
-    return
     # data = auxiliary.sparse_data(data, 1, 10)
     # data = auxiliary.insert_deletion_data(data, False)
     print('\n', data)
@@ -67,13 +70,20 @@ def main():
     config = json.load(open(args.domain_path))
     UPPERBOUND = len(data)
     logger.info('Data information: %s' % config)
+
     # ---- Construction Section --------
-    dynamic_tree = DynamicTree(config)
+    query_instance = Query(config, random_query=False)
+    dynamic_tree = DynamicTree(config, query_instance)
+    insertion_tree = Insertion_Mechanism(config, query_instance)
+    deletion_tree = Insertion_Mechanism(config, query_instance)
     ipp_instance = IPP(data, args.epsilon, args.beta)
-    # ipp_instance = IPP(data, args.epsilon, args.beta)
     # Dataframe that stores the current dataset
+    # cur_data: current data upto the timestamp t
+    # cur_deletion_data: deletion data between two nodes
+    # cur_deleted_data: treating deletion as insertion
     cur_data = CurrentDf(config.keys())
     cur_deletion_data = CurrentDf(config.keys())
+    cur_deleted_data = CurrentDf(config.keys())
 
     # ---- Establish Dynamic Tree --------
     print('******** Create Dynamic Tree ********')
@@ -83,6 +93,7 @@ def main():
         if t == (UPPERBOUND - 1):
             cur_data.current_df_update(data.iloc[[t]], t)
             cur_deletion_data.add_deletion_item(data.iloc[[t]], t)
+            # cur_data_deleted.add_deletion_item(data.iloc[[t]], t)
             ipp_instance.segment.append(t)
         if ipp_instance.segment[-1] == t:
             # First, create a new node, store the data in the new node
@@ -90,16 +101,23 @@ def main():
             # We first insert the current df into the last node
             if len(ipp_instance.get_segment()) == 1:
                 cur_data.current_df_update(data.iloc[[t]], t)
+                cur_deleted_data.add_deletion_item(data.iloc[[t]], t)
                 continue
             elif auxiliary.is_two_power(len(ipp_instance.get_segment()) - 1):
+                # Create leftmost node
                 dynamic_tree.create_leftmost_node(cur_data, cur_deletion_data, t)
+                insertion_tree.create_leftmost_node(cur_data, t)
+                deletion_tree.create_leftmost_node(cur_deleted_data, t)
                 cur_deletion_data.renew()
             else:
                 dynamic_tree.create_internal_node(cur_data, cur_deletion_data, t)
+                insertion_tree.create_internal_node(cur_data, t)
+                deletion_tree.create_internal_node(cur_deleted_data, t)
                 cur_deletion_data.renew()
         # For linear query, we need to keep track of the deletion time of the item
         cur_data.current_df_update(data.iloc[[t]], t)
         cur_deletion_data.add_deletion_item(data.iloc[[t]], t)
+        cur_deleted_data.add_deletion_item(data.iloc[[t]], t)
     logger.info('The dynamic interval tree consists of nodes: %s' % dynamic_tree.node_list[1:])
     logger.info('Infinite Private Partitioning: %s' % ipp_instance)
     print('******** Testing Started ********')
