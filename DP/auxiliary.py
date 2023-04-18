@@ -5,6 +5,7 @@ from tqdm._tqdm import trange
 from tqdm import tqdm
 
 
+
 def is_two_power(n):
     if n == 1:
         return True
@@ -15,6 +16,7 @@ def is_two_power(n):
         return True
     else:
         return False
+
 
 def find_far_left_ancestor_index(index, height):
     if index / (2 ** height) % 4 == 1:
@@ -30,6 +32,7 @@ def process_data(data, frac=1, sparse_ratio=100, sparse=False):
     else:
         data = insert_deletion_data_original(data, False)
     return data
+
 
 def sparse_data(data, frac=1, sparse_ratio=100):
     start = time.perf_counter()
@@ -122,13 +125,12 @@ def insert_deletion_data(data, concentrate=True):
     print('Insert deletion data costs: %ds' % (end - start))
     return data
 
-
     # This funding wants to generate the dynamic data with fixed size：
+
+
 def generate_fixed_size_data(data, size=1000):
     start = time.perf_counter()
     data.insert(data.shape[1], 'update', 1)
-    # data_output = pd.DataFrame(columns=data.shape[1])
-    # data_current = pd.DataFrame(columns=data.shape[1])
     # Initially, set data_output and data_current to be the first size row
     data_output = data[0: size]
     data_current = data[0: size]
@@ -140,7 +142,8 @@ def generate_fixed_size_data(data, size=1000):
         insertion_row = data.loc[i: i].copy()
         data_output = pd.concat([data_output, deletion_row, insertion_row], ignore_index=True)
         deletion_row.loc[:, 'update'] = 1
-        data_current = pd.concat([data_current, deletion_row, insertion_row], ignore_index=True).drop_duplicates(keep=False)
+        data_current = pd.concat([data_current, deletion_row, insertion_row], ignore_index=True).drop_duplicates(
+            keep=False).reset_index(drop=True)
     end = time.perf_counter()
     print('Generating dynamic data with fix size cost: %ds' % (end - start))
     return data_output

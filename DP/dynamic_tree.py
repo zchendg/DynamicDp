@@ -95,13 +95,12 @@ class DynamicTree:
                                                                                  epsilon, delta, beta, iteration,
                                                                                  logger=logger)
             logger.info('The testing is implemented at %s' % member)
-            logger.info('Ground truth: gives answer: \n%s' % np.array(
-                auxiliary1.output_answer(self.answer_ground_truth[member][index], member, self.query_instance, logger)))
-            logger.info('Golden standard: gives answer: \n%s' % np.array(
-                auxiliary1.output_answer(self.answer_golden_standard[member][index], member, self.query_instance,
-                                         logger)))
-            logger.info('Mechanism: gives answer: \n%s' % np.array(
-                auxiliary1.output_answer(self.answer_mechanism[member][index], member, self.query_instance, logger)))
+            logger.info('Ground truth: gives answer')
+            auxiliary1.output_answer(self.answer_ground_truth[member][index], member, self.query_instance, logger)
+            logger.info('Golden standard: gives answer')
+            auxiliary1.output_answer(self.answer_golden_standard[member][index], member, self.query_instance, logger)
+            logger.info('Mechanism: gives answer')
+            auxiliary1.output_answer(self.answer_mechanism[member][index], member, self.query_instance, logger)
             logger.info("Mean Square Error of ground truth and golden standard: %s" % self.mse(
                 self.answer_ground_truth[member][index],
                 self.answer_golden_standard[member][index]))
@@ -281,9 +280,7 @@ class DynamicTree:
         tail = 0
         logger.info('output_answer:%s' % answer)
         for length in query_instance.length_size[member]:
-            logger.info('query_instance.length_size[member]:%s' % query_instance.length_size[member])
             tail = query_instance.length_size[member][length]
-            logger.info('tail, head: %s %s' % (head, tail))
             if logger is not None:
                 logger.info('Range size %d, answer %s:' % (length, str(answer[head: tail])))
             else:
@@ -339,3 +336,4 @@ class DynamicTree:
             plt.plot(index_range, sum_3.values())
             plt.legend(['ground truth', 'golden standard', 'mechanism'], loc='upper left')
             plt.savefig(figure_file_name + str(member) + '.jpg')
+            plt.cla()

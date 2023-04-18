@@ -5,16 +5,21 @@ import logging
 import os
 import argparse
 import auxiliary
+import auxiliary1
 import time
 from tqdm import tqdm
 from tqdm._tqdm import trange
 from dynamic_tree import DynamicTree
-from insertion_mechanism import Insertion_Mechanism
+from insertion_deletion import Insertion_Deletion_Mechanism
 from ipp import IPP
 from query import Query
 from current_df import CurrentDf
 from datetime import datetime
 from my_logger import Logger
+
+# pd.set_option('display.max_columns', None)
+pd.set_option('display.max_rows', None)
+# pd.set_option('max_colwidth', 100)
 
 if not os.path.exists('./result'):
     os.mkdir('./result')
@@ -74,8 +79,7 @@ def main():
     # ---- Construction Section --------
     query_instance = Query(config, random_query=False)
     dynamic_tree = DynamicTree(config, query_instance)
-    insertion_tree = Insertion_Mechanism(config, query_instance)
-    deletion_tree = Insertion_Mechanism(config, query_instance)
+    insertion_deletion_instance = Insertion_Deletion_Mechanism(config, query_instance)
     ipp_instance = IPP(data, args.epsilon, args.beta)
     # Dataframe that stores the current dataset
     # cur_data: current data upto the timestamp t
@@ -83,6 +87,7 @@ def main():
     # cur_deleted_data: treating deletion as insertion
     cur_data = CurrentDf(config.keys())
     cur_deletion_data = CurrentDf(config.keys())
+    cur_inserted_data = CurrentDf(config.keys())
     cur_deleted_data = CurrentDf(config.keys())
 
     # ---- Establish Dynamic Tree --------
@@ -101,24 +106,28 @@ def main():
             # We first insert the current df into the last node
             if len(ipp_instance.get_segment()) == 1:
                 cur_data.current_df_update(data.iloc[[t]], t)
+                cur_inserted_data.add_insertion_item(data.iloc[[t]], t)
                 cur_deleted_data.add_deletion_item(data.iloc[[t]], t)
                 continue
             elif auxiliary.is_two_power(len(ipp_instance.get_segment()) - 1):
                 # Create leftmost node
                 dynamic_tree.create_leftmost_node(cur_data, cur_deletion_data, t)
-                insertion_tree.create_leftmost_node(cur_data, t)
-                deletion_tree.create_leftmost_node(cur_deleted_data, t)
+                insertion_deletion_instance.insertion_tree.create_leftmost_node(cur_inserted_data, t)
+                insertion_deletion_instance.deletion_tree.create_leftmost_node(cur_deleted_data, t)
                 cur_deletion_data.renew()
             else:
                 dynamic_tree.create_internal_node(cur_data, cur_deletion_data, t)
-                insertion_tree.create_internal_node(cur_data, t)
-                deletion_tree.create_internal_node(cur_deleted_data, t)
+                insertion_deletion_instance.insertion_tree.create_internal_node(cur_inserted_data, t)
+                insertion_deletion_instance.deletion_tree.create_internal_node(cur_deleted_data, t)
                 cur_deletion_data.renew()
         # For linear query, we need to keep track of the deletion time of the item
         cur_data.current_df_update(data.iloc[[t]], t)
         cur_deletion_data.add_deletion_item(data.iloc[[t]], t)
+        cur_inserted_data.add_insertion_item(data.iloc[[t]], t)
         cur_deleted_data.add_deletion_item(data.iloc[[t]], t)
     logger.info('The dynamic interval tree consists of nodes: %s' % dynamic_tree.node_list[1:])
+    logger.info('The insertion tree consists of nodes: %s ' % insertion_deletion_instance.insertion_tree.node_list[1:])
+    logger.info('The deletion tree consists of nodes: %s ' % insertion_deletion_instance.deletion_tree.node_list[1:])
     logger.info('Infinite Private Partitioning: %s' % ipp_instance)
     print('******** Testing Started ********')
     logger.info('******** Testing Started ********')
@@ -127,11 +136,13 @@ def main():
     # Modification
     # dynamic_tree.testing_index(8, epsilon=args.epsilon, iteration=args.iteration, logger=logger)
     dynamic_tree.testing(ipp_instance, 2, 100, args.epsilon, args.delta, args.beta, args.iteration, logger)
+    insertion_deletion_instance.testing(ipp_instance, args.epsilon, args.delta, args.beta, args.iteration, logger)
+    auxiliary1.store_answer(dynamic_tree, insertion_deletion_instance, ipp_instance, logger=logger)
     print('******** Testing Finished ********')
     logger.info('******** Testing Finished ********')
-    logger.info('******** Drawing Figure start ********')
+    logger.info('******** Drawing Figure started ********')
     dynamic_tree.draw_diagram(ipp_instance, figure_file_name)
-    logger.info('******** Drawing Figure finish ********')
+    logger.info('******** Drawing Figure finished ********')
     return -1
 
 

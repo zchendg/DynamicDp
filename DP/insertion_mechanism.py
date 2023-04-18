@@ -8,6 +8,8 @@ import argparse
 import auxiliary
 from node import Node
 from approximation_instance import ApproximationInstance
+import auxiliary
+import auxiliary1
 from mbi import Domain, Dataset
 
 
@@ -49,26 +51,33 @@ class Insertion_Mechanism:
             return nodes + self.query_nodes(
                 auxiliary.find_far_left_ancestor_index(self.node_list[index].index, self.node_list[index].height))
 
-    def testing(self, ipp_instance, column_number=1, each_query_size=10, epsilon=1, delta=0, beta=0.05, iteration=500,
+    def testing(self, ipp_instance, epsilon=1, delta=0, beta=0.05, iteration=500,
                 logger=None):
         for index in range(1, len(ipp_instance.get_segment()) - 1):
             logger.info('++++++++ Testing on node %d Started ++++++++' % index)
+            self.testing_index(index, epsilon, delta, beta, iteration, logger)
+            logger.info('++++++++ Testing on node %d Finished ++++++++' % index)
 
-    def testing_index(self, index, query_instance, epsilon=1, delta=0, beta=0.05, iteration=500, logger=None):
+    def testing_index(self, index, epsilon=1, delta=0, beta=0.05, iteration=500, logger=None):
         for member in self.query_instance.queries.keys():
             self.answer_ground_truth[member][index] = self.answer_queries_ground_truth(index,
                                                                                        self.query_instance.queries,
                                                                                        member, logger)
-            self.answer_mechanism[member][index] = self.answer_queries_baseline()
+            self.answer_mechanism[member][index] = self.answer_queries_baseline(index, self.query_instance.queries, member, epsilon, beta, iteration, logger)
+            logger.info('The testing is implemented at %s' % member)
+            logger.info('Mechanism: gives answer: \n%s' % np.array(
+                auxiliary1.output_answer(self.answer_ground_truth[member][index], member, self.query_instance, logger)))
+            logger.info('Mechanism: gives answer: \n%s' % np.array(
+                auxiliary1.output_answer(self.answer_ground_truth[member][index], member, self.query_instance, logger)))
         return
 
     def answer_queries_ground_truth(self, cur_index, queries, member, logger=None):
-        current_dataset = self.find_current_dataset(cur_index)
+        current_dataset = self.find_current_dataset(cur_index, logger)
         answer_ground_truth = self.answer_queries(current_dataset, member, queries)
         return np.array(answer_ground_truth)
 
     def answer_queries_baseline(self, cur_index, queries, member, epsilon=1, delta=0, iteration=500, logger=None):
-        current_dataset = self.find_current_dataset(cur_index)
+        current_dataset = self.find_current_dataset(cur_index, logger)
         approximate_instance = ApproximationInstance(current_dataset, self.domain, epsilon, [member], 'Data', iteration)
         answer_baseline = self.answer_queries(approximate_instance.approximated_data.df, member, queries)
         return np.array(answer_baseline)
@@ -93,7 +102,8 @@ class Insertion_Mechanism:
         for node in self.node_list[1:]:
             if node.index <= cur_index:
                 Dv_list += [node.df]
-        current_dataset = pd.concat(Dv_list).drop_duplicates(keep=False)
+        current_dataset = pd.concat(Dv_list).drop_duplicates(keep=False).reset_index(drop=True)
+        logger.info('current size of dataset is: %d' % len(current_dataset))
         return current_dataset
 
     def initialize_answer(self):

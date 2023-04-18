@@ -29,7 +29,7 @@ def output_answer(answer, member, query_instance, logger=None):
     for length in query_instance.length_size[member]:
         logger.info('query_instance.length_size[member]:%s' % query_instance.length_size[member])
         tail = query_instance.length_size[member][length]
-        logger.info('tail, head: %s %s' %(head, tail))
+        logger.info('tail, head: %s %s' % (head, tail))
         if logger is not None:
             logger.info('Range size %d, answer %s:' % (length, str(answer[head: tail])))
         else:
@@ -38,7 +38,25 @@ def output_answer(answer, member, query_instance, logger=None):
         head = query_instance.length_size[member][length]
 
 
-def compare_results(self, answer1, answer2, measurement=1):
+def store_answer(dynamic_tree, insertion_deletion_mechanism, ipp_instance, query_length=None, logger=None):
+    logger.info('Integrated answers stores here')
+    members = dynamic_tree.query_instance.queries.keys()
+    indexes = range(1, len(ipp_instance.get_segment()) - 1)
+    for member in members:
+        logger.info('Member %s' % member)
+        for index in indexes:
+            logger.info('Node Index %d' % index)
+            if query_length is None:
+                logger.info('Dynamic Tree:')
+                logger.info('Ground truth: %s' % dynamic_tree.answer_ground_truth[member][index])
+                logger.info('Golden standard: %s' % dynamic_tree.answer_golden_standard[member][index])
+                logger.info('Mechanism: %s' % dynamic_tree.answer_mechanism[member][index])
+                logger.info('Insertion-Only Mechanism:')
+                logger.info('Ground Truth: %s' % insertion_deletion_mechanism.answer_ground_truth[member][index])
+                logger.info('Mechanism: %s' % insertion_deletion_mechanism.answer_mechanism[member][index])
+
+
+def compare_results(answer1, answer2, measurement=1):
     # For golden standard, returns the queries' answer with pgm mechanism on single static dataset.
     # Parameter: measurement:
     # measurement=1: give the average of the difference divides the golden_standard

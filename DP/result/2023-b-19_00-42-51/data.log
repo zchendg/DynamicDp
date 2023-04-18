@@ -1,0 +1,175 @@
+[2023-04-19 00:42:51] - Arguments: Namespace(beta=0.05, column_number=1, data_size=1000, dataset_path='./data/adult.csv', delta=0.1, domain_path='./data/adult-domain.json', each_query_size=10, epsilon=1.0, iteration=100, sparse_ratio=10)
+[2023-04-19 00:42:51] - ******** Initialization ********
+[2023-04-19 00:42:52] - Data sparsification complete
+[2023-04-19 00:42:52] - Data information: {'age': 85, 'workclass': 9, 'fnlwgt': 100, 'education-num': 16, 'marital-status': 7, 'occupation': 15, 'relationship': 6, 'race': 5, 'sex': 2, 'capital-gain': 100, 'capital-loss': 100, 'hours-per-week': 99, 'native-country': 42, 'income>50K': 2}
+[2023-04-19 00:42:52] - ******** Create Dynamic Tree ********
+[2023-04-19 00:42:54] - The dynamic interval tree consists of nodes: [
+-------- Node index: 1 --------
+height: 0, sj: 2, 
+right_ancestor_index: 2, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 2, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 2 --------
+height: 1, sj: 4, 
+right_ancestor_index: 4, left_ancestor_index: None, right_child: 3, left_child: 1, 
+df size: 4, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 3 --------
+height: 0, sj: 16, 
+right_ancestor_index: None, left_ancestor_index: 2, right_child: None, left_child: None, 
+df size: 12, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 4 --------
+height: 2, sj: 128, 
+right_ancestor_index: 8, left_ancestor_index: None, right_child: 6, left_child: 2, 
+df size: 128, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 5 --------
+height: 0, sj: 297, 
+right_ancestor_index: 6, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 102, delete_df size: 49
+-----------------------------------, 
+-------- Node index: 6 --------
+height: 1, sj: 513, 
+right_ancestor_index: None, left_ancestor_index: 4, right_child: 7, left_child: 5, 
+df size: 142, delete_df size: 107
+-----------------------------------, 
+-------- Node index: 7 --------
+height: 0, sj: 768, 
+right_ancestor_index: None, left_ancestor_index: 6, right_child: None, left_child: None, 
+df size: 93, delete_df size: 128
+-----------------------------------, 
+-------- Node index: 8 --------
+height: 3, sj: 1058, 
+right_ancestor_index: 16, left_ancestor_index: None, right_child: 12, left_child: 4, 
+df size: 200, delete_df size: 145
+-----------------------------------, 
+-------- Node index: 9 --------
+height: 0, sj: 1379, 
+right_ancestor_index: 10, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 114, delete_df size: 159
+-----------------------------------, 
+-------- Node index: 10 --------
+height: 1, sj: 1755, 
+right_ancestor_index: 12, left_ancestor_index: None, right_child: 11, left_child: 9, 
+df size: 171, delete_df size: 188
+-----------------------------------, 
+-------- Node index: 11 --------
+height: 0, sj: 1796, 
+right_ancestor_index: None, left_ancestor_index: 10, right_child: None, left_child: None, 
+df size: 20, delete_df size: 21
+-----------------------------------]
+[2023-04-19 00:42:54] - The insertion tree consists of nodes: [
+-------- Node index: 1 --------
+height: 0, sj: 2, 
+right_ancestor_index: 2, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 2, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 2 --------
+height: 1, sj: 4, 
+right_ancestor_index: 4, left_ancestor_index: None, right_child: 3, left_child: 1, 
+df size: 4, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 3 --------
+height: 0, sj: 16, 
+right_ancestor_index: None, left_ancestor_index: 2, right_child: None, left_child: None, 
+df size: 12, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 4 --------
+height: 2, sj: 128, 
+right_ancestor_index: 8, left_ancestor_index: None, right_child: 6, left_child: 2, 
+df size: 128, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 5 --------
+height: 0, sj: 297, 
+right_ancestor_index: 6, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 102, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 6 --------
+height: 1, sj: 513, 
+right_ancestor_index: None, left_ancestor_index: 4, right_child: 7, left_child: 5, 
+df size: 142, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 7 --------
+height: 0, sj: 768, 
+right_ancestor_index: None, left_ancestor_index: 6, right_child: None, left_child: None, 
+df size: 93, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 8 --------
+height: 3, sj: 1058, 
+right_ancestor_index: 16, left_ancestor_index: None, right_child: 12, left_child: 4, 
+df size: 200, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 9 --------
+height: 0, sj: 1379, 
+right_ancestor_index: 10, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 114, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 10 --------
+height: 1, sj: 1755, 
+right_ancestor_index: 12, left_ancestor_index: None, right_child: 11, left_child: 9, 
+df size: 171, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 11 --------
+height: 0, sj: 1796, 
+right_ancestor_index: None, left_ancestor_index: 10, right_child: None, left_child: None, 
+df size: 20, delete_df size: 0
+-----------------------------------] 
+[2023-04-19 00:42:54] - The deletion tree consists of nodes: [
+-------- Node index: 1 --------
+height: 0, sj: 2, 
+right_ancestor_index: 2, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 0, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 2 --------
+height: 1, sj: 4, 
+right_ancestor_index: 4, left_ancestor_index: None, right_child: 3, left_child: 1, 
+df size: 0, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 3 --------
+height: 0, sj: 16, 
+right_ancestor_index: None, left_ancestor_index: 2, right_child: None, left_child: None, 
+df size: 0, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 4 --------
+height: 2, sj: 128, 
+right_ancestor_index: 8, left_ancestor_index: None, right_child: 6, left_child: 2, 
+df size: 0, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 5 --------
+height: 0, sj: 297, 
+right_ancestor_index: 6, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 49, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 6 --------
+height: 1, sj: 513, 
+right_ancestor_index: None, left_ancestor_index: 4, right_child: 7, left_child: 5, 
+df size: 156, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 7 --------
+height: 0, sj: 768, 
+right_ancestor_index: None, left_ancestor_index: 6, right_child: None, left_child: None, 
+df size: 128, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 8 --------
+height: 3, sj: 1058, 
+right_ancestor_index: 16, left_ancestor_index: None, right_child: 12, left_child: 4, 
+df size: 429, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 9 --------
+height: 0, sj: 1379, 
+right_ancestor_index: 10, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 159, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 10 --------
+height: 1, sj: 1755, 
+right_ancestor_index: 12, left_ancestor_index: None, right_child: 11, left_child: 9, 
+df size: 347, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 11 --------
+height: 0, sj: 1796, 
+right_ancestor_index: None, left_ancestor_index: 10, right_child: None, left_child: None, 
+df size: 21, delete_df size: 0
+-----------------------------------] 
+[2023-04-19 00:42:54] - Infinite Private Partitioning: s0: 0, j: 11, T: 3080025, beta: 1.3153009179670144e-19, C: 413.76052721387885, epsilon: 1.0, 
+ segment: [0, 2, 4, 16, 128, 297, 513, 768, 1058, 1379, 1755, 1796]

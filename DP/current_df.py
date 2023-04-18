@@ -19,6 +19,11 @@ class CurrentDf:
         cur_item = item.drop(columns=['update'])
         self.data = pd.concat([self.data, cur_item, cur_item]).drop_duplicates(keep=False)
 
+    def add_insertion_item(self, item, index):
+        if item.loc[index, 'update'] == 1:
+            self.add_item(item)
+        return
+
     # This function only serves to cur_deletion_df
     def add_deletion_item(self, item, index):
         if item.loc[index, 'update'] == -1:

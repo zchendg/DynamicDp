@@ -1,0 +1,2 @@
+[2023-04-19 01:11:09] - Arguments: Namespace(beta=0.05, column_number=1, data_size=1000, dataset_path='./data/adult.csv', delta=0.1, domain_path='./data/adult-domain.json', each_query_size=10, epsilon=1.0, iteration=100, sparse_ratio=10)
+[2023-04-19 01:11:09] - ******** Initialization ********

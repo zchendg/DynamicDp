@@ -1,2 +1,0 @@
-[2023-04-13 00:47:33] - Arguments: Namespace(beta=0.05, data_size=13, dataset_path='./data/adult.csv', delta=0.1, domain_path='./data/adult-domain.json', epsilon=5.0, iteration=100, sparse_ratio=10)
-[2023-04-13 00:47:33] - ******** Initialization ********
