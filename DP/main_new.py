@@ -6,6 +6,7 @@ import os
 import argparse
 import auxiliary
 import auxiliary1
+import analysis_data
 import time
 from tqdm import tqdm
 from tqdm._tqdm import trange
@@ -141,7 +142,8 @@ def main():
     print('******** Testing Finished ********')
     logger.info('******** Testing Finished ********')
     logger.info('******** Drawing Figure started ********')
-    dynamic_tree.draw_diagram(ipp_instance, figure_file_name)
+    # dynamic_tree.draw_diagram(ipp_instance, figure_file_name)
+    analysis_data.draw_diagram(dynamic_tree, insertion_deletion_instance, query_instance, ipp_instance, figure_file_name)
     logger.info('******** Drawing Figure finished ********')
     return -1
 

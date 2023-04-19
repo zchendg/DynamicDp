@@ -255,6 +255,7 @@ class DynamicTree:
                     if index == cur_index:
                         break
         logger.info('-------- New Mechanism answer node query on node %s finished --------' % node.index)
+        answer_mechanism = [max(answer, 0) for answer in answer_mechanism]
         return np.array(answer_mechanism)
 
     # Pack the way for answering the query.

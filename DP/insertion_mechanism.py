@@ -65,10 +65,10 @@ class Insertion_Mechanism:
                                                                                        member, logger)
             self.answer_mechanism[member][index] = self.answer_queries_baseline(index, self.query_instance.queries, member, epsilon, beta, iteration, logger)
             logger.info('The testing is implemented at %s' % member)
-            logger.info('Mechanism: gives answer: \n%s' % np.array(
-                auxiliary1.output_answer(self.answer_ground_truth[member][index], member, self.query_instance, logger)))
-            logger.info('Mechanism: gives answer: \n%s' % np.array(
-                auxiliary1.output_answer(self.answer_ground_truth[member][index], member, self.query_instance, logger)))
+            logger.info('Ground truth: gives answer')
+            auxiliary1.output_answer(self.answer_ground_truth[member][index], member, self.query_instance, logger)
+            logger.info('Mechanism: gives answer')
+            auxiliary1.output_answer(self.answer_mechanism[member][index], member, self.query_instance, logger)
         return
 
     def answer_queries_ground_truth(self, cur_index, queries, member, logger=None):
@@ -102,8 +102,8 @@ class Insertion_Mechanism:
         for node in self.node_list[1:]:
             if node.index <= cur_index:
                 Dv_list += [node.df]
-        current_dataset = pd.concat(Dv_list).drop_duplicates(keep=False).reset_index(drop=True)
-        logger.info('current size of dataset is: %d' % len(current_dataset))
+        current_dataset = pd.concat(Dv_list).drop_duplicates(keep='first').reset_index(drop=True)
+        logger.info('At node index %d current size of dataset is: %d' % (cur_index, len(current_dataset)))
         return current_dataset
 
     def initialize_answer(self):
