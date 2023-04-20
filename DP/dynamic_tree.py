@@ -127,16 +127,11 @@ class DynamicTree:
             for index in range(cur_index + 1):
                 if index == node.index:
                     Dv = node.df
-                    delete_df = pd.merge(
-                        pd.concat([delete_df, self.node_list[index].delete_df]).drop_duplicates(keep=False), Dv,
-                        how='inner')
                 elif node.index < index <= cur_index:
-                    delete_df = pd.merge(
-                        pd.concat([delete_df, self.node_list[index].delete_df]).drop_duplicates(keep=False), Dv,
-                        how='inner')
-                    Dv = pd.concat([Dv, delete_df, delete_df]).drop_duplicates(keep=False)
+                    delete_df = pd.merge(delete_df, self.node_list[index].delete_df, how='outer')
+            Dv = pd.concat([Dv, delete_df, delete_df]).drop_duplicates(keep=False)
             Dv_list += [Dv]
-        Dataset_r = pd.concat(Dv_list).drop_duplicates(keep=False)
+        Dataset_r = pd.concat(Dv_list).drop_duplicates(keep='first')
         answer_ground_truth = self.answer_queries(Dataset_r, member, queries)
         return np.array(answer_ground_truth)
 
@@ -150,16 +145,11 @@ class DynamicTree:
             for index in range(cur_index + 1):
                 if index == node.index:
                     Dv = node.df
-                    delete_df = pd.merge(
-                        pd.concat([delete_df, self.node_list[index].delete_df]).drop_duplicates(keep=False), Dv,
-                        how='inner')
                 elif node.index < index <= cur_index:
-                    delete_df = pd.merge(
-                        pd.concat([delete_df, self.node_list[index].delete_df]).drop_duplicates(keep=False), Dv,
-                        how='inner')
-                    Dv = pd.concat([Dv, delete_df, delete_df]).drop_duplicates(keep=False)
+                    delete_df = pd.merge(delete_df, self.node_list[index].delete_df, how='outer')
+            Dv = pd.concat([Dv, delete_df, delete_df]).drop_duplicates(keep=False)
             Dv_list += [Dv]
-        Dataset_r = pd.concat(Dv_list).drop_duplicates(keep=False)
+        Dataset_r = pd.concat(Dv_list).drop_duplicates(keep='first')
         approximate_instance = ApproximationInstance(Dataset_r, self.domain, epsilon, [member], 'Data', iteration)
         answer_golden_standard = self.answer_queries(approximate_instance.approximated_data.df, member, queries)
         return np.array(answer_golden_standard)
@@ -186,7 +176,6 @@ class DynamicTree:
         delete_df = pd.DataFrame(columns=self.config.keys())
         # These variables store the query answer for the approximated dataset
         Dv_answer = []
-        # D_sj_answer = []
         answer_mechanism = []
         for index in range(cur_index + 1):
             if index == node.index:
@@ -314,27 +303,3 @@ class DynamicTree:
         self.answer_queries_ground_truth[member][index] = answer1
         self.answer_golden_standard[member][index] = answer2
         self.answer_mechanism[member][index] = answer3
-
-    def draw_diagram(self, ipp_instance, figure_file_name, query_length=1):
-        for member in self.query_instance.clique:
-            cut_range = self.query_instance.length_size[member][query_length]
-            index_range = range(1, len(ipp_instance.get_segment()) - 1)
-            sum_1, sum_2, sum_3 = {}, {}, {}
-            for index in index_range:
-                sum_1_temp = 0
-                sum_2_temp = 0
-                sum_3_temp = 0
-                for i in range(cut_range):
-                    sum_1_temp += self.answer_ground_truth[member][index][i] * i
-                    sum_2_temp += self.answer_golden_standard[member][index][i] * i
-                    sum_3_temp += self.answer_mechanism[member][index][i] * i
-                sum_1[index] = sum_1_temp / sum(self.answer_ground_truth[member][index][0:cut_range])
-                sum_2[index] = sum_2_temp / sum(self.answer_golden_standard[member][index][0:cut_range])
-                sum_3[index] = sum_3_temp / sum(self.answer_mechanism[member][index][0:cut_range])
-            plt.title('Testing on %s' % member)
-            plt.plot(index_range, sum_1.values())
-            plt.plot(index_range, sum_2.values())
-            plt.plot(index_range, sum_3.values())
-            plt.legend(['ground truth', 'golden standard', 'mechanism'], loc='upper left')
-            plt.savefig(figure_file_name + str(member) + '.jpg')
-            plt.cla()
