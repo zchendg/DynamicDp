@@ -180,9 +180,6 @@ class DynamicTree:
         for index in range(cur_index + 1):
             if index == node.index:
                 Dv = node.df
-                delete_df = pd.merge(
-                    pd.concat([delete_df, self.node_list[index].delete_df]).drop_duplicates(keep=False), Dv,
-                    how='inner')
                 r = 1
                 if len(Dv) <= 1:
                     epsilon_r = epsilon
@@ -202,9 +199,8 @@ class DynamicTree:
                 # Initiate M_Ins
                 basic_counting_instance = BasicCounting(epsilon, delta_r, store_df=True, config=self.config)
             elif node.index < index <= cur_index:
-                delete_df = pd.merge(
-                    pd.concat([delete_df, self.node_list[index].delete_df]).drop_duplicates(keep=False), Dv,
-                    how='inner')
+                # delete_df contains the actual item that has been deleted.
+                delete_df = pd.merge(pd.concat([delete_df, self.node_list[index].delete_df]).drop_duplicates(keep='first'), Dv, how='inner')
                 basic_counting_instance.update(pd.merge(self.node_list[index].delete_df, Dv, how='inner'))
                 tilde_n_del = basic_counting_instance.tilde_counter()
                 # The error bound of MBC at time sj
