@@ -36,10 +36,10 @@ class Insertion_Deletion_Mechanism:
             for index in indexes:
                 self.answer_ground_truth[member][index] = self.insertion_tree.answer_ground_truth[member][index] - \
                                                           self.deletion_tree.answer_ground_truth[member][index]
-                self.answer_ground_truth[member][index] = [max(answer, 0) for answer in self.answer_ground_truth[member][index]]
+                self.answer_ground_truth[member][index] = np.array(self.answer_ground_truth[member][index])
                 self.answer_mechanism[member][index] = self.insertion_tree.answer_mechanism[member][index] - \
                                                        self.deletion_tree.answer_mechanism[member][index]
-                self.answer_mechanism[member][index] = [max(answer, 0) for answer in self.answer_mechanism[member][index]]
+                self.answer_mechanism[member][index] = np.array([max(answer, 0) for answer in self.answer_mechanism[member][index]])
         return
 
     def store_answer(self, ipp_instance, logger=None):

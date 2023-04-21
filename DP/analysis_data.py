@@ -37,6 +37,7 @@ def draw_diagram(dynamic_tree, insertion_deletion_instance, query_instance, ipp_
         plt.plot(index_range, sum_3.values())
         plt.plot(index_range, sum_4.values())
         plt.plot(index_range, sum_5.values())
+        plt.xticks(index_range)
         plt.legend(['ground truth', 'golden standard', 'mechanism', 'ground truth for ground' ,'insertion only mechanism'], loc='upper left')
         plt.savefig(figure_file_name + str(member) + '.jpg')
         plt.cla()

@@ -2,7 +2,7 @@ import random
 
 
 class Query:
-    def __init__(self, config, random_query=False, column_number=2, query_size=10):
+    def __init__(self, config, random_query=False, column_number=2, query_size=10, logger=None):
         # self.clique = random.sample(config.keys(), column_number)
         self.clique = ['marital-status', 'age']
         self.config = config
@@ -115,3 +115,9 @@ class Query:
             print(answer[head: tail])
             head = self.length_size[member][length]
         return -1
+
+    def store_query_info(self, logger=None):
+        logger.info('Query instance consist of clique: %s' % self.clique)
+        for member in self.clique:
+            logger.info('query_instance.length_size[%s]: %s' % (member, self.length_size[member]))
+        return

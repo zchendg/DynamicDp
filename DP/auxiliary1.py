@@ -27,9 +27,7 @@ def output_answer(answer, member, query_instance, logger=None):
     tail = 0
     logger.info('output_answer:%s' % answer)
     for length in query_instance.length_size[member]:
-        logger.info('query_instance.length_size[member]:%s' % query_instance.length_size[member])
         tail = query_instance.length_size[member][length]
-        logger.info('tail, head: %s %s' % (head, tail))
         if logger is not None:
             logger.info('Range size %d, answer %s:' % (length, str(answer[head: tail])))
         else:
@@ -48,12 +46,12 @@ def store_answer(dynamic_tree, insertion_deletion_mechanism, ipp_instance, query
             logger.info('Node Index %d' % index)
             if query_length is None:
                 logger.info('Dynamic Tree:')
-                logger.info('Ground truth: %s' % dynamic_tree.answer_ground_truth[member][index])
-                logger.info('Golden standard: %s' % dynamic_tree.answer_golden_standard[member][index])
-                logger.info('Mechanism: %s' % dynamic_tree.answer_mechanism[member][index])
+                logger.info('Ground truth:\n%s' % dynamic_tree.answer_ground_truth[member][index])
+                logger.info('Golden standard:\n%s' % dynamic_tree.answer_golden_standard[member][index])
+                logger.info('Mechanism: \n%s' % dynamic_tree.answer_mechanism[member][index])
                 logger.info('Insertion-Only Mechanism:')
-                logger.info('Ground Truth: %s' % insertion_deletion_mechanism.answer_ground_truth[member][index])
-                logger.info('Mechanism: %s' % insertion_deletion_mechanism.answer_mechanism[member][index])
+                logger.info('Ground truth:\n%s' % insertion_deletion_mechanism.answer_ground_truth[member][index])
+                logger.info('Mechanism:\n%s' % insertion_deletion_mechanism.answer_mechanism[member][index])
 
 
 def compare_results(answer1, answer2, measurement=1):

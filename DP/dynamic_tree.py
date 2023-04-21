@@ -132,7 +132,7 @@ class DynamicTree:
             Dv = pd.concat([Dv, delete_df, delete_df]).drop_duplicates(keep=False)
             Dv_list += [Dv]
         Dataset_r = pd.concat(Dv_list).drop_duplicates(keep='first')
-        answer_ground_truth = self.answer_queries(Dataset_r, member, queries)
+        answer_ground_truth = auxiliary1.answer_queries(Dataset_r, member, queries)
         return np.array(answer_ground_truth)
 
     # For golden standard, returns the queries' answer for golden standard (Approximated data)
@@ -151,7 +151,7 @@ class DynamicTree:
             Dv_list += [Dv]
         Dataset_r = pd.concat(Dv_list).drop_duplicates(keep='first')
         approximate_instance = ApproximationInstance(Dataset_r, self.domain, epsilon, [member], 'Data', iteration)
-        answer_golden_standard = self.answer_queries(approximate_instance.approximated_data.df, member, queries)
+        answer_golden_standard = auxiliary1.answer_queries(approximate_instance.approximated_data.df, member, queries)
         return np.array(answer_golden_standard)
 
     # For new algorithm, returns the queries' answer for the new algorithm
@@ -159,7 +159,7 @@ class DynamicTree:
                                  logger=None):
         epsilon_budget = {node: 6 * epsilon / (np.square(np.pi * (node.height + 1))) for node in nodes}
         delta_budget = {node: 6 * delta / (np.square(np.pi * (node.height + 1))) for node in nodes}
-        answer_mechanism = self.answer_queries(pd.DataFrame(columns=self.config.keys()), member, queries)
+        answer_mechanism = auxiliary1.answer_queries(pd.DataFrame(columns=self.config.keys()), member, queries)
         for node in nodes:
             answer_mechanism_node = self.answer_node_queries_mechanism(node, cur_index, queries, member,
                                                                        epsilon_budget[node], delta_budget[node],
@@ -184,7 +184,7 @@ class DynamicTree:
                 if len(Dv) <= 1:
                     epsilon_r = epsilon
                     delta_r = delta
-                    Dv_answer = self.answer_queries(Dv, member, queries)
+                    Dv_answer = auxiliary1.answer_queries(Dv, member, queries)
                     answer_mechanism = Dv_answer
                     # Initiate M_BC
                     basic_counting_instance = BasicCounting(epsilon, delta_r, store_df=True, config=self.config)
@@ -194,7 +194,7 @@ class DynamicTree:
                 delta_r = max(2 * delta / (np.square(np.pi * r)), delta / np.log2(len(Dv)))
                 tilde_n_v = len(Dv) + np.random.laplace(loc=0, scale=1 / epsilon_r)
                 approximation_instance = ApproximationInstance(Dv, self.domain, epsilon_r, [member], 'Data', iteration)
-                Dv_answer = self.answer_queries(approximation_instance.approximated_data.df, member, queries)
+                Dv_answer = auxiliary1.answer_queries(approximation_instance.approximated_data.df, member, queries)
                 answer_mechanism = Dv_answer
                 # Initiate M_Ins
                 basic_counting_instance = BasicCounting(epsilon, delta_r, store_df=True, config=self.config)
@@ -214,9 +214,9 @@ class DynamicTree:
                         tilde_n_v = len(Dv) + np.random.laplace(loc=0, scale=1 / epsilon_r)
                         approximation_instance = ApproximationInstance(Dv, self.domain, epsilon_r, [member], 'Data',
                                                                        iteration)
-                        Dv_answer = self.answer_queries(approximation_instance.approximated_data.df, member, queries)
+                        Dv_answer = auxiliary1.answer_queries(approximation_instance.approximated_data.df, member, queries)
                         if tilde_n_v < (2 * alpha_BC_sj):
-                            ansewr_mechanism = self.ansewr_queries(pd.DataFrame(columns=self.config.keys()), member,
+                            ansewr_mechanism = auxiliary1.ansewr_queries(pd.DataFrame(columns=self.config.keys()), member,
                                                                    queries)
                             break
                     epsilon_r = max(3 * epsilon / (2 * np.square(np.pi * r)), epsilon / np.log2(len(Dv)))
@@ -226,7 +226,7 @@ class DynamicTree:
                     approximation_instance = ApproximationInstance(Dv, self.domain, epsilon_r, [member], 'Data',
                                                                    iteration)
                     # Re-publish the query answer for Dv
-                    Dv_answer = self.answer_queries(approximation_instance.approximated_data.df, member, queries)
+                    Dv_answer = auxiliary1.answer_queries(approximation_instance.approximated_data.df, member, queries)
                     # When this condition happens, we all the Q(D_t(v)) will return 0, hence just
                     if tilde_n_v < (2 * alpha_BC_sj):
                         logger.info('Testing on index %d, mechanism passed index %d, the algorithm hit tilde_n_del > ('
@@ -235,7 +235,7 @@ class DynamicTree:
                         answer_mechanism = np.array(Dv_answer)
                         break
                 else:
-                    D_sj_answer = self.answer_queries(delete_df, member, queries)
+                    D_sj_answer = auxiliary1.answer_queries(delete_df, member, queries)
                     answer_mechanism = np.array(Dv_answer) - np.array(D_sj_answer)
                     if index == cur_index:
                         break
@@ -259,20 +259,6 @@ class DynamicTree:
             for query in queries[member][length]:
                 answer += [len(query(dataset))]
         return answer
-
-    # Divide queries into group with different length
-    def output_answer(self, answer, member, query_instance, logger=None):
-        head = 0
-        tail = 0
-        logger.info('output_answer:%s' % answer)
-        for length in query_instance.length_size[member]:
-            tail = query_instance.length_size[member][length]
-            if logger is not None:
-                logger.info('Range size %d, answer %s:' % (length, str(answer[head: tail])))
-            else:
-                print('Range size %d, answer:' % length)
-                print(str(answer[head: tail]))
-            head = query_instance.length_size[member][length]
 
     def compare_results(self, answer1, answer2, measurement=1):
         # For golden standard, returns the queries' answer with pgm mechanism on single static dataset.

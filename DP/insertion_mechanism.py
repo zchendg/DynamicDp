@@ -59,11 +59,13 @@ class Insertion_Mechanism:
             logger.info('++++++++ Testing on node %d Finished ++++++++' % index)
 
     def testing_index(self, index, epsilon=1, delta=0, beta=0.05, iteration=500, logger=None):
+        query_nodes = self.query_nodes(index)
+        query_nodes.reverse()
         for member in self.query_instance.queries.keys():
             self.answer_ground_truth[member][index] = self.answer_queries_ground_truth(index,
                                                                                        self.query_instance.queries,
                                                                                        member, logger)
-            self.answer_mechanism[member][index] = self.answer_queries_baseline(index, self.query_instance.queries, member, epsilon, beta, iteration, logger)
+            self.answer_mechanism[member][index] = self.answer_queries_baseline2(index, self.query_instance.queries, member, epsilon, beta, iteration, logger)
             logger.info('The testing is implemented at %s' % member)
             logger.info('Ground truth: gives answer')
             auxiliary1.output_answer(self.answer_ground_truth[member][index], member, self.query_instance, logger)
@@ -76,11 +78,23 @@ class Insertion_Mechanism:
         answer_ground_truth = self.answer_queries(current_dataset, member, queries)
         return np.array(answer_ground_truth)
 
-    def answer_queries_baseline(self, cur_index, queries, member, epsilon=1, delta=0, iteration=500, logger=None):
+    # Baseline1: the approximate dataset is generated from current dataset
+    def answer_queries_baseline1(self, cur_index, queries, member, epsilon=1, delta=0, iteration=500, logger=None):
         current_dataset = self.find_current_dataset(cur_index, logger)
         approximate_instance = ApproximationInstance(current_dataset, self.domain, epsilon, [member], 'Data', iteration)
-        answer_baseline = self.answer_queries(approximate_instance.approximated_data.df, member, queries)
-        return np.array(answer_baseline)
+        answer_baseline1 = self.answer_queries(approximate_instance.approximated_data.df, member, queries)
+        return np.array(answer_baseline1)
+
+    # Baseline2: the approximate dataset is generated from the union of several approximated dataset
+    def answer_queries_baseline2(self, nodes, cur_index, queries, member, epsilon=1, delta=0, iteration=500, logger=None):
+        epsilon_budget = {node: 6 * epsilon / (np.square(np.pi * (node.height + 1))) for node in nodes}
+        delta_budget = {node: 6 * delta / (np.square(np.pi * (node.height + 1))) for node in nodes}
+        Dv_list = []
+        for node in nodes:
+            Dv_list += [ApproximationInstance(node.df, self.domain, epsilon_budget[node], [member], 'Data', iteration).data_df]
+        Dv = pd.concat(Dv_list)
+        answer_baseline2 = self.answer_queries(Dv, member, queries)
+        return np.array(answer_baseline2)
 
     def answer_queries_dict(self, dataset, member, queries):
         answer = {}
@@ -88,14 +102,14 @@ class Insertion_Mechanism:
             answer[length] = []
             for query in queries[member][length]:
                 answer[length] += [len(query(dataset))]
-        return answer
+        return np.array(answer)
 
     def answer_queries(self, dataset, member, queries):
         answer = []
         for length in queries[member].keys():
             for query in queries[member][length]:
                 answer += [len(query(dataset))]
-        return answer
+        return np.array(answer)
 
     def find_current_dataset(self, cur_index, logger=None):
         Dv_list = []
