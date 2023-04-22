@@ -65,7 +65,7 @@ class Insertion_Mechanism:
             self.answer_ground_truth[member][index] = self.answer_queries_ground_truth(index,
                                                                                        self.query_instance.queries,
                                                                                        member, logger)
-            self.answer_mechanism[member][index] = self.answer_queries_baseline2(index, self.query_instance.queries, member, epsilon, beta, iteration, logger)
+            self.answer_mechanism[member][index] = self.answer_queries_baseline2(query_nodes, index, self.query_instance.queries, member, epsilon, beta, iteration, logger)
             logger.info('The testing is implemented at %s' % member)
             logger.info('Ground truth: gives answer')
             auxiliary1.output_answer(self.answer_ground_truth[member][index], member, self.query_instance, logger)
