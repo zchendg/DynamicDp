@@ -144,6 +144,7 @@ def main():
     logger.info('******** Drawing Figure started ********')
     # dynamic_tree.draw_diagram(ipp_instance, figure_file_name)
     analysis_data.draw_diagram(dynamic_tree, insertion_deletion_instance, query_instance, ipp_instance, figure_file_name)
+    analysis_data.draw_diagram_error(dynamic_tree, insertion_deletion_instance, query_instance, ipp_instance, figure_file_name)
     logger.info('******** Drawing Figure finished ********')
     return -1
 

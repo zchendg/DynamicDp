@@ -91,7 +91,7 @@ class Insertion_Mechanism:
         delta_budget = {node: 6 * delta / (np.square(np.pi * (node.height + 1))) for node in nodes}
         Dv_list = []
         for node in nodes:
-            Dv_list += [ApproximationInstance(node.df, self.domain, epsilon_budget[node], [member], 'Data', iteration).data_df]
+            Dv_list += [ApproximationInstance(node.df, self.domain, epsilon_budget[node], [member], 'Data', iteration).approximated_data.df]
         Dv = pd.concat(Dv_list)
         answer_baseline2 = self.answer_queries(Dv, member, queries)
         return np.array(answer_baseline2)
