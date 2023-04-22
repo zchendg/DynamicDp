@@ -53,7 +53,9 @@ if 1:
 
     # Initialize the logger
     # logger_file_name = './log/' + datetime.now().strftime(time_format) + '.log'
-    logger = Logger(logger_file_name, sys.stdout)
+    # logger = Logger(logger_file_name, sys.stdout)
+    logging.basicConfig(stream=sys.stderr, level=logging.INFO)
+    logger = logging.getLogger()
     logger.info('Arguments: ' + str(args))
     # ------------------------------------------------------------------
 

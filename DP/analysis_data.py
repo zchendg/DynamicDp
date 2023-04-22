@@ -38,11 +38,15 @@ def draw_diagram(dynamic_tree, insertion_deletion_instance, query_instance, ipp_
         plt.plot(index_range, sum_4.values())
         plt.plot(index_range, sum_5.values())
         plt.xticks(index_range)
-        plt.legend(['ground truth', 'golden standard', 'mechanism', 'ground truth for ground' ,'insertion only mechanism'], loc='upper left')
+        plt.legend(
+            ['ground truth', 'golden standard', 'mechanism', 'ground truth for ground', 'insertion only mechanism'],
+            loc='upper left')
         plt.savefig(figure_file_name + str(member) + '.jpg')
         plt.cla()
 
-def draw_diagram_error(dynamic_tree, insertion_deletion_instance, query_instance, ipp_instance, figure_file_name, query_length=1):
+
+def draw_diagram_error(dynamic_tree, insertion_deletion_instance, query_instance, ipp_instance, figure_file_name,
+                       query_length=1):
     members = query_instance.clique
     index_range = np.array(range(1, len(ipp_instance.get_segment()) - 1))
     answer_ground_truth = dynamic_tree.answer_ground_truth
@@ -54,11 +58,14 @@ def draw_diagram_error(dynamic_tree, insertion_deletion_instance, query_instance
     x = index_range - (total_width - width) / 2
     for member in members:
         cur_range = query_instance.length_size[member][query_length]
-        a1, a2, a3= [], [], []
+        a1, a2, a3 = [], [], []
         for index in index_range:
-            a1.append(l1_error(answer_ground_truth[member][index][0: cur_range], answer_golden_standard[member][index][0: cur_range]))
-            a2.append(l1_error(answer_ground_truth[member][index][0: cur_range], answer_mechanism[member][index][0: cur_range]))
-            a3.append(l1_error(answer_ground_truth[member][index][0: cur_range], answer_baseline[member][index][0: cur_range]))
+            a1.append(l1_error(answer_ground_truth[member][index][0: cur_range],
+                               answer_golden_standard[member][index][0: cur_range]))
+            a2.append(l1_error(answer_ground_truth[member][index][0: cur_range],
+                               answer_mechanism[member][index][0: cur_range]))
+            a3.append(l1_error(answer_ground_truth[member][index][0: cur_range],
+                               answer_baseline[member][index][0: cur_range]))
         plt.title('Histogram of %s' % member)
         plt.bar(x, a1, width=width, label='golden standard')
         plt.bar(x + width, a2, width=width, label='mechanism')
@@ -66,7 +73,6 @@ def draw_diagram_error(dynamic_tree, insertion_deletion_instance, query_instance
         plt.legend()
         plt.savefig(figure_file_name + 'error histogram on' + str(member) + 'jpg')
         plt.cla()
-
 
 
 def l1_error(ground_truth, mechanism):
