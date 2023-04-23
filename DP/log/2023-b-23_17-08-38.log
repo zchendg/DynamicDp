@@ -1,0 +1,622 @@
+[2023-04-23 17:08:38] - Arguments: Namespace(beta=0.05, column_number=1, data_size=10, dataset_path='./data/adult.csv', delta=0.1, domain_path='./data/adult-domain.json', each_query_size=10, epsilon=5.0, iteration=100, sparse_ratio=10)
+[2023-04-23 17:08:38] - ******** Initialization ********
+[2023-04-23 17:08:38] - Data sparsification complete
+[2023-04-23 17:08:38] - Data information: {'age': 85, 'workclass': 9, 'fnlwgt': 100, 'education-num': 16, 'marital-status': 7, 'occupation': 15, 'relationship': 6, 'race': 5, 'sex': 2, 'capital-gain': 100, 'capital-loss': 100, 'hours-per-week': 99, 'native-country': 42, 'income>50K': 2}
+[2023-04-23 17:08:38] - ******** Create Dynamic Tree ********
+[2023-04-23 17:08:38] - The dynamic interval tree consists of nodes: [
+-------- Node index: 1 --------
+height: 0, sj: 2, 
+right_ancestor_index: 2, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 2, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 2 --------
+height: 1, sj: 4, 
+right_ancestor_index: 4, left_ancestor_index: None, right_child: 3, left_child: 1, 
+df size: 4, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 3 --------
+height: 0, sj: 9, 
+right_ancestor_index: None, left_ancestor_index: 2, right_child: None, left_child: None, 
+df size: 6, delete_df size: 0
+-----------------------------------]
+[2023-04-23 17:08:38] - The insertion tree consists of nodes: [
+-------- Node index: 1 --------
+height: 0, sj: 2, 
+right_ancestor_index: 2, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 2, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 2 --------
+height: 1, sj: 4, 
+right_ancestor_index: 4, left_ancestor_index: None, right_child: 3, left_child: 1, 
+df size: 4, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 3 --------
+height: 0, sj: 9, 
+right_ancestor_index: None, left_ancestor_index: 2, right_child: None, left_child: None, 
+df size: 5, delete_df size: 0
+-----------------------------------] 
+[2023-04-23 17:08:38] - The deletion tree consists of nodes: [
+-------- Node index: 1 --------
+height: 0, sj: 2, 
+right_ancestor_index: 2, left_ancestor_index: None, right_child: None, left_child: None, 
+df size: 0, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 2 --------
+height: 1, sj: 4, 
+right_ancestor_index: 4, left_ancestor_index: None, right_child: 3, left_child: 1, 
+df size: 0, delete_df size: 0
+-----------------------------------, 
+-------- Node index: 3 --------
+height: 0, sj: 9, 
+right_ancestor_index: None, left_ancestor_index: 2, right_child: None, left_child: None, 
+df size: 0, delete_df size: 0
+-----------------------------------] 
+[2023-04-23 17:08:38] - Infinite Private Partitioning: s0: 0, j: 3, T: 16, beta: 0.00031204844198875586, C: 16.153323231110885, epsilon: 5.0, 
+ segment: [0, 2, 4, 9]
+[2023-04-23 17:08:38] - ******** Testing Started ********
+[2023-04-23 17:08:38] - ++++++++ Testing on node 1 Started ++++++++
+[2023-04-23 17:08:38] - At node with index 1, we implement queries on cliques dict_keys(['marital-status', 'age']):
+[2023-04-23 17:08:40] - -------- New Mechanism: Testing on 1, node 1 is accessed --------
+[2023-04-23 17:08:41] - -------- New Mechanism answer node query on node 1 finished --------
+[2023-04-23 17:08:41] - The testing is implemented at marital-status
+[2023-04-23 17:08:41] - Ground truth: gives answer
+[2023-04-23 17:08:41] - output_answer:[1 0 1 0 0 0 0 1 1 0 0 2 2]
+[2023-04-23 17:08:41] - Range size 1, answer [1 0 1 0 0 0 0]:
+[2023-04-23 17:08:41] - Range size 2, answer [1 1 0]:
+[2023-04-23 17:08:41] - Range size 3, answer [0]:
+[2023-04-23 17:08:41] - Range size 4, answer [2]:
+[2023-04-23 17:08:41] - Range size 7, answer [2]:
+[2023-04-23 17:08:41] - Golden standard: gives answer
+[2023-04-23 17:08:41] - output_answer:[1 0 1 0 0 0 1 1 1 0 1 2 3]
+[2023-04-23 17:08:41] - Range size 1, answer [1 0 1 0 0 0 1]:
+[2023-04-23 17:08:41] - Range size 2, answer [1 1 0]:
+[2023-04-23 17:08:41] - Range size 3, answer [1]:
+[2023-04-23 17:08:41] - Range size 4, answer [2]:
+[2023-04-23 17:08:41] - Range size 7, answer [3]:
+[2023-04-23 17:08:41] - Mechanism: gives answer
+[2023-04-23 17:08:41] - output_answer:[1 0 0 0 1 0 1 1 0 1 2 1 3]
+[2023-04-23 17:08:41] - Range size 1, answer [1 0 0 0 1 0 1]:
+[2023-04-23 17:08:41] - Range size 2, answer [1 0 1]:
+[2023-04-23 17:08:41] - Range size 3, answer [2]:
+[2023-04-23 17:08:41] - Range size 4, answer [1]:
+[2023-04-23 17:08:41] - Range size 7, answer [3]:
+[2023-04-23 17:08:41] - Mean Square Error of ground truth and golden standard: 0.23076923076923078
+[2023-04-23 17:08:41] - Mean Square Error of ground truth and mechanism: 0.8461538461538461
+[2023-04-23 17:08:41] - Mean Square Error of golden standard and mechanism: 0.46153846153846156
+[2023-04-23 17:08:41] - Measurement3: golden_standard and mechanism
+0.0
+[2023-04-23 17:08:43] - -------- New Mechanism: Testing on 1, node 1 is accessed --------
+[2023-04-23 17:08:45] - -------- New Mechanism answer node query on node 1 finished --------
+[2023-04-23 17:08:45] - The testing is implemented at age
+[2023-04-23 17:08:45] - Ground truth: gives answer
+[2023-04-23 17:08:45] - output_answer:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0
+ 0 0 0 1 0 0 1 0 0 0 0 1 0 0 2 0 0 0 0 2 2]
+[2023-04-23 17:08:45] - Range size 1, answer [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:08:45] - Range size 2, answer [0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:08:45] - Range size 3, answer [0 0 0 0 0 0 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:08:45] - Range size 5, answer [0 0 0 1 0 0 0 0 0 0 0]:
+[2023-04-23 17:08:45] - Range size 6, answer [0 0 1 0 0]:
+[2023-04-23 17:08:45] - Range size 10, answer [1 0 0]:
+[2023-04-23 17:08:45] - Range size 11, answer [0 0 1 0 0]:
+[2023-04-23 17:08:45] - Range size 21, answer [2 0 0]:
+[2023-04-23 17:08:45] - Range size 22, answer [0]:
+[2023-04-23 17:08:45] - Range size 42, answer [0]:
+[2023-04-23 17:08:45] - Range size 43, answer [2]:
+[2023-04-23 17:08:45] - Range size 85, answer [2]:
+[2023-04-23 17:08:45] - Golden standard: gives answer
+[2023-04-23 17:08:45] - output_answer:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 1 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 1 0 0 1 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 1
+ 1 0 0 0 0 0 1 0 2 0 0 0 0 0 1 0 2 0 2 1 3]
+[2023-04-23 17:08:45] - Range size 1, answer [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 1 0 0 0 0 0 0 0 0 1]:
+[2023-04-23 17:08:45] - Range size 2, answer [0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1]:
+[2023-04-23 17:08:45] - Range size 3, answer [0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 0]:
+[2023-04-23 17:08:45] - Range size 5, answer [0 0 0 1 0 0 0 0 0 1 1]:
+[2023-04-23 17:08:45] - Range size 6, answer [0 0 0 0 0]:
+[2023-04-23 17:08:45] - Range size 10, answer [1 0 2]:
+[2023-04-23 17:08:45] - Range size 11, answer [0 0 0 0 0]:
+[2023-04-23 17:08:45] - Range size 21, answer [1 0 2]:
+[2023-04-23 17:08:45] - Range size 22, answer [0]:
+[2023-04-23 17:08:45] - Range size 42, answer [2]:
+[2023-04-23 17:08:45] - Range size 43, answer [1]:
+[2023-04-23 17:08:45] - Range size 85, answer [3]:
+[2023-04-23 17:08:45] - Mechanism: gives answer
+[2023-04-23 17:08:45] - output_answer:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 0 0 0
+ 0 0 0 0 0 0 3 0 0 0 0 0 0 0 3 0 0 0 0 3 3]
+[2023-04-23 17:08:45] - Range size 1, answer [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:08:45] - Range size 2, answer [0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:08:45] - Range size 3, answer [0 0 0 0 0 0 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:08:45] - Range size 5, answer [0 0 0 3 0 0 0 0 0 0 0]:
+[2023-04-23 17:08:45] - Range size 6, answer [0 0 0 0 0]:
+[2023-04-23 17:08:45] - Range size 10, answer [3 0 0]:
+[2023-04-23 17:08:45] - Range size 11, answer [0 0 0 0 0]:
+[2023-04-23 17:08:45] - Range size 21, answer [3 0 0]:
+[2023-04-23 17:08:45] - Range size 22, answer [0]:
+[2023-04-23 17:08:45] - Range size 42, answer [0]:
+[2023-04-23 17:08:45] - Range size 43, answer [3]:
+[2023-04-23 17:08:45] - Range size 85, answer [3]:
+[2023-04-23 17:08:45] - Mean Square Error of ground truth and golden standard: 0.15976331360946747
+[2023-04-23 17:08:45] - Mean Square Error of ground truth and mechanism: 0.16568047337278108
+[2023-04-23 17:08:45] - Mean Square Error of golden standard and mechanism: 0.2781065088757396
+[2023-04-23 17:08:45] - Measurement3: golden_standard and mechanism
+0.0
+[2023-04-23 17:08:45] - ++++++++ Testing on node 1 Finished ++++++++
+[2023-04-23 17:08:45] - ++++++++ Testing on node 2 Started ++++++++
+[2023-04-23 17:08:45] - At node with index 2, we implement queries on cliques dict_keys(['marital-status', 'age']):
+[2023-04-23 17:08:47] - -------- New Mechanism: Testing on 2, node 2 is accessed --------
+[2023-04-23 17:08:48] - -------- New Mechanism answer node query on node 2 finished --------
+[2023-04-23 17:08:48] - The testing is implemented at marital-status
+[2023-04-23 17:08:48] - Ground truth: gives answer
+[2023-04-23 17:08:48] - output_answer:[2 1 1 0 0 0 0 3 1 0 0 4 4]
+[2023-04-23 17:08:48] - Range size 1, answer [2 1 1 0 0 0 0]:
+[2023-04-23 17:08:48] - Range size 2, answer [3 1 0]:
+[2023-04-23 17:08:48] - Range size 3, answer [0]:
+[2023-04-23 17:08:48] - Range size 4, answer [4]:
+[2023-04-23 17:08:48] - Range size 7, answer [4]:
+[2023-04-23 17:08:48] - Golden standard: gives answer
+[2023-04-23 17:08:48] - output_answer:[2 1 1 0 0 0 1 3 1 0 1 4 5]
+[2023-04-23 17:08:48] - Range size 1, answer [2 1 1 0 0 0 1]:
+[2023-04-23 17:08:48] - Range size 2, answer [3 1 0]:
+[2023-04-23 17:08:48] - Range size 3, answer [1]:
+[2023-04-23 17:08:48] - Range size 4, answer [4]:
+[2023-04-23 17:08:48] - Range size 7, answer [5]:
+[2023-04-23 17:08:48] - Mechanism: gives answer
+[2023-04-23 17:08:48] - output_answer:[1 0 2 0 0 0 2 1 2 0 2 3 5]
+[2023-04-23 17:08:48] - Range size 1, answer [1 0 2 0 0 0 2]:
+[2023-04-23 17:08:48] - Range size 2, answer [1 2 0]:
+[2023-04-23 17:08:48] - Range size 3, answer [2]:
+[2023-04-23 17:08:48] - Range size 4, answer [3]:
+[2023-04-23 17:08:48] - Range size 7, answer [5]:
+[2023-04-23 17:08:48] - Mean Square Error of ground truth and golden standard: 0.23076923076923078
+[2023-04-23 17:08:48] - Mean Square Error of ground truth and mechanism: 1.3846153846153846
+[2023-04-23 17:08:48] - Mean Square Error of golden standard and mechanism: 0.8461538461538461
+[2023-04-23 17:08:48] - Measurement3: golden_standard and mechanism
+0.0
+[2023-04-23 17:08:50] - -------- New Mechanism: Testing on 2, node 2 is accessed --------
+[2023-04-23 17:08:52] - -------- New Mechanism answer node query on node 2 finished --------
+[2023-04-23 17:08:52] - The testing is implemented at age
+[2023-04-23 17:08:52] - Ground truth: gives answer
+[2023-04-23 17:08:52] - output_answer:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 1 0 0
+ 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0
+ 0 0 0 2 0 0 2 0 0 0 0 2 0 0 4 0 0 0 0 4 4]
+[2023-04-23 17:08:52] - Range size 1, answer [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 1 0 0
+ 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:08:52] - Range size 2, answer [0 0 0 0 0 0 0 0 2 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:08:52] - Range size 3, answer [0 0 0 0 0 0 2 0 0 1 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:08:52] - Range size 5, answer [0 0 0 2 0 0 0 0 0 0 0]:
+[2023-04-23 17:08:52] - Range size 6, answer [0 0 2 0 0]:
+[2023-04-23 17:08:52] - Range size 10, answer [2 0 0]:
+[2023-04-23 17:08:52] - Range size 11, answer [0 0 2 0 0]:
+[2023-04-23 17:08:52] - Range size 21, answer [4 0 0]:
+[2023-04-23 17:08:52] - Range size 22, answer [0]:
+[2023-04-23 17:08:52] - Range size 42, answer [0]:
+[2023-04-23 17:08:52] - Range size 43, answer [4]:
+[2023-04-23 17:08:52] - Range size 85, answer [4]:
+[2023-04-23 17:08:52] - Golden standard: gives answer
+[2023-04-23 17:08:52] - output_answer:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0 0
+ 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 1 1 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 0 2 0 0 0 0 0 0
+ 0 0 1 1 0 0 2 0 0 0 2 1 0 0 3 0 0 2 0 5 5]
+[2023-04-23 17:08:52] - Range size 1, answer [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0 0
+ 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:08:52] - Range size 2, answer [0 0 0 0 0 0 1 0 1 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:08:52] - Range size 3, answer [0 0 0 0 1 1 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:08:52] - Range size 5, answer [0 1 0 2 0 0 0 0 0 0 0]:
+[2023-04-23 17:08:52] - Range size 6, answer [0 1 1 0 0]:
+[2023-04-23 17:08:52] - Range size 10, answer [2 0 0]:
+[2023-04-23 17:08:52] - Range size 11, answer [0 2 1 0 0]:
+[2023-04-23 17:08:52] - Range size 21, answer [3 0 0]:
+[2023-04-23 17:08:52] - Range size 22, answer [2]:
+[2023-04-23 17:08:52] - Range size 42, answer [0]:
+[2023-04-23 17:08:52] - Range size 43, answer [5]:
+[2023-04-23 17:08:52] - Range size 85, answer [5]:
+[2023-04-23 17:08:52] - Mechanism: gives answer
+[2023-04-23 17:08:52] - output_answer:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 2 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 2 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 5 0 0 0 0 0 0 0 5 0 0 5 0 5 0 5]
+[2023-04-23 17:08:52] - Range size 1, answer [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 2 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:08:52] - Range size 2, answer [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:08:52] - Range size 3, answer [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 2 0 0 0]:
+[2023-04-23 17:08:52] - Range size 5, answer [0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:08:52] - Range size 6, answer [0 0 0 0 5]:
+[2023-04-23 17:08:52] - Range size 10, answer [0 0 0]:
+[2023-04-23 17:08:52] - Range size 11, answer [0 0 0 0 5]:
+[2023-04-23 17:08:52] - Range size 21, answer [0 0 5]:
+[2023-04-23 17:08:52] - Range size 22, answer [0]:
+[2023-04-23 17:08:52] - Range size 42, answer [5]:
+[2023-04-23 17:08:52] - Range size 43, answer [0]:
+[2023-04-23 17:08:52] - Range size 85, answer [5]:
+[2023-04-23 17:08:52] - Mean Square Error of ground truth and golden standard: 0.13609467455621302
+[2023-04-23 17:08:52] - Mean Square Error of ground truth and mechanism: 1.1242603550295858
+[2023-04-23 17:08:52] - Mean Square Error of golden standard and mechanism: 1.1420118343195267
+[2023-04-23 17:08:52] - Measurement3: golden_standard and mechanism
+0.0
+[2023-04-23 17:08:52] - ++++++++ Testing on node 2 Finished ++++++++
+[2023-04-23 17:08:52] - ++++++++ Testing on node 1 Started ++++++++
+[2023-04-23 17:08:52] - At node index 1 current size of dataset is: 2
+[2023-04-23 17:08:53] - The testing is implemented at marital-status
+[2023-04-23 17:08:53] - Ground truth: gives answer
+[2023-04-23 17:08:53] - output_answer:[1 0 1 0 0 0 0 1 1 0 0 2 2]
+[2023-04-23 17:08:53] - Range size 1, answer [1 0 1 0 0 0 0]:
+[2023-04-23 17:08:53] - Range size 2, answer [1 1 0]:
+[2023-04-23 17:08:53] - Range size 3, answer [0]:
+[2023-04-23 17:08:53] - Range size 4, answer [2]:
+[2023-04-23 17:08:53] - Range size 7, answer [2]:
+[2023-04-23 17:08:53] - Mechanism: gives answer
+[2023-04-23 17:08:53] - output_answer:[1 0 2 0 0 0 0 1 2 0 0 3 3]
+[2023-04-23 17:08:53] - Range size 1, answer [1 0 2 0 0 0 0]:
+[2023-04-23 17:08:53] - Range size 2, answer [1 2 0]:
+[2023-04-23 17:08:53] - Range size 3, answer [0]:
+[2023-04-23 17:08:53] - Range size 4, answer [3]:
+[2023-04-23 17:08:53] - Range size 7, answer [3]:
+[2023-04-23 17:08:53] - At node index 1 current size of dataset is: 2
+[2023-04-23 17:08:55] - The testing is implemented at age
+[2023-04-23 17:08:55] - Ground truth: gives answer
+[2023-04-23 17:08:55] - output_answer:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0
+ 0 0 0 1 0 0 1 0 0 0 0 1 0 0 2 0 0 0 0 2 2]
+[2023-04-23 17:08:55] - Range size 1, answer [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:08:55] - Range size 2, answer [0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:08:55] - Range size 3, answer [0 0 0 0 0 0 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:08:55] - Range size 5, answer [0 0 0 1 0 0 0 0 0 0 0]:
+[2023-04-23 17:08:55] - Range size 6, answer [0 0 1 0 0]:
+[2023-04-23 17:08:55] - Range size 10, answer [1 0 0]:
+[2023-04-23 17:08:55] - Range size 11, answer [0 0 1 0 0]:
+[2023-04-23 17:08:55] - Range size 21, answer [2 0 0]:
+[2023-04-23 17:08:55] - Range size 22, answer [0]:
+[2023-04-23 17:08:55] - Range size 42, answer [0]:
+[2023-04-23 17:08:55] - Range size 43, answer [2]:
+[2023-04-23 17:08:55] - Range size 85, answer [2]:
+[2023-04-23 17:08:55] - Mechanism: gives answer
+[2023-04-23 17:08:55] - output_answer:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 1 0 1 0 0 0
+ 0 0 0 0 0 0 2 1 0 0 0 0 0 0 2 1 0 0 1 2 3]
+[2023-04-23 17:08:55] - Range size 1, answer [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:08:55] - Range size 2, answer [0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:08:55] - Range size 3, answer [0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0]:
+[2023-04-23 17:08:55] - Range size 5, answer [0 0 0 1 1 0 1 0 0 0 0]:
+[2023-04-23 17:08:55] - Range size 6, answer [0 0 0 0 0]:
+[2023-04-23 17:08:55] - Range size 10, answer [2 1 0]:
+[2023-04-23 17:08:55] - Range size 11, answer [0 0 0 0 0]:
+[2023-04-23 17:08:55] - Range size 21, answer [2 1 0]:
+[2023-04-23 17:08:55] - Range size 22, answer [0]:
+[2023-04-23 17:08:55] - Range size 42, answer [1]:
+[2023-04-23 17:08:55] - Range size 43, answer [2]:
+[2023-04-23 17:08:55] - Range size 85, answer [3]:
+[2023-04-23 17:08:55] - ++++++++ Testing on node 1 Finished ++++++++
+[2023-04-23 17:08:55] - ++++++++ Testing on node 2 Started ++++++++
+[2023-04-23 17:08:55] - At node index 2 current size of dataset is: 4
+[2023-04-23 17:08:56] - The testing is implemented at marital-status
+[2023-04-23 17:08:56] - Ground truth: gives answer
+[2023-04-23 17:08:56] - output_answer:[2 1 1 0 0 0 0 3 1 0 0 4 4]
+[2023-04-23 17:08:56] - Range size 1, answer [2 1 1 0 0 0 0]:
+[2023-04-23 17:08:56] - Range size 2, answer [3 1 0]:
+[2023-04-23 17:08:56] - Range size 3, answer [0]:
+[2023-04-23 17:08:56] - Range size 4, answer [4]:
+[2023-04-23 17:08:56] - Range size 7, answer [4]:
+[2023-04-23 17:08:56] - Mechanism: gives answer
+[2023-04-23 17:08:56] - output_answer:[2 3 0 0 0 0 0 5 0 0 0 5 5]
+[2023-04-23 17:08:56] - Range size 1, answer [2 3 0 0 0 0 0]:
+[2023-04-23 17:08:56] - Range size 2, answer [5 0 0]:
+[2023-04-23 17:08:56] - Range size 3, answer [0]:
+[2023-04-23 17:08:56] - Range size 4, answer [5]:
+[2023-04-23 17:08:56] - Range size 7, answer [5]:
+[2023-04-23 17:08:56] - At node index 2 current size of dataset is: 4
+[2023-04-23 17:08:58] - The testing is implemented at age
+[2023-04-23 17:08:58] - Ground truth: gives answer
+[2023-04-23 17:08:58] - output_answer:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 1 0 0
+ 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0
+ 0 0 0 2 0 0 2 0 0 0 0 2 0 0 4 0 0 0 0 4 4]
+[2023-04-23 17:08:58] - Range size 1, answer [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 1 0 0
+ 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:08:58] - Range size 2, answer [0 0 0 0 0 0 0 0 2 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:08:58] - Range size 3, answer [0 0 0 0 0 0 2 0 0 1 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:08:58] - Range size 5, answer [0 0 0 2 0 0 0 0 0 0 0]:
+[2023-04-23 17:08:58] - Range size 6, answer [0 0 2 0 0]:
+[2023-04-23 17:08:58] - Range size 10, answer [2 0 0]:
+[2023-04-23 17:08:58] - Range size 11, answer [0 0 2 0 0]:
+[2023-04-23 17:08:58] - Range size 21, answer [4 0 0]:
+[2023-04-23 17:08:58] - Range size 22, answer [0]:
+[2023-04-23 17:08:58] - Range size 42, answer [0]:
+[2023-04-23 17:08:58] - Range size 43, answer [4]:
+[2023-04-23 17:08:58] - Range size 85, answer [4]:
+[2023-04-23 17:08:58] - Mechanism: gives answer
+[2023-04-23 17:08:58] - output_answer:[0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 2 0 0 0 0 0 2 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0
+ 0 2 0 1 0 0 0 0 0 2 0 1 0 2 1 0 2 2 2 3 5]
+[2023-04-23 17:08:58] - Range size 1, answer [0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2
+ 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:08:58] - Range size 2, answer [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0]:
+[2023-04-23 17:08:58] - Range size 3, answer [0 2 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:08:58] - Range size 5, answer [0 0 0 0 0 0 0 0 2 0 0]:
+[2023-04-23 17:08:58] - Range size 6, answer [2 0 1 0 0]:
+[2023-04-23 17:08:58] - Range size 10, answer [0 0 0]:
+[2023-04-23 17:08:58] - Range size 11, answer [2 0 1 0 2]:
+[2023-04-23 17:08:58] - Range size 21, answer [1 0 2]:
+[2023-04-23 17:08:58] - Range size 22, answer [2]:
+[2023-04-23 17:08:58] - Range size 42, answer [2]:
+[2023-04-23 17:08:58] - Range size 43, answer [3]:
+[2023-04-23 17:08:58] - Range size 85, answer [5]:
+[2023-04-23 17:08:58] - ++++++++ Testing on node 2 Finished ++++++++
+[2023-04-23 17:08:58] - ++++++++ Testing on node 1 Started ++++++++
+[2023-04-23 17:08:58] - At node index 1 current size of dataset is: 0
+[2023-04-23 17:09:00] - The testing is implemented at marital-status
+[2023-04-23 17:09:00] - Ground truth: gives answer
+[2023-04-23 17:09:00] - output_answer:[0 0 0 0 0 0 0 0 0 0 0 0 0]
+[2023-04-23 17:09:00] - Range size 1, answer [0 0 0 0 0 0 0]:
+[2023-04-23 17:09:00] - Range size 2, answer [0 0 0]:
+[2023-04-23 17:09:00] - Range size 3, answer [0]:
+[2023-04-23 17:09:00] - Range size 4, answer [0]:
+[2023-04-23 17:09:00] - Range size 7, answer [0]:
+[2023-04-23 17:09:00] - Mechanism: gives answer
+[2023-04-23 17:09:00] - output_answer:[0 1 0 0 0 0 0 1 0 0 0 1 1]
+[2023-04-23 17:09:00] - Range size 1, answer [0 1 0 0 0 0 0]:
+[2023-04-23 17:09:00] - Range size 2, answer [1 0 0]:
+[2023-04-23 17:09:00] - Range size 3, answer [0]:
+[2023-04-23 17:09:00] - Range size 4, answer [1]:
+[2023-04-23 17:09:00] - Range size 7, answer [1]:
+[2023-04-23 17:09:00] - At node index 1 current size of dataset is: 0
+[2023-04-23 17:09:02] - The testing is implemented at age
+[2023-04-23 17:09:02] - Ground truth: gives answer
+[2023-04-23 17:09:02] - output_answer:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+[2023-04-23 17:09:02] - Range size 1, answer [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:09:02] - Range size 2, answer [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:09:02] - Range size 3, answer [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:09:02] - Range size 5, answer [0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:09:02] - Range size 6, answer [0 0 0 0 0]:
+[2023-04-23 17:09:02] - Range size 10, answer [0 0 0]:
+[2023-04-23 17:09:02] - Range size 11, answer [0 0 0 0 0]:
+[2023-04-23 17:09:02] - Range size 21, answer [0 0 0]:
+[2023-04-23 17:09:02] - Range size 22, answer [0]:
+[2023-04-23 17:09:02] - Range size 42, answer [0]:
+[2023-04-23 17:09:02] - Range size 43, answer [0]:
+[2023-04-23 17:09:02] - Range size 85, answer [0]:
+[2023-04-23 17:09:02] - Mechanism: gives answer
+[2023-04-23 17:09:02] - output_answer:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0
+ 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 0 1 1]
+[2023-04-23 17:09:02] - Range size 1, answer [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:09:02] - Range size 2, answer [0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:09:02] - Range size 3, answer [0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:09:02] - Range size 5, answer [0 0 0 1 0 0 0 0 0 0 0]:
+[2023-04-23 17:09:02] - Range size 6, answer [0 0 0 0 0]:
+[2023-04-23 17:09:02] - Range size 10, answer [1 0 0]:
+[2023-04-23 17:09:02] - Range size 11, answer [0 0 0 0 0]:
+[2023-04-23 17:09:02] - Range size 21, answer [1 0 0]:
+[2023-04-23 17:09:02] - Range size 22, answer [0]:
+[2023-04-23 17:09:02] - Range size 42, answer [0]:
+[2023-04-23 17:09:02] - Range size 43, answer [1]:
+[2023-04-23 17:09:02] - Range size 85, answer [1]:
+[2023-04-23 17:09:02] - ++++++++ Testing on node 1 Finished ++++++++
+[2023-04-23 17:09:02] - ++++++++ Testing on node 2 Started ++++++++
+[2023-04-23 17:09:02] - At node index 2 current size of dataset is: 0
+[2023-04-23 17:09:04] - The testing is implemented at marital-status
+[2023-04-23 17:09:04] - Ground truth: gives answer
+[2023-04-23 17:09:04] - output_answer:[0 0 0 0 0 0 0 0 0 0 0 0 0]
+[2023-04-23 17:09:04] - Range size 1, answer [0 0 0 0 0 0 0]:
+[2023-04-23 17:09:04] - Range size 2, answer [0 0 0]:
+[2023-04-23 17:09:04] - Range size 3, answer [0]:
+[2023-04-23 17:09:04] - Range size 4, answer [0]:
+[2023-04-23 17:09:04] - Range size 7, answer [0]:
+[2023-04-23 17:09:04] - Mechanism: gives answer
+[2023-04-23 17:09:04] - output_answer:[0 0 0 0 1 0 0 0 0 1 1 0 1]
+[2023-04-23 17:09:04] - Range size 1, answer [0 0 0 0 1 0 0]:
+[2023-04-23 17:09:04] - Range size 2, answer [0 0 1]:
+[2023-04-23 17:09:04] - Range size 3, answer [1]:
+[2023-04-23 17:09:04] - Range size 4, answer [0]:
+[2023-04-23 17:09:04] - Range size 7, answer [1]:
+[2023-04-23 17:09:04] - At node index 2 current size of dataset is: 0
+[2023-04-23 17:09:06] - The testing is implemented at age
+[2023-04-23 17:09:06] - Ground truth: gives answer
+[2023-04-23 17:09:06] - output_answer:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+[2023-04-23 17:09:06] - Range size 1, answer [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:09:06] - Range size 2, answer [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:09:06] - Range size 3, answer [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:09:06] - Range size 5, answer [0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:09:06] - Range size 6, answer [0 0 0 0 0]:
+[2023-04-23 17:09:06] - Range size 10, answer [0 0 0]:
+[2023-04-23 17:09:06] - Range size 11, answer [0 0 0 0 0]:
+[2023-04-23 17:09:06] - Range size 21, answer [0 0 0]:
+[2023-04-23 17:09:06] - Range size 22, answer [0]:
+[2023-04-23 17:09:06] - Range size 42, answer [0]:
+[2023-04-23 17:09:06] - Range size 43, answer [0]:
+[2023-04-23 17:09:06] - Range size 85, answer [0]:
+[2023-04-23 17:09:06] - Mechanism: gives answer
+[2023-04-23 17:09:06] - output_answer:[0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 1 1]
+[2023-04-23 17:09:06] - Range size 1, answer [0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:09:06] - Range size 2, answer [0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:09:06] - Range size 3, answer [0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:09:06] - Range size 5, answer [0 0 0 0 0 0 0 0 0 0 0]:
+[2023-04-23 17:09:06] - Range size 6, answer [1 0 0 0 0]:
+[2023-04-23 17:09:06] - Range size 10, answer [0 0 0]:
+[2023-04-23 17:09:06] - Range size 11, answer [1 0 0 0 0]:
+[2023-04-23 17:09:06] - Range size 21, answer [0 0 0]:
+[2023-04-23 17:09:06] - Range size 22, answer [1]:
+[2023-04-23 17:09:06] - Range size 42, answer [0]:
+[2023-04-23 17:09:06] - Range size 43, answer [1]:
+[2023-04-23 17:09:06] - Range size 85, answer [1]:
+[2023-04-23 17:09:06] - ++++++++ Testing on node 2 Finished ++++++++
+[2023-04-23 17:09:06] - Insertion and Deletion Mechanism:
+[2023-04-23 17:09:06] - Member marital-status
+[2023-04-23 17:09:06] - For ground truth, queries on node 1 gives answer [1 0 1 0 0 0 0 1 1 0 0 2 2]
+[2023-04-23 17:09:06] - For insertion-only mechanism, queries on node 1 gives answer [1 0 2 0 0 0 0 0 2 0 0 2 2]
+[2023-04-23 17:09:06] - For ground truth, queries on node 2 gives answer [2 1 1 0 0 0 0 3 1 0 0 4 4]
+[2023-04-23 17:09:06] - For insertion-only mechanism, queries on node 2 gives answer [2 3 0 0 0 0 0 5 0 0 0 5 4]
+[2023-04-23 17:09:06] - Member age
+[2023-04-23 17:09:06] - For ground truth, queries on node 1 gives answer [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0
+ 0 0 0 1 0 0 1 0 0 0 0 1 0 0 2 0 0 0 0 2 2]
+[2023-04-23 17:09:06] - For insertion-only mechanism, queries on node 1 gives answer [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0
+ 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1 1 0 0 1 1 2]
+[2023-04-23 17:09:06] - For ground truth, queries on node 2 gives answer [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 1 0 0
+ 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0
+ 0 0 0 2 0 0 2 0 0 0 0 2 0 0 4 0 0 0 0 4 4]
+[2023-04-23 17:09:06] - For insertion-only mechanism, queries on node 2 gives answer [0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 2 0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0
+ 0 1 0 1 0 0 0 0 0 1 0 1 0 2 1 0 2 1 2 2 4]
+[2023-04-23 17:09:06] - Insertion and Deletion Mechanism finished
+[2023-04-23 17:09:06] - Integrated answers stores here
+[2023-04-23 17:09:06] - Member marital-status
+[2023-04-23 17:09:06] - Node Index 1
+[2023-04-23 17:09:06] - Dynamic Tree:
+[2023-04-23 17:09:06] - Ground truth:
+[1 0 1 0 0 0 0 1 1 0 0 2 2]
+[2023-04-23 17:09:06] - Golden standard:
+[1 0 1 0 0 0 1 1 1 0 1 2 3]
+[2023-04-23 17:09:06] - Mechanism: 
+[1 0 0 0 1 0 1 1 0 1 2 1 3]
+[2023-04-23 17:09:06] - Insertion-Only Mechanism:
+[2023-04-23 17:09:06] - Ground truth:
+[1 0 1 0 0 0 0 1 1 0 0 2 2]
+[2023-04-23 17:09:06] - Mechanism:
+[1 0 2 0 0 0 0 0 2 0 0 2 2]
+[2023-04-23 17:09:06] - Node Index 2
+[2023-04-23 17:09:06] - Dynamic Tree:
+[2023-04-23 17:09:06] - Ground truth:
+[2 1 1 0 0 0 0 3 1 0 0 4 4]
+[2023-04-23 17:09:06] - Golden standard:
+[2 1 1 0 0 0 1 3 1 0 1 4 5]
+[2023-04-23 17:09:06] - Mechanism: 
+[1 0 2 0 0 0 2 1 2 0 2 3 5]
+[2023-04-23 17:09:06] - Insertion-Only Mechanism:
+[2023-04-23 17:09:06] - Ground truth:
+[2 1 1 0 0 0 0 3 1 0 0 4 4]
+[2023-04-23 17:09:06] - Mechanism:
+[2 3 0 0 0 0 0 5 0 0 0 5 4]
+[2023-04-23 17:09:06] - Member age
+[2023-04-23 17:09:06] - Node Index 1
+[2023-04-23 17:09:06] - Dynamic Tree:
+[2023-04-23 17:09:06] - Ground truth:
+[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0
+ 0 0 0 1 0 0 1 0 0 0 0 1 0 0 2 0 0 0 0 2 2]
+[2023-04-23 17:09:06] - Golden standard:
+[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 1 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 1 0 0 1 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 1
+ 1 0 0 0 0 0 1 0 2 0 0 0 0 0 1 0 2 0 2 1 3]
+[2023-04-23 17:09:06] - Mechanism: 
+[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 0 0 0
+ 0 0 0 0 0 0 3 0 0 0 0 0 0 0 3 0 0 0 0 3 3]
+[2023-04-23 17:09:06] - Insertion-Only Mechanism:
+[2023-04-23 17:09:06] - Ground truth:
+[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0
+ 0 0 0 1 0 0 1 0 0 0 0 1 0 0 2 0 0 0 0 2 2]
+[2023-04-23 17:09:06] - Mechanism:
+[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0
+ 0 0 0 0 0 0 1 1 0 0 0 0 0 0 1 1 0 0 1 1 2]
+[2023-04-23 17:09:06] - Node Index 2
+[2023-04-23 17:09:06] - Dynamic Tree:
+[2023-04-23 17:09:06] - Ground truth:
+[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 1 0 0
+ 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0
+ 0 0 0 2 0 0 2 0 0 0 0 2 0 0 4 0 0 0 0 4 4]
+[2023-04-23 17:09:06] - Golden standard:
+[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0 0
+ 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 1 1 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 0 2 0 0 0 0 0 0
+ 0 0 1 1 0 0 2 0 0 0 2 1 0 0 3 0 0 2 0 5 5]
+[2023-04-23 17:09:06] - Mechanism: 
+[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 2 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 2 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 5 0 0 0 0 0 0 0 5 0 0 5 0 5 0 5]
+[2023-04-23 17:09:06] - Insertion-Only Mechanism:
+[2023-04-23 17:09:06] - Ground truth:
+[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 1 0 0
+ 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0
+ 0 0 0 2 0 0 2 0 0 0 0 2 0 0 4 0 0 0 0 4 4]
+[2023-04-23 17:09:06] - Mechanism:
+[0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 2 0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0
+ 0 1 0 1 0 0 0 0 0 1 0 1 0 2 1 0 2 1 2 2 4]
+[2023-04-23 17:09:06] - ******** Testing Finished ********
+[2023-04-23 17:09:06] - ******** Drawing Figure started ********
+[2023-04-23 17:09:07] - ******** Drawing Figure finished ********

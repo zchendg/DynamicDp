@@ -6,7 +6,7 @@ import os
 import argparse
 import auxiliary
 import auxiliary1
-import analysis_data
+import analysis_data_1
 import time
 from tqdm import tqdm
 from tqdm._tqdm import trange
@@ -53,8 +53,8 @@ if 1:
 
     # Initialize the logger
     # logger_file_name = './log/' + datetime.now().strftime(time_format) + '.log'
-    # logger = Logger(logger_file_name, sys.stdout)
-    logging.basicConfig(stream=sys.stderr, level=logging.INFO)
+    logger = Logger(logger_file_name, sys.stdout)
+    # logging.basicConfig(filemode='w', filename=logger_file_name, level=logging.INFO)
     logger = logging.getLogger()
     logger.info('Arguments: ' + str(args))
     # ------------------------------------------------------------------
@@ -145,8 +145,8 @@ def main():
     logger.info('******** Testing Finished ********')
     logger.info('******** Drawing Figure started ********')
     # dynamic_tree.draw_diagram(ipp_instance, figure_file_name)
-    analysis_data.draw_diagram(dynamic_tree, insertion_deletion_instance, query_instance, ipp_instance, figure_file_name)
-    analysis_data.draw_diagram_error(dynamic_tree, insertion_deletion_instance, query_instance, ipp_instance, figure_file_name)
+    analysis_data_1.draw_diagram(dynamic_tree, insertion_deletion_instance, query_instance, ipp_instance, figure_file_name)
+    analysis_data_1.draw_diagram_error(dynamic_tree, insertion_deletion_instance, query_instance, ipp_instance, figure_file_name)
     logger.info('******** Drawing Figure finished ********')
     return -1
 
