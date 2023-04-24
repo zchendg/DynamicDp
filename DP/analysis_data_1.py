@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import plotly.graph_objs as go
+import plotly.express as px
 import plotly.offline as pyoff
 
 
@@ -40,48 +41,35 @@ def draw_diagram(dynamic_tree, insertion_deletion_instance, query_instance, ipp_
         data = [trace_ground_truth, trace_golden_standard, trace_mechanism, trace_ground_truth_insertion, trace_insertion_only]
         figure = go.Figure(data=data)
         figure.write_image(figure_file_name + str(member) + '.jpg')
-        # plt.title('Testing on %s' % member)
-        # plt.plot(index_range, sum_1.values())
-        # plt.plot(index_range, sum_2.values())
-        # plt.plot(index_range, sum_3.values())
-        # plt.plot(index_range, sum_4.values())
-        # plt.plot(index_range, sum_5.values())
-        # plt.xticks(index_range)
-        # plt.legend(
-        #     ['ground truth', 'golden standard', 'mechanism', 'ground truth for ground', 'insertion only mechanism'],
-        #     loc='upper left')
-        # plt.savefig(figure_file_name + str(member) + '.jpg')
-        # plt.cla()
 
 
-# def draw_diagram_error(dynamic_tree, insertion_deletion_instance, query_instance, ipp_instance, figure_file_name,
-#                        query_length=1):
-#     members = query_instance.clique
-#     index_range = np.array(range(1, len(ipp_instance.get_segment()) - 1))
-#     answer_ground_truth = dynamic_tree.answer_ground_truth
-#     answer_golden_standard = dynamic_tree.answer_golden_standard
-#     answer_mechanism = dynamic_tree.answer_mechanism
-#     answer_baseline = insertion_deletion_instance.answer_mechanism
-#     total_width, n = 0.8, 3
-#     width = total_width / n
-#     x = index_range - (total_width - width) / 2
-#     for member in members:
-#         cur_range = query_instance.length_size[member][query_length]
-#         a1, a2, a3 = [], [], []
-#         for index in index_range:
-#             a1.append(l1_error(answer_ground_truth[member][index][0: cur_range],
-#                                answer_golden_standard[member][index][0: cur_range]))
-#             a2.append(l1_error(answer_ground_truth[member][index][0: cur_range],
-#                                answer_mechanism[member][index][0: cur_range]))
-#             a3.append(l1_error(answer_ground_truth[member][index][0: cur_range],
-#                                answer_baseline[member][index][0: cur_range]))
-#         plt.title('Histogram of %s' % member)
-#         plt.bar(x, a1, width=width, label='golden standard')
-#         plt.bar(x + width, a2, width=width, label='mechanism')
-#         plt.bar(x + 2 * width, a3, width=width, label='baseline')
-#         plt.legend()
-#         plt.savefig(figure_file_name + 'error histogram on' + str(member) + 'jpg')
-#         plt.cla()
+def draw_diagram_error(dynamic_tree, insertion_deletion_instance, query_instance, ipp_instance, figure_file_name,
+                       query_length=1):
+    members = query_instance.clique
+    index_range = np.array(range(1, len(ipp_instance.get_segment()) - 1))
+    answer_ground_truth = dynamic_tree.answer_ground_truth
+    answer_golden_standard = dynamic_tree.answer_golden_standard
+    answer_mechanism = dynamic_tree.answer_mechanism
+    answer_baseline = insertion_deletion_instance.answer_mechanism
+    total_width, n = 0.8, 3
+    width = total_width / n
+    x = index_range - (total_width - width) / 2
+    for member in members:
+        cur_range = query_instance.length_size[member][query_length]
+        a1, a2, a3 = [], [], []
+        for index in index_range:
+            a1.append(l1_error(answer_ground_truth[member][index][0: cur_range],
+                               answer_golden_standard[member][index][0: cur_range]))
+            a2.append(l1_error(answer_ground_truth[member][index][0: cur_range],
+                               answer_mechanism[member][index][0: cur_range]))
+            a3.append(l1_error(answer_ground_truth[member][index][0: cur_range],
+                               answer_baseline[member][index][0: cur_range]))
+        fig = go.Figure(data=[
+            go.Bar(name='golden standard', x=list(index_range), y=list(a1)),
+            go.Bar(name='mechanism', x=list(index_range), y=list(a2)),
+            go.Bar(name='baseline', x=list(index_range), y=list(a3))])
+        fig.update_layout(barmode='group')
+        fig.write_image(figure_file_name + 'error histogram on' + str(member) + '.jpg')
 
 
 def l1_error(ground_truth, mechanism):
