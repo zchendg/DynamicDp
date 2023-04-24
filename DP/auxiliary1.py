@@ -25,7 +25,7 @@ def answer_queries(dataset, member, queries):
 def output_answer(answer, member, query_instance, logger=None):
     head = 0
     tail = 0
-    logger.info('output_answer:%s' % answer)
+    logger.info('output_answer:\n%s' % answer)
     for length in query_instance.length_size[member]:
         tail = query_instance.length_size[member][length]
         if logger is not None:

@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 import os
 from node import Node
 from query import Query
@@ -157,20 +156,26 @@ class DynamicTree:
     # For new algorithm, returns the queries' answer for the new algorithm
     def answer_queries_mechanism(self, nodes, cur_index, queries, member, epsilon=1, delta=0, beta=0.05, iteration=500,
                                  logger=None):
-        epsilon_budget = {node: 6 * epsilon / (np.square(np.pi * (node.height + 1))) for node in nodes}
-        delta_budget = {node: 6 * delta / (np.square(np.pi * (node.height + 1))) for node in nodes}
+        # epsilon_budget = {node: 6 * epsilon / (np.square(np.pi * (node.height + 1))) for node in nodes}
+        # delta_budget = {node: 6 * delta / (np.square(np.pi * (node.height + 1))) for node in nodes}
+        epsilon_budget = {node: epsilon / len(nodes) for node in nodes}
+        delta_budget = {node: delta / len(nodes) for node in nodes}
         answer_mechanism = auxiliary1.answer_queries(pd.DataFrame(columns=self.config.keys()), member, queries)
+        logger.info('-------- New Mechanism: Testing on node %d started --------' % cur_index)
         for node in nodes:
             answer_mechanism_node = self.answer_node_queries_mechanism(node, cur_index, queries, member,
                                                                        epsilon_budget[node], delta_budget[node],
                                                                        beta, iteration, logger)
+            logger.info('Passed node %d, gives answer: \n%s' % (node.index, answer_mechanism_node))
             answer_mechanism = np.array(answer_mechanism) + np.array(answer_mechanism_node)
+        logger.info('-------- New Mechanism: Testing on node %d finished --------' % cur_index)
         return np.array(answer_mechanism)
 
     def answer_node_queries_mechanism(self, node, cur_index, queries, member, epsilon=1, delta=0, beta=0.05,
                                       iteration=500, logger=None):
-        logger.info('-------- New Mechanism: Testing on %s, node %s is accessed --------' % (cur_index, node.index))
+        # logger.info('-------- New Mechanism: Testing on %s, node %s is accessed --------' % (cur_index, node.index))
         # Initiate delete_df to store the data in the deletion-only problem
+        r = 1
         tilde_n_v = 0
         Dv = pd.DataFrame(columns=self.config.keys())
         delete_df = pd.DataFrame(columns=self.config.keys())
@@ -181,23 +186,17 @@ class DynamicTree:
             if index == node.index:
                 Dv = node.df
                 r = 1
-                if len(Dv) <= 1:
-                    epsilon_r = epsilon
-                    delta_r = delta
-                    Dv_answer = auxiliary1.answer_queries(Dv, member, queries)
-                    answer_mechanism = Dv_answer
-                    # Initiate M_BC
-                    basic_counting_instance = BasicCounting(epsilon, delta_r, store_df=True, config=self.config)
-                    continue
                 # Epsilon_r might be modified, as the number of restarts is fixed
-                epsilon_r = max(3 * epsilon / (2 * np.square(np.pi * r)), epsilon / np.log2(len(Dv)))
-                delta_r = max(2 * delta / (np.square(np.pi * r)), delta / np.log2(len(Dv)))
+                # epsilon_r = max(3 * epsilon / (2 * np.square(np.pi * r)), epsilon / np.log2(len(Dv) + 2))
+                # delta_r = max(2 * delta / np.square(np.pi * r), delta / np.log2(len(Dv) + 2))
+                epsilon_r = epsilon
+                delta_r = delta
                 tilde_n_v = len(Dv) + np.random.laplace(loc=0, scale=1 / epsilon_r)
                 approximation_instance = ApproximationInstance(Dv, self.domain, epsilon_r, [member], 'Data', iteration)
                 Dv_answer = auxiliary1.answer_queries(approximation_instance.approximated_data.df, member, queries)
                 answer_mechanism = Dv_answer
                 # Initiate M_Ins
-                basic_counting_instance = BasicCounting(epsilon, delta_r, store_df=True, config=self.config)
+                basic_counting_instance = BasicCounting(epsilon_r, delta_r, store_df=True, config=self.config)
             elif node.index < index <= cur_index:
                 # delete_df contains the actual item that has been deleted.
                 delete_df = pd.merge(pd.concat([delete_df, self.node_list[index].delete_df]).drop_duplicates(keep='first'), Dv, how='inner')
@@ -208,38 +207,30 @@ class DynamicTree:
                 if tilde_n_del > (tilde_n_v / 2 + 2 * alpha_BC_sj):
                     # Remove all augmented items from D(v)
                     # Dv = pd.concat([Dv, delete_df, delete_df]).drop_duplicates(keep=False)
+                    Dv = pd.concat([Dv, delete_df, delete_df]).drop_duplicates(keep=False)
                     r = r + 1
-                    if len(Dv) <= 1:
-                        # epsilon_r and delta_r remains unchanged
-                        tilde_n_v = len(Dv) + np.random.laplace(loc=0, scale=1 / epsilon_r)
-                        approximation_instance = ApproximationInstance(Dv, self.domain, epsilon_r, [member], 'Data',
-                                                                       iteration)
-                        Dv_answer = auxiliary1.answer_queries(approximation_instance.approximated_data.df, member, queries)
-                        if tilde_n_v < (2 * alpha_BC_sj):
-                            ansewr_mechanism = auxiliary1.ansewr_queries(pd.DataFrame(columns=self.config.keys()), member,
-                                                                   queries)
-                            break
-                    epsilon_r = max(3 * epsilon / (2 * np.square(np.pi * r)), epsilon / np.log2(len(Dv)))
-                    delta_r = max(2 * delta / (np.square(np.pi * r)), delta / np.log2(len(Dv)))
+                    # epsilon_r = max(3 * epsilon / (2 * np.square(np.pi * r)), epsilon / np.log2(len(Dv) + 2))
+                    # delta_r = max(2 * delta / np.square(np.pi * r), delta / np.log2(len(Dv) + 2))
+                    epsilon_r = epsilon
+                    delta_r = delta
                     tilde_n_v = len(Dv) + np.random.laplace(loc=0, scale=1 / epsilon_r)
                     # Run(epsilon_r, delta_r)-DP M(D(v)) to release Q(D(v))
-                    approximation_instance = ApproximationInstance(Dv, self.domain, epsilon_r, [member], 'Data',
-                                                                   iteration)
-                    # Re-publish the query answer for Dv
+                    approximation_instance = ApproximationInstance(Dv, self.domain, epsilon_r, [member], 'Data', iteration)
                     Dv_answer = auxiliary1.answer_queries(approximation_instance.approximated_data.df, member, queries)
-                    # When this condition happens, we all the Q(D_t(v)) will return 0, hence just
+                    # When this condition happens, we all the Q(D_t(v)) will return 0
                     if tilde_n_v < (2 * alpha_BC_sj):
                         logger.info('Testing on index %d, mechanism passed index %d, the algorithm hit tilde_n_del > ('
                                     'tilde_n_v / 2 + 2 * alpha_BC_sj, with %f > (%f / 2 + 2 * %f)' % (
                                         node.index, index, tilde_n_del, tilde_n_v, alpha_BC_sj))
-                        answer_mechanism = np.array(Dv_answer)
-                        break
+                        answer_mechanism = auxiliary1.answer_queries(pd.DataFrame(columns=self.config.keys()), member, queries)
+                        return np.array(answer_mechanism)
+                    # Re-publish the query answer for Dv
                 else:
                     D_sj_answer = auxiliary1.answer_queries(delete_df, member, queries)
                     answer_mechanism = np.array(Dv_answer) - np.array(D_sj_answer)
                     if index == cur_index:
                         break
-        logger.info('-------- New Mechanism answer node query on node %s finished --------' % node.index)
+        # logger.info('-------- New Mechanism answer node query on node %s finished --------' % node.index)
         answer_mechanism = [max(answer, 0) for answer in answer_mechanism]
         return np.array(answer_mechanism)
 

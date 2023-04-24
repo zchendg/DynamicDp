@@ -31,9 +31,8 @@ class BasicCounting:
     def create_DP_counting_query(self):
         return lambda df: self.update_counting(df, True)
 
-
     def update(self, df):
-        self.df = pd.concat([self.df, df]).drop_duplicates(keep=False)
+        self.df = pd.concat([self.df, df]).drop_duplicates(keep='first')
         self.counter = len(self.df)
 
     # For dynamic tree

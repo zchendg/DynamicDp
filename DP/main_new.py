@@ -40,6 +40,7 @@ if 1:
     parser.add_argument('--data_size', type=int, default=100)
     parser.add_argument('--sparse_ratio', type=int, default=10, help='The ratio between the Nan data and meaningful '
                                                                      'data')
+    parser.add_argument('--dynamic_size', type=int, default=256)
     parser.add_argument('--epsilon', type=float, default=0.1)
     parser.add_argument('--delta', type=float, default=0.1)
     parser.add_argument('--beta', type=float, default=0.05)
@@ -69,7 +70,7 @@ def main():
     data = pd.read_csv(args.dataset_path, sep=',').iloc[0:args.data_size]
     # print(data)
     # data = auxiliary.process_data(data, sparse=False)
-    data = auxiliary.generate_fixed_size_data(data, 10)
+    data = auxiliary.generate_fixed_size_data(data, args.dynamic_size)
     print(data)
     # data = auxiliary.sparse_data(data, 1, 10)
     # data = auxiliary.insert_deletion_data(data, False)

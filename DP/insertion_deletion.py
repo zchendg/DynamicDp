@@ -49,9 +49,9 @@ class Insertion_Deletion_Mechanism:
         for member in clique:
             logger.info('Member %s' % member)
             for index in indexes:
-                logger.info('For ground truth, queries on node %d gives answer %s' % (
+                logger.info('For ground truth, queries on node %d gives answer: \n%s' % (
                     index, self.answer_ground_truth[member][index]))
-                logger.info('For insertion-only mechanism, queries on node %d gives answer %s' % (
+                logger.info('For insertion-only mechanism, queries on node %d gives answer: \n%s' % (
                     index, self.answer_mechanism[member][index]))
         logger.info('Insertion and Deletion Mechanism finished')
 

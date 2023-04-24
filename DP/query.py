@@ -4,7 +4,7 @@ import random
 class Query:
     def __init__(self, config, random_query=False, column_number=2, query_size=10, logger=None):
         # self.clique = random.sample(config.keys(), column_number)
-        self.clique = ['marital-status', 'age']
+        self.clique = ['age']
         self.config = config
         if random_query:
             self.parameters = self.generate_query_parameters(query_size)
