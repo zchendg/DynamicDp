@@ -46,7 +46,7 @@ if 1:
     parser.add_argument('--beta', type=float, default=0.05)
     parser.add_argument('--iteration', type=int, default=500)
     parser.add_argument('--column_number', type=int, default=1)
-    parser.add_argument('--each_query_size', type=int, default=10)
+    parser.add_argument('--query_size', type=int, default=10)
 
     # Command line arguments parser
     print('******** Parsing Parameter********')
@@ -81,7 +81,7 @@ def main():
     logger.info('Data information: %s' % config)
 
     # ---- Construction Section --------
-    query_instance = Query(config, random_query=False)
+    query_instance = Query(config, random_query=True, query_size=args.query_size, logger=logger)
     dynamic_tree = DynamicTree(config, query_instance)
     insertion_deletion_instance = Insertion_Deletion_Mechanism(config, query_instance)
     ipp_instance = IPP(data, args.epsilon, args.beta)
@@ -139,7 +139,7 @@ def main():
     # dynamic_tree.node_list[4].df = pd.read_csv(args.dataset_path, sep=',').iloc[0:10000]
     # Modification
     # dynamic_tree.testing_index(8, epsilon=args.epsilon, iteration=args.iteration, logger=logger)
-    dynamic_tree.testing(ipp_instance, 2, 100, args.epsilon, args.delta, args.beta, args.iteration, logger)
+    dynamic_tree.testing(ipp_instance, args.epsilon, args.delta, args.beta, args.iteration, logger)
     insertion_deletion_instance.testing(ipp_instance, args.epsilon, args.delta, args.beta, args.iteration, logger)
     auxiliary1.store_answer(dynamic_tree, insertion_deletion_instance, ipp_instance, logger=logger)
     print('******** Testing Finished ********')

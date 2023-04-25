@@ -14,11 +14,17 @@ def store_answer(answer_list, clique, query_instance, logger=None):
 
 
 def draw_diagram(dynamic_tree, insertion_deletion_instance, query_instance, ipp_instance, figure_file_name,
-                 query_length=1):
+                 query_length=None):
     members = query_instance.clique
     index_range = range(1, len(ipp_instance.get_segment()) - 1)
     for member in members:
-        cur_range = query_instance.length_size[member][query_length]
+        length_size = 1
+        if query_length is None:
+            query_length = range(1, query_instance.config[member]+1)
+        for length in query_length:
+            if length in list(query_instance.length_size[member].keys()):
+                length_size = length
+        cur_range = query_instance.length_size[member][length_size]
         sum_1, sum_2, sum_3, sum_4, sum_5 = {}, {}, {}, {}, {}
         for index in index_range:
             sum_1_temp, sum_2_temp, sum_3_temp, sum_4_temp, sum_5_temp = 0, 0, 0, 0, 0
@@ -40,11 +46,13 @@ def draw_diagram(dynamic_tree, insertion_deletion_instance, query_instance, ipp_
         trace_insertion_only = go.Scatter(x=list(index_range), y=list(sum_5.values()), mode='lines+markers', name='insertion only mechanism')
         data = [trace_ground_truth, trace_golden_standard, trace_mechanism, trace_ground_truth_insertion, trace_insertion_only]
         figure = go.Figure(data=data)
+        figure.update_layout(width=1400, height=1000)
+        figure.update_xaxes(fixedrange=True)
         figure.write_image(figure_file_name + str(member) + '.jpg')
 
 
 def draw_diagram_error(dynamic_tree, insertion_deletion_instance, query_instance, ipp_instance, figure_file_name,
-                       query_length=1):
+                       query_length=None):
     members = query_instance.clique
     index_range = np.array(range(1, len(ipp_instance.get_segment()) - 1))
     answer_ground_truth = dynamic_tree.answer_ground_truth
@@ -55,7 +63,13 @@ def draw_diagram_error(dynamic_tree, insertion_deletion_instance, query_instance
     width = total_width / n
     x = index_range - (total_width - width) / 2
     for member in members:
-        cur_range = query_instance.length_size[member][query_length]
+        length_size = 1
+        if query_length is None:
+            query_length = range(1, query_instance.config[member]+1)
+        for length in query_length:
+            if length in list(query_instance.length_size[member].keys()):
+                length_size = length
+        cur_range = query_instance.length_size[member][length_size]
         a1, a2, a3 = [], [], []
         for index in index_range:
             a1.append(l1_error(answer_ground_truth[member][index][0: cur_range],
@@ -68,7 +82,8 @@ def draw_diagram_error(dynamic_tree, insertion_deletion_instance, query_instance
             go.Bar(name='golden standard', x=list(index_range), y=list(a1)),
             go.Bar(name='mechanism', x=list(index_range), y=list(a2)),
             go.Bar(name='baseline', x=list(index_range), y=list(a3))])
-        fig.update_layout(barmode='group')
+        fig.update_layout(barmode='group', width=1400, height=1000)
+        fig.update_xaxes(fixedrange=True)
         fig.write_image(figure_file_name + 'error histogram on' + str(member) + '.jpg')
 
 

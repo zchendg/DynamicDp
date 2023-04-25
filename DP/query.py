@@ -8,11 +8,13 @@ class Query:
         self.config = config
         if random_query:
             self.parameters = self.generate_query_parameters(query_size)
-            self.queries = self.create_queries(query_size)
+            self.length_size = self.get_length_size()
+            self.queries = self.create_queries()
         else:
             self.parameters = self.generate_query_parameters_non_randomly()
             self.length_size = self.get_length_size()
-            self.queries = self.create_queries_non_randomly()
+            self.queries = self.create_queries()
+        self.store_query_info(logger)
 
     def generate_query_parameters_non_randomly(self):
         parameters = {}
@@ -21,7 +23,6 @@ class Query:
             query_parameter_list = self.range_partition(0, self.config[member]-1)
             query_parameter_dict = self.rearrange(query_parameter_list)
             parameters[member] = query_parameter_dict
-            print('new query: ', parameters[member])
         return parameters
 
     # Store size of length for each member
@@ -34,10 +35,9 @@ class Query:
             for length in self.parameters[member].keys():
                 size += len(self.parameters[member][length])
                 length_size[member][length] = size
-            print('new query: ', length_size[member])
         return length_size
 
-    def create_queries_non_randomly(self):
+    def create_queries(self):
         queries = {}
         for member in self.clique:
             queries[member] = {}
@@ -75,7 +75,7 @@ class Query:
         return query_dict
 
     # create_queries is for random querying, above serves to the formal query
-    def create_queries(self, query_size):
+    def create_queries_randomly(self, query_size):
         queries = {}
         for member in self.clique:
             queries[member] = []
@@ -89,10 +89,13 @@ class Query:
     def generate_query_parameters(self, query_size):
         parameters = {}
         for member in self.clique:
-            parameters[member] = []
+            parameters[member] = {}
+            query_parameter_list = []
             for count in range(query_size):
                 query_bounds = sorted(random.sample(range(self.config[member]), 2))
-                parameters[member] += [query_bounds]
+                query_parameter_list += [query_bounds]
+            query_parameter_dict = self.rearrange(query_parameter_list)
+            parameters[member] = query_parameter_dict
         return parameters
 
     def answer_query_instance(self, df, member, length, count):
@@ -120,4 +123,7 @@ class Query:
         logger.info('Query instance consist of clique: %s' % self.clique)
         for member in self.clique:
             logger.info('query_instance.length_size[%s]: %s' % (member, self.length_size[member]))
+            for length in self.parameters[member].keys():
+                logger.info('for query with length %d:' % length)
+                logger.info('query parameters is with bounds: %s' % self.parameters[member][length])
         return

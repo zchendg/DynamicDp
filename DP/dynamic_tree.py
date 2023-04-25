@@ -61,7 +61,7 @@ class DynamicTree:
                 self.find_far_left_ancestor_index(self.node_list[index].index, self.node_list[index].height))
 
     # Implement testing function in the data structure
-    def testing(self, ipp_instance, column_number=1, each_query_size=10, epsilon=1, delta=0, beta=0.05, iteration=500,
+    def testing(self, ipp_instance, epsilon=1, delta=0, beta=0.05, iteration=500,
                 logger=None):
         for member in self.query_instance.queries.keys():
             self.answer_ground_truth[member] = {}
@@ -156,10 +156,10 @@ class DynamicTree:
     # For new algorithm, returns the queries' answer for the new algorithm
     def answer_queries_mechanism(self, nodes, cur_index, queries, member, epsilon=1, delta=0, beta=0.05, iteration=500,
                                  logger=None):
-        # epsilon_budget = {node: 6 * epsilon / (np.square(np.pi * (node.height + 1))) for node in nodes}
-        # delta_budget = {node: 6 * delta / (np.square(np.pi * (node.height + 1))) for node in nodes}
-        epsilon_budget = {node: epsilon / len(nodes) for node in nodes}
-        delta_budget = {node: delta / len(nodes) for node in nodes}
+        epsilon_budget = {node: max(6 * epsilon / (np.square(np.pi * (node.height + 1))), epsilon / len(nodes)) for node in nodes}
+        delta_budget = {node: max(6 * delta / (np.square(np.pi * (node.height + 1))), epsilon / len(nodes)) for node in nodes}
+        # epsilon_budget = {node: epsilon / len(nodes) for node in nodes}
+        # delta_budget = {node: delta / len(nodes) for node in nodes}
         answer_mechanism = auxiliary1.answer_queries(pd.DataFrame(columns=self.config.keys()), member, queries)
         logger.info('-------- New Mechanism: Testing on node %d started --------' % cur_index)
         for node in nodes:
@@ -187,10 +187,10 @@ class DynamicTree:
                 Dv = node.df
                 r = 1
                 # Epsilon_r might be modified, as the number of restarts is fixed
-                # epsilon_r = max(3 * epsilon / (2 * np.square(np.pi * r)), epsilon / np.log2(len(Dv) + 2))
-                # delta_r = max(2 * delta / np.square(np.pi * r), delta / np.log2(len(Dv) + 2))
-                epsilon_r = epsilon
-                delta_r = delta
+                epsilon_r = max(3 * epsilon / (2 * np.square(np.pi * r)), epsilon / np.log2(len(Dv) + 2))
+                delta_r = max(2 * delta / np.square(np.pi * r), delta / np.log2(len(Dv) + 2))
+                # epsilon_r = epsilon
+                # delta_r = delta
                 tilde_n_v = len(Dv) + np.random.laplace(loc=0, scale=1 / epsilon_r)
                 approximation_instance = ApproximationInstance(Dv, self.domain, epsilon_r, [member], 'Data', iteration)
                 Dv_answer = auxiliary1.answer_queries(approximation_instance.approximated_data.df, member, queries)
@@ -206,7 +206,6 @@ class DynamicTree:
                 alpha_BC_sj = basic_counting_instance.error_bound()
                 if tilde_n_del > (tilde_n_v / 2 + 2 * alpha_BC_sj):
                     # Remove all augmented items from D(v)
-                    # Dv = pd.concat([Dv, delete_df, delete_df]).drop_duplicates(keep=False)
                     Dv = pd.concat([Dv, delete_df, delete_df]).drop_duplicates(keep=False)
                     r = r + 1
                     # epsilon_r = max(3 * epsilon / (2 * np.square(np.pi * r)), epsilon / np.log2(len(Dv) + 2))
