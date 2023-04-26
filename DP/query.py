@@ -86,13 +86,14 @@ class Query:
     def create_query(self, member, length, count):
         return lambda df: self.answer_query_instance(df, member, length, count)
 
-    def generate_query_parameters(self, query_size):
+    def generate_query_parameters(self, query_size, threshold=1):
         parameters = {}
         for member in self.clique:
             parameters[member] = {}
             query_parameter_list = []
             for count in range(query_size):
-                query_bounds = sorted(random.sample(range(self.config[member]), 2))
+                query_bounds = query_bounds = sorted(random.sample(range(self.config[member]), 2))
+                # query_bounds = self.generate_query_bound(member, int((1/3)*self.config[member]))
                 query_parameter_list += [query_bounds]
             query_parameter_dict = self.rearrange(query_parameter_list)
             parameters[member] = query_parameter_dict
@@ -127,3 +128,14 @@ class Query:
                 logger.info('for query with length %d:' % length)
                 logger.info('query parameters is with bounds: %s' % self.parameters[member][length])
         return
+
+    def generate_query_bound(self, member, threshold=1):
+        query_bounds = sorted(random.sample(range(self.config[member]), 2))
+        counter = 0
+        while counter < 50:
+            if (query_bounds[1]-query_bounds[0]+1) >= threshold:
+                return query_bounds
+            else:
+                query_bounds = sorted(random.sample(range(self.config[member]), 2))
+                counter+1
+        return query_bounds
