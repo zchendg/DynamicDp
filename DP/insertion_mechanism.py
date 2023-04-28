@@ -74,14 +74,14 @@ class Insertion_Mechanism:
 
     def answer_queries_ground_truth(self, cur_index, queries, member, logger=None):
         current_dataset = self.find_current_dataset(cur_index, logger)
-        answer_ground_truth = auxiliary1.answer_queries(current_dataset, member, queries)
+        answer_ground_truth = auxiliary1.answer_queries(self.query_instance.query_type, current_dataset, member, queries)
         return np.array(answer_ground_truth)
 
     # Baseline1: the approximate dataset is generated from current dataset
     def answer_queries_baseline1(self, cur_index, queries, member, epsilon=1, delta=0, iteration=500, logger=None):
         current_dataset = self.find_current_dataset(cur_index, logger)
         approximate_instance = ApproximationInstance(current_dataset, self.domain, epsilon, [member], 'Data', iteration)
-        answer_baseline1 = auxiliary1.answer_queries(approximate_instance.approximated_data.df, member, queries)
+        answer_baseline1 = auxiliary1.answer_queries(self.query_instance.query_type, approximate_instance.approximated_data.df, member, queries)
         return np.array(answer_baseline1)
 
     # Baseline2: the approximate dataset is generated from the union of several approximated dataset
@@ -92,7 +92,7 @@ class Insertion_Mechanism:
         for node in nodes:
             Dv_list += [ApproximationInstance(node.df, self.domain, epsilon_budget[node], [member], 'Data', iteration).approximated_data.df]
         Dv = pd.concat(Dv_list)
-        answer_baseline2 = auxiliary1.answer_queries(Dv, member, queries)
+        answer_baseline2 = auxiliary1.answer_queries(self.query_instance.query_type, Dv, member, queries)
         return np.array(answer_baseline2)
 
     def answer_queries_dict(self, dataset, member, queries):

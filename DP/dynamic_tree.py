@@ -95,11 +95,11 @@ class DynamicTree:
                                                                                  logger=logger)
             logger.info('The testing is implemented at %s' % member)
             logger.info('Ground truth: gives answer')
-            auxiliary1.output_answer(self.answer_ground_truth[member][index], member, self.query_instance, logger)
+            auxiliary1.output_answer(self.query_instance.query_type, self.answer_ground_truth[member][index], member, self.query_instance, logger)
             logger.info('Golden standard: gives answer')
-            auxiliary1.output_answer(self.answer_golden_standard[member][index], member, self.query_instance, logger)
+            auxiliary1.output_answer(self.query_instance.query_type, self.answer_golden_standard[member][index], member, self.query_instance, logger)
             logger.info('Mechanism: gives answer')
-            auxiliary1.output_answer(self.answer_mechanism[member][index], member, self.query_instance, logger)
+            auxiliary1.output_answer(self.query_instance.query_type, self.answer_mechanism[member][index], member, self.query_instance, logger)
             logger.info("Mean Square Error of ground truth and golden standard: %s" % self.mse(
                 self.answer_ground_truth[member][index],
                 self.answer_golden_standard[member][index]))
@@ -131,7 +131,7 @@ class DynamicTree:
             Dv = pd.concat([Dv, delete_df, delete_df]).drop_duplicates(keep=False)
             Dv_list += [Dv]
         Dataset_r = pd.concat(Dv_list).drop_duplicates(keep='first')
-        answer_ground_truth = auxiliary1.answer_queries(Dataset_r, member, queries)
+        answer_ground_truth = auxiliary1.answer_queries(self.query_instance.query_type, Dataset_r, member, queries)
         return np.array(answer_ground_truth)
 
     # For golden standard, returns the queries' answer for golden standard (Approximated data)
@@ -150,7 +150,7 @@ class DynamicTree:
             Dv_list += [Dv]
         Dataset_r = pd.concat(Dv_list).drop_duplicates(keep='first')
         approximate_instance = ApproximationInstance(Dataset_r, self.domain, epsilon, [member], 'Data', iteration)
-        answer_golden_standard = auxiliary1.answer_queries(approximate_instance.approximated_data.df, member, queries)
+        answer_golden_standard = auxiliary1.answer_queries(self.query_instance.query_type, approximate_instance.approximated_data.df, member, queries)
         return np.array(answer_golden_standard)
 
     # For new algorithm, returns the queries' answer for the new algorithm
@@ -160,7 +160,7 @@ class DynamicTree:
         delta_budget = {node: max(6 * delta / (np.square(np.pi * (node.height + 1))), epsilon / len(nodes)) for node in nodes}
         # epsilon_budget = {node: epsilon / len(nodes) for node in nodes}
         # delta_budget = {node: delta / len(nodes) for node in nodes}
-        answer_mechanism = auxiliary1.answer_queries(pd.DataFrame(columns=self.config.keys()), member, queries)
+        answer_mechanism = auxiliary1.answer_queries(self.query_instance.query_type, pd.DataFrame(columns=self.config.keys()), member, queries)
         logger.info('-------- New Mechanism: Testing on node %d started --------' % cur_index)
         for node in nodes:
             answer_mechanism_node = self.answer_node_queries_mechanism(node, cur_index, queries, member,
@@ -193,7 +193,7 @@ class DynamicTree:
                 # delta_r = delta
                 tilde_n_v = len(Dv) + np.random.laplace(loc=0, scale=1 / epsilon_r)
                 approximation_instance = ApproximationInstance(Dv, self.domain, epsilon_r, [member], 'Data', iteration)
-                Dv_answer = auxiliary1.answer_queries(approximation_instance.approximated_data.df, member, queries)
+                Dv_answer = auxiliary1.answer_queries(self.query_instance.query_type, approximation_instance.approximated_data.df, member, queries)
                 answer_mechanism = Dv_answer
                 # Initiate M_Ins
                 basic_counting_instance = BasicCounting(epsilon_r, delta_r, store_df=True, config=self.config)
@@ -215,17 +215,17 @@ class DynamicTree:
                     tilde_n_v = len(Dv) + np.random.laplace(loc=0, scale=1 / epsilon_r)
                     # Run(epsilon_r, delta_r)-DP M(D(v)) to release Q(D(v))
                     approximation_instance = ApproximationInstance(Dv, self.domain, epsilon_r, [member], 'Data', iteration)
-                    Dv_answer = auxiliary1.answer_queries(approximation_instance.approximated_data.df, member, queries)
+                    Dv_answer = auxiliary1.answer_queries(self.query_instance.query_type, approximation_instance.approximated_data.df, member, queries)
                     # When this condition happens, we all the Q(D_t(v)) will return 0
                     if tilde_n_v < (2 * alpha_BC_sj):
                         logger.info('Testing on index %d, mechanism passed index %d, the algorithm hit tilde_n_del > ('
                                     'tilde_n_v / 2 + 2 * alpha_BC_sj, with %f > (%f / 2 + 2 * %f)' % (
                                         node.index, index, tilde_n_del, tilde_n_v, alpha_BC_sj))
-                        answer_mechanism = auxiliary1.answer_queries(pd.DataFrame(columns=self.config.keys()), member, queries)
+                        answer_mechanism = auxiliary1.answer_queries(self.query_instance.query_type, pd.DataFrame(columns=self.config.keys()), member, queries)
                         return np.array(answer_mechanism)
                     # Re-publish the query answer for Dv
                 else:
-                    D_sj_answer = auxiliary1.answer_queries(delete_df, member, queries)
+                    D_sj_answer = auxiliary1.answer_queries(self.query_instance.query_type, delete_df, member, queries)
                     answer_mechanism = np.array(Dv_answer) - np.array(D_sj_answer)
                     if index == cur_index:
                         break

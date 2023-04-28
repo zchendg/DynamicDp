@@ -5,7 +5,7 @@ from tqdm._tqdm import trange
 from tqdm import tqdm
 
 
-def answer_queries_dict(dataset, member, queries):
+def answer_queries_dict(query_type, dataset, member, queries):
     answer = {}
     for length in queries[member].keys():
         answer[length] = []
@@ -14,26 +14,33 @@ def answer_queries_dict(dataset, member, queries):
     return answer
 
 
-def answer_queries(dataset, member, queries):
+def answer_queries(query_type, dataset, member, queries):
     answer = []
-    for length in queries[member].keys():
-        for query in queries[member][length]:
-            answer += [len(query(dataset))]
+    if query_type == 'linear query':
+        for query in queries[member]:
+            answer += [query(dataset)]
+    elif query_type == 'range query':
+        for length in queries[member].keys():
+            for query in queries[member][length]:
+                answer += [len(query(dataset))]
     return answer
 
 
-def output_answer(answer, member, query_instance, logger=None):
-    head = 0
-    tail = 0
-    logger.info('output_answer:\n%s' % answer)
-    for length in query_instance.length_size[member]:
-        tail = query_instance.length_size[member][length]
-        if logger is not None:
-            logger.info('Range size %d, answer %s:' % (length, str(answer[head: tail])))
-        else:
-            print('Range size %d, answer:' % length)
-            print(str(answer[head: tail]))
-        head = query_instance.length_size[member][length]
+def output_answer(query_type, answer, member, query_instance, logger=None):
+    if query_type == 'linear query':
+        logger.info('output_answer:\n%s' % answer)
+    elif query_type == 'range query':
+        head = 0
+        tail = 0
+        logger.info('output_answer:\n%s' % answer)
+        for length in query_instance.length_size[member]:
+            tail = query_instance.length_size[member][length]
+            if logger is not None:
+                logger.info('Range size %d, answer %s:' % (length, str(answer[head: tail])))
+            else:
+                print('Range size %d, answer:' % length)
+                print(str(answer[head: tail]))
+            head = query_instance.length_size[member][length]
 
 
 def store_answer(dynamic_tree, insertion_deletion_mechanism, ipp_instance, query_length=None, logger=None):

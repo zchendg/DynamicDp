@@ -19,13 +19,16 @@ def draw_diagram(dynamic_tree, insertion_deletion_instance, query_instance, ipp_
     members = query_instance.clique
     index_range = range(1, len(ipp_instance.get_segment()) - 1)
     for member in members:
-        length_size = 1
-        if query_length is None:
-            query_length = range(1, query_instance.config[member]+1)
-        for length in query_length:
-            if length in list(query_instance.length_size[member].keys()):
-                length_size = length
-        cur_range = query_instance.length_size[member][length_size]
+        if query_instance.query_type == 'linear query':
+            cur_range = query_instance.query_size
+        elif query_instance.query_type == 'range query':
+            length_size = 1
+            if query_length is None:
+                query_length = range(1, query_instance.config[member]+1)
+            for length in query_length:
+                if length in list(query_instance.length_size[member].keys()):
+                    length_size = length
+            cur_range = query_instance.length_size[member][length_size]
         sum_1, sum_2, sum_3, sum_4, sum_5 = {}, {}, {}, {}, {}
         for index in index_range:
             sum_1_temp, sum_2_temp, sum_3_temp, sum_4_temp, sum_5_temp = 0, 0, 0, 0, 0
@@ -64,13 +67,16 @@ def draw_diagram_error(dynamic_tree, insertion_deletion_instance, query_instance
     width = total_width / n
     x = index_range - (total_width - width) / 2
     for member in members:
-        length_size = 1
-        if query_length is None:
-            query_length = range(1, query_instance.config[member]+1)
-        for length in query_length:
-            if length in list(query_instance.length_size[member].keys()):
-                length_size = length
-        cur_range = query_instance.length_size[member][length_size]
+        if query_instance.query_type == 'linear query':
+            cur_range = query_instance.query_size
+        elif query_instance.query_type == 'range query':
+            length_size = 1
+            if query_length is None:
+                query_length = range(1, query_instance.config[member]+1)
+            for length in query_length:
+                if length in list(query_instance.length_size[member].keys()):
+                    length_size = length
+            cur_range = query_instance.length_size[member][length_size]
         a1, a2, a3 = [], [], []
         for index in index_range:
             a1.append(l1_error(answer_ground_truth[member][index][0: cur_range],

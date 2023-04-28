@@ -81,7 +81,7 @@ def main():
     logger.info('Data information: %s' % config)
 
     # ---- Construction Section --------
-    query_instance = Query(config, random_query=True, query_size=args.query_size, logger=logger)
+    query_instance = Query(config,query_type='linear query', random_query=True, query_size=args.query_size, logger=logger)
     dynamic_tree = DynamicTree(config, query_instance)
     insertion_deletion_instance = Insertion_Deletion_Mechanism(config, query_instance)
     ipp_instance = IPP(data, args.epsilon, args.beta)
