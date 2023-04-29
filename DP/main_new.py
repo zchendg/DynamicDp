@@ -79,7 +79,7 @@ def main():
     config = json.load(open(args.domain_path))
     UPPERBOUND = len(data)
     logger.info('Data information: %s' % config)
-
+    return
     # ---- Construction Section --------
     query_instance = Query(config,query_type='linear query', random_query=True, query_size=args.query_size, logger=logger)
     dynamic_tree = DynamicTree(config, query_instance)
@@ -146,8 +146,8 @@ def main():
     logger.info('******** Testing Finished ********')
     logger.info('******** Drawing Figure started ********')
     # dynamic_tree.draw_diagram(ipp_instance, figure_file_name)
-    analysis_data_1.draw_diagram(dynamic_tree, insertion_deletion_instance, query_instance, ipp_instance, figure_file_name)
-    analysis_data_1.draw_diagram_error(dynamic_tree, insertion_deletion_instance, query_instance, ipp_instance, figure_file_name)
+    analysis_data_1.draw_mean_diagram(dynamic_tree, insertion_deletion_instance, query_instance, ipp_instance, figure_file_name)
+    analysis_data_1.draw_error_diagram(dynamic_tree, insertion_deletion_instance, query_instance, ipp_instance, figure_file_name)
     logger.info('******** Drawing Figure finished ********')
     return -1
 

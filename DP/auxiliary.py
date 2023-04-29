@@ -128,7 +128,7 @@ def insert_deletion_data(data, concentrate=True):
     # This funding wants to generate the dynamic data with fixed size：
 
 
-def generate_fixed_size_data(data, size=1000):
+def generate_fixed_size_data(data, size=1000, delete=True):
     start = time.perf_counter()
     data.insert(data.shape[1], 'update', 1)
     # Initially, set data_output and data_current to be the first size row
@@ -144,6 +144,10 @@ def generate_fixed_size_data(data, size=1000):
         deletion_row.loc[:, 'update'] = 1
         data_current = pd.concat([data_current, deletion_row, insertion_row], ignore_index=True).drop_duplicates(
             keep=False).reset_index(drop=True)
+    if delete:
+        data_current['update'] = -1
+        data_delete = data_current.sample(frac=1).reset_index(drop=True)
+        data_output = pd.concat([data_output, data_delete], ignore_index=True).reset_index(drop=True)
     end = time.perf_counter()
     print('Generating dynamic data with fix size cost: %ds' % (end - start))
     return data_output

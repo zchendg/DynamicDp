@@ -156,10 +156,12 @@ class DynamicTree:
     # For new algorithm, returns the queries' answer for the new algorithm
     def answer_queries_mechanism(self, nodes, cur_index, queries, member, epsilon=1, delta=0, beta=0.05, iteration=500,
                                  logger=None):
-        epsilon_budget = {node: max(6 * epsilon / (np.square(np.pi * (node.height + 1))), epsilon / len(nodes)) for node in nodes}
-        delta_budget = {node: max(6 * delta / (np.square(np.pi * (node.height + 1))), epsilon / len(nodes)) for node in nodes}
+        # epsilon_budget = {node: max(6 * epsilon / (np.square(np.pi * (node.height + 1))), epsilon / len(nodes)) for node in nodes}
+        # delta_budget = {node: max(6 * delta / (np.square(np.pi * (node.height + 1))), epsilon / len(nodes)) for node in nodes}
         # epsilon_budget = {node: epsilon / len(nodes) for node in nodes}
         # delta_budget = {node: delta / len(nodes) for node in nodes}
+        epsilon_budget = {node: 6 * epsilon / (np.square(np.pi * (node.height + 1))) for node in nodes}
+        delta_budget = {node: 6 * delta / (np.square(np.pi * (node.height + 1))) for node in nodes}
         answer_mechanism = auxiliary1.answer_queries(self.query_instance.query_type, pd.DataFrame(columns=self.config.keys()), member, queries)
         logger.info('-------- New Mechanism: Testing on node %d started --------' % cur_index)
         for node in nodes:
@@ -205,22 +207,22 @@ class DynamicTree:
                 # The error bound of MBC at time sj
                 alpha_BC_sj = basic_counting_instance.error_bound()
                 if tilde_n_del > (tilde_n_v / 2 + 2 * alpha_BC_sj):
+                    logger.info('Testing on index %d, mechanism passed index %d, the algorithm hit tilde_n_del > ('
+                                'tilde_n_v / 2 + 2 * alpha_BC_sj), with %f > (%f / 2 + 2 * %f)' % (node.index, index, tilde_n_del, tilde_n_v, alpha_BC_sj))
                     # Remove all augmented items from D(v)
                     Dv = pd.concat([Dv, delete_df, delete_df]).drop_duplicates(keep=False)
                     r = r + 1
-                    # epsilon_r = max(3 * epsilon / (2 * np.square(np.pi * r)), epsilon / np.log2(len(Dv) + 2))
-                    # delta_r = max(2 * delta / np.square(np.pi * r), delta / np.log2(len(Dv) + 2))
-                    epsilon_r = epsilon
-                    delta_r = delta
+                    epsilon_r = epsilon / (4 * np.log2(len(Dv) + 2))
+                    delta_r = delta / (3 * np.log2(len(Dv) + 2))
                     tilde_n_v = len(Dv) + np.random.laplace(loc=0, scale=1 / epsilon_r)
                     # Run(epsilon_r, delta_r)-DP M(D(v)) to release Q(D(v))
                     approximation_instance = ApproximationInstance(Dv, self.domain, epsilon_r, [member], 'Data', iteration)
                     Dv_answer = auxiliary1.answer_queries(self.query_instance.query_type, approximation_instance.approximated_data.df, member, queries)
                     # When this condition happens, we all the Q(D_t(v)) will return 0
                     if tilde_n_v < (2 * alpha_BC_sj):
-                        logger.info('Testing on index %d, mechanism passed index %d, the algorithm hit tilde_n_del > ('
-                                    'tilde_n_v / 2 + 2 * alpha_BC_sj, with %f > (%f / 2 + 2 * %f)' % (
-                                        node.index, index, tilde_n_del, tilde_n_v, alpha_BC_sj))
+                        logger.info('Testing on index %d, mechanism passed index %d, the algorithm hit tilde_n_v < (2 '
+                                    '* alpha_BC_sj), with %f < (2 * %f)' % (
+                                        node.index, index, tilde_n_v, alpha_BC_sj))
                         answer_mechanism = auxiliary1.answer_queries(self.query_instance.query_type, pd.DataFrame(columns=self.config.keys()), member, queries)
                         return np.array(answer_mechanism)
                     # Re-publish the query answer for Dv
