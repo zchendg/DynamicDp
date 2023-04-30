@@ -79,7 +79,6 @@ def main():
     config = json.load(open(args.domain_path))
     UPPERBOUND = len(data)
     logger.info('Data information: %s' % config)
-    return
     # ---- Construction Section --------
     query_instance = Query(config,query_type='linear query', random_query=True, query_size=args.query_size, logger=logger)
     dynamic_tree = DynamicTree(config, query_instance)

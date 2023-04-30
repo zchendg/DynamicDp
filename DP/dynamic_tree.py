@@ -189,8 +189,8 @@ class DynamicTree:
                 Dv = node.df
                 r = 1
                 # Epsilon_r might be modified, as the number of restarts is fixed
-                epsilon_r = max(3 * epsilon / (2 * np.square(np.pi * r)), epsilon / np.log2(len(Dv) + 2))
-                delta_r = max(2 * delta / np.square(np.pi * r), delta / np.log2(len(Dv) + 2))
+                epsilon_r = epsilon * (0.8 ** r) / 4
+                delta_r = delta * (0.8 ** r) / 3
                 # epsilon_r = epsilon
                 # delta_r = delta
                 tilde_n_v = len(Dv) + np.random.laplace(loc=0, scale=1 / epsilon_r)
@@ -212,8 +212,8 @@ class DynamicTree:
                     # Remove all augmented items from D(v)
                     Dv = pd.concat([Dv, delete_df, delete_df]).drop_duplicates(keep=False)
                     r = r + 1
-                    epsilon_r = epsilon / (4 * np.log2(len(Dv) + 2))
-                    delta_r = delta / (3 * np.log2(len(Dv) + 2))
+                    epsilon_r = epsilon * (0.8 ** r) / 4
+                    delta_r = delta_r * (0.8 ** r) / 3
                     tilde_n_v = len(Dv) + np.random.laplace(loc=0, scale=1 / epsilon_r)
                     # Run(epsilon_r, delta_r)-DP M(D(v)) to release Q(D(v))
                     approximation_instance = ApproximationInstance(Dv, self.domain, epsilon_r, [member], 'Data', iteration)
@@ -227,12 +227,12 @@ class DynamicTree:
                         return np.array(answer_mechanism)
                     # Re-publish the query answer for Dv
                 else:
-                    D_sj_answer = auxiliary1.answer_queries(self.query_instance.query_type, delete_df, member, queries)
-                    answer_mechanism = np.array(Dv_answer) - np.array(D_sj_answer)
                     if index == cur_index:
+                        deletion_instance = ApproximationInstance(delete_df, self.domain, epsilon_r, [member], 'Data', iteration)
+                        D_sj_answer = auxiliary1.answer_queries(self.query_instance.query_type, deletion_instance.approximated_data.df, member, queries)
+                        answer_mechanism = np.array(Dv_answer) - np.array(D_sj_answer)
                         break
         # logger.info('-------- New Mechanism answer node query on node %s finished --------' % node.index)
-        answer_mechanism = [max(answer, 0) for answer in answer_mechanism]
         return np.array(answer_mechanism)
 
     # Pack the way for answering the query.
