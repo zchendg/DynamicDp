@@ -86,8 +86,8 @@ class Insertion_Mechanism:
 
     # Baseline2: the approximate dataset is generated from the union of several approximated dataset
     def answer_queries_baseline2(self, nodes, cur_index, queries, member, epsilon=1, delta=0, iteration=500, logger=None):
-        epsilon_budget = {node: 6 * epsilon / (np.square(np.pi * (node.height + 1))) for node in nodes}
-        delta_budget = {node: 6 * delta / (np.square(np.pi * (node.height + 1))) for node in nodes}
+        epsilon_budget = {node: 6 * epsilon / (2 * np.square(np.pi * (node.height + 1))) for node in nodes}
+        delta_budget = {node: 6 * delta / (2 * np.square(np.pi * (node.height + 1))) for node in nodes}
         Dv_list = []
         for node in nodes:
             Dv_list += [ApproximationInstance(node.df, self.domain, epsilon_budget[node], [member], 'Data', iteration).approximated_data.df]
