@@ -125,9 +125,8 @@ def insert_deletion_data(data, concentrate=True):
     print('Insert deletion data costs: %ds' % (end - start))
     return data
 
-    # This funding wants to generate the dynamic data with fixed size：
 
-
+# This function generates the dynamic data with fixed size：
 def generate_fixed_size_data(data, size=1000, delete=True):
     start = time.perf_counter()
     data.insert(data.shape[1], 'update', 1)
@@ -148,6 +147,20 @@ def generate_fixed_size_data(data, size=1000, delete=True):
         data_current['update'] = -1
         data_delete = data_current.sample(frac=1).reset_index(drop=True)
         data_output = pd.concat([data_output, data_delete], ignore_index=True).reset_index(drop=True)
+    end = time.perf_counter()
+    print('Generating dynamic data with fix size cost: %ds' % (end - start))
+    return data_output
+
+# This function generates the dataset that inserts all items and then deletes all in random order
+def generate_insertion_to_deletion_data(data):
+    start =  time.perf_counter()
+    data_insert = data
+    data_delete = data
+    data_insert(data.shape[1], 'update', 1)
+    data_delete(data.shape[1], 'update', -1)
+    data_insert = data_insert.sample(frac=1).reset_index(drop=True)
+    data_delete = data_delete.sample(frac=1).reset_index(drop=True)
+    data_output = pd.concat([data_insert, data_delete], ignore_index=True).reset_index(drop=True)
     end = time.perf_counter()
     print('Generating dynamic data with fix size cost: %ds' % (end - start))
     return data_output

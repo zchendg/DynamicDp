@@ -9,6 +9,7 @@ import auxiliary1
 import analysis_data_1
 import time
 from tqdm import tqdm
+from data_loader import DataLoader
 from tqdm._tqdm import trange
 from dynamic_tree import DynamicTree
 from insertion_deletion import Insertion_Deletion_Mechanism
@@ -68,14 +69,12 @@ def main():
     logger.info('******** Initialization ********')
     # Loading dataset
     data = pd.read_csv(args.dataset_path, sep=',').iloc[0:args.data_size]
-    # print(data)
     # data = auxiliary.process_data(data, sparse=False)
-    data = auxiliary.generate_fixed_size_data(data, args.dynamic_size)
+    # data = auxiliary.generate_fixed_size_data(data, args.dynamic_size)
+    data = DataLoader('fixed size', data, args.dynamic_size, logger=logger).dynamic_data
     print(data)
     # data = auxiliary.sparse_data(data, 1, 10)
     # data = auxiliary.insert_deletion_data(data, False)
-    print('\n', data)
-    logger.info('Data sparsification complete')
     config = json.load(open(args.domain_path))
     UPPERBOUND = len(data)
     logger.info('Data information: %s' % config)
