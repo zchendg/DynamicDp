@@ -68,7 +68,7 @@ class DynamicTree:
             self.answer_ground_truth[member] = {}
             self.answer_golden_standard[member] = {}
             self.answer_mechanism[member] = {}
-            self.node_answer_dict[member] = {}
+            self.node_answer_dict[member] = self.answer_node_mechanism2(self.query_instance.queries, member, epsilon, beta, delta, iteration, logger)
             for index in range(1, len(ipp_instance.get_segment()) - 1):
                 logger.info('++++++++ Testing on node %d Started ++++++++' % index)
                 self.testing_index(index, member, epsilon, delta, beta, iteration, logger)
@@ -77,10 +77,10 @@ class DynamicTree:
     # Implement testing for at particular position, this function
     def testing_index(self, index, member, epsilon=1, delta=0, beta=0.05, iteration=500,
                       logger=None):
+        logger.info(
+            'At node with index %d, we implement queries on member: %s:' % (index, member))
         query_nodes = self.query_nodes(index)
         query_nodes.reverse()
-        logger.info(
-            'At node with index %d, we implement queries on cliques %s:' % (index, self.query_instance.queries.keys()))
         self.answer_ground_truth[member][index] = self.answer_queries_ground_truth(query_nodes, index,
                                                                                    self.query_instance.queries,
                                                                                    member,
@@ -94,7 +94,6 @@ class DynamicTree:
                                                                               self.query_instance.queries, member,
                                                                               epsilon, delta, beta, iteration,
                                                                               logger=logger)
-        logger.info('The testing is implemented at %s' % member)
         logger.info('Ground truth: gives answer')
         auxiliary1.output_answer(self.query_instance.query_type, self.answer_ground_truth[member][index], member,
                                  self.query_instance, logger)
@@ -104,21 +103,6 @@ class DynamicTree:
         logger.info('Mechanism: gives answer')
         auxiliary1.output_answer(self.query_instance.query_type, self.answer_mechanism[member][index], member,
                                  self.query_instance, logger)
-        logger.info("Mean Square Error of ground truth and golden standard: %s" % self.mse(
-            self.answer_ground_truth[member][index],
-            self.answer_golden_standard[member][index]))
-        logger.info("Mean Square Error of ground truth and mechanism: %s" % self.mse(
-            self.answer_ground_truth[member][index], self.answer_mechanism[member][index]))
-        logger.info("Mean Square Error of golden standard and mechanism: %s" % self.mse(
-            self.answer_golden_standard[member][index],
-            self.answer_mechanism[member][index]))
-        # logger.info('Measurement1: ground_truth and golden_standard\n' + str( self.compare_results(
-        # self.answer_ground_truth[member], self.answer_golden_standard[member], measurement=3))) logger.info(
-        # 'Measurement2: ground_truth and mechanism\n' + str( self.compare_results(self.answer_ground_truth[
-        # member], self.answer_mechanism[member], measurement=3)))
-        logger.info('Measurement3: golden_standard and mechanism\n' + str(
-            auxiliary1.compare_results(self.answer_golden_standard[member], self.answer_mechanism[member],
-                                       measurement=3)))
 
     # For ground truth, returns the queries' answer for original data.
     def answer_queries_ground_truth(self, nodes, cur_index, queries, member, logger=None):
@@ -254,17 +238,17 @@ class DynamicTree:
                                   logger=None):
         answer_mechanism = np.array([0] * self.query_instance.query_size)
         for node in nodes:
-            answer_mechanism += np.array(self.node_answer_dict[member][node.index][cur_index])
+            answer_mechanism = answer_mechanism + np.array(self.node_answer_dict[member][node.index][cur_index])
         return answer_mechanism
 
-    def answer_mechanism2(self, queries, member, epsilon=1, delta=0, beta=0.05, iteration=500, logger=None):
+    def answer_node_mechanism2(self, queries, member, epsilon=1, delta=0, beta=0.05, iteration=500, logger=None):
         node_answer_dict = {}
         for node in self.node_list[1:]:
             epsilon_budget = 6 * epsilon / (np.square(np.pi * (node.height + 1)))
-            delta_bndget = 6 * delta / (np.square(np.pi * (node.height + 1)))
-            node_answer_dict[member][node.index] = self.answer_node_queries_mechanism2(node, queries, member,
-                                                                                       epsilon_budget, delta_bndget,
-                                                                                       beta, iteration, logger)
+            delta_budget = 6 * delta / (np.square(np.pi * (node.height + 1)))
+            node_answer_dict[node.index] = self.answer_node_queries_mechanism2(node, queries, member,
+                                                                               epsilon_budget, delta_budget,
+                                                                               beta, iteration, logger)
         return node_answer_dict
 
     def answer_node_queries_mechanism2(self, node, queries, member, epsilon=1, delta=0, beta=0.05,

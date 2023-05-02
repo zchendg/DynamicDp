@@ -1,3 +1,0 @@
-[2023-05-01 20:24:28] - Arguments: Namespace(beta=0.05, column_number=1, data_size=10, dataset_path='./data/adult.csv', delta=0.1, domain_path='./data/adult-domain.json', dynamic_size=32, epsilon=1.0, iteration=200, query_size=10, sparse_ratio=10)
-[2023-05-01 20:24:28] - ******** Initialization ********
-[2023-05-01 20:24:28] - Process Type: fixed size, cost 0s
