@@ -4,7 +4,6 @@ import json
 from approximation_instance import ApproximationInstance
 from mbi import Domain, Dataset
 from query import Query
-from catboost.datasets import adult
 from my_logger import Logger
 
 domain = "/Users/chenzijun/Library/CloudStorage/OneDrive-HKUSTConnect/Study/Program/DP/data/adult-domain.json"

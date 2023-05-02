@@ -22,7 +22,8 @@ class Query:
             self.parameters = self.generate_non_random_range_query_parameters()
             self.length_size = self.non_random_get_length_size()
             self.queries = self.create_non_random_range_queries()
-        self.store_query_info(logger)
+        if logger is not None:
+            self.store_query_info(logger)
 
     # Serves to the range query that generating queries randomly
     #

@@ -1,27 +1,35 @@
 import pandas as pd
+import json
 import numpy as np
-import datetime
-from basic_counting import BasicCounting
-from ipp import IPP
+from approximation_instance import ApproximationInstance
+from mbi import Domain, Dataset
+from query import Query
+import plotly.graph_objs as go
+import auxiliary1
+import analysis_data_1
+from my_logger import Logger
 
+data = pd.read_csv('./data/adult.csv')
+config = json.load(open('./data/adult-domain.json'))
+domain = Domain(config.keys(), config.values())
+data_small_size = data[0: 100]
+data_large_size = data[0: 10000]
+epsilon = 1
+clique = ['age']
+member = 'age'
+iteration = 1000
+query_instance = Query(config, query_type='linear query', random_query=True, query_size=100)
+error = []
+index_range = list(range(500, 40000, 5000))
 
-print("-- Starting @ %ss" % datetime.datetime.now())
-df = pd.read_csv('/data/simple DP dataset.csv', sep=',')
-# print(df.head(20))
-
-# BC = BasicCounting(df)
-# print(BC.update_counting())
-
-# arr = [np.random.randint(low=0, high=n, size=20) for n in [2,3,4,5]]
-# values = np.array(arr).T
-# df = pd.DataFrame(values, columns = ['a', 'b', 'c', 'd'])
-# print(df)
-
-# bins = [range(n+1) for n in [2, 3, 4, 5]]
-# print(bins)
-
-ipp_instance = IPP(df, 5, 0.05)
-print(ipp_instance)
-for t in range(len(df)):
-    ipp_instance.update_segment(t)
-print(ipp_instance.get_segment())
+for size in index_range:
+    data_sized = data[0:size]
+    approximation_instance = ApproximationInstance(data_sized, domain, epsilon, clique, 'Data', iteration)
+    answer_ground_truth = auxiliary1.answer_queries(query_instance.query_type, data_sized, member, query_instance.queries)
+    answer_pgm = auxiliary1.answer_queries(query_instance.query_type, approximation_instance.approximated_data.df, member, query_instance.queries)
+    error += [analysis_data_1.l1_absolute_error(answer_ground_truth, answer_pgm)]
+figure_data = [go.Scatter(x=index_range, y=error, mode='lines+markers', name='error')]
+figure = go.Figure(data=figure_data)
+figure.update_xaxes(fixedrange=True)
+figure.write_image('error diagram.jpg')
+print(error)

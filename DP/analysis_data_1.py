@@ -78,6 +78,7 @@ def draw_error_diagram(dynamic_tree, insertion_deletion_instance, query_instance
             cur_range = query_instance.length_size[member][length_size]
         re1, re2, re3 = [], [], []
         ae1, ae2, ae3 = [], [], []
+        aae1, aae2, aae3 = [] , [], []
         rmse1, rmse2, rmse3 = [], [], []
         for index in index_range:
             re1.append(l1_relative_error(answer_ground_truth[member][index][0: cur_range],
@@ -92,6 +93,12 @@ def draw_error_diagram(dynamic_tree, insertion_deletion_instance, query_instance
                                          answer_mechanism[member][index][0: cur_range]))
             ae3.append(l1_absolute_error(answer_ground_truth[member][index][0: cur_range],
                                          answer_baseline[member][index][0: cur_range]))
+            aae1.append(l1_absolute_error(answer_ground_truth[member][index][0: cur_range],
+                                         answer_golden_standard[member][index][0: cur_range]) / query_instance.query_size)
+            aae2.append(l1_absolute_error(answer_ground_truth[member][index][0: cur_range],
+                                         answer_mechanism[member][index][0: cur_range]) / query_instance.query_size)
+            aae3.append(l1_absolute_error(answer_ground_truth[member][index][0: cur_range],
+                                         answer_baseline[member][index][0: cur_range]) / query_instance.query_size)
             rmse1.append(RMSE_error(answer_ground_truth[member][index][0: cur_range],
                                     answer_golden_standard[member][index][0: cur_range]))
             rmse2.append(RMSE_error(answer_ground_truth[member][index][0: cur_range],
@@ -119,6 +126,13 @@ def draw_error_diagram(dynamic_tree, insertion_deletion_instance, query_instance
         absolute_error_figure.update_layout(width=1400, height=1000, title='Absolute Error Line Chart', xaxis_title='Index', yaxis_title='Error')
         absolute_error_figure.update_xaxes(fixedrange=True)
         absolute_error_figure.write_image(figure_file_name + 'absolute error histogram on ' + str(member) + '.jpg')
+        aae_data = [go.Scatter(x=list(index_range), y=list(aae1), mode='lines+markers', name='golden standard'),
+                    go.Scatter(x=list(index_range), y=list(aae2), mode='lines+markers', name='mechanism'),
+                    go.Scatter(x=list(index_range), y=list(aae3), mode='lines+markers', name='baseline')]
+        average_absolute_error_figure = go.Figure(data=aae_data)
+        average_absolute_error_figure.update_layout(width=1400, height=1000, title='Average Absolute Error Line Chart', xaxis_title='Index', yaxis_title='Error')
+        average_absolute_error_figure.update_xaxes(fixedrange=True)
+        average_absolute_error_figure.write_image(figure_file_name + 'average absolute error histogram on ' + str(member) + '.jpg')
         rmse_data = [go.Scatter(x=list(index_range), y=list(rmse1), mode='lines+markers', name='golden standard'),
                      go.Scatter(x=list(index_range), y=list(rmse2), mode='lines+markers', name='mechanism'),
                      go.Scatter(x=list(index_range), y=list(rmse3), mode='lines+markers', name='baseline')]
