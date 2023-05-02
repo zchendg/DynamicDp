@@ -147,6 +147,7 @@ def main():
     analysis_data_1.draw_mean_diagram(dynamic_tree, insertion_deletion_instance, query_instance, ipp_instance, figure_file_name)
     analysis_data_1.draw_error_diagram(dynamic_tree, insertion_deletion_instance, query_instance, ipp_instance, figure_file_name)
     logger.info('******** Drawing Figure finished ********')
+    logger.info('******** Results stored in %s ********' % result_path)
     return -1
 
 

@@ -64,7 +64,7 @@ class Insertion_Mechanism:
             self.answer_ground_truth[member][index] = self.answer_queries_ground_truth(index,
                                                                                        self.query_instance.queries,
                                                                                        member, logger)
-            self.answer_mechanism[member][index] = self.answer_queries_baseline2(query_nodes, index, self.query_instance.queries, member, epsilon, beta, iteration, logger)
+            self.answer_mechanism[member][index] = self.answer_queries_baseline4(query_nodes, index, self.query_instance.queries, member, epsilon, beta, iteration, logger)
             logger.info('The testing is implemented at %s' % member)
             logger.info('Ground truth: gives answer')
             auxiliary1.output_answer(self.answer_ground_truth[member][index], member, self.query_instance, logger)
@@ -94,6 +94,26 @@ class Insertion_Mechanism:
         Dv = pd.concat(Dv_list)
         answer_baseline2 = auxiliary1.answer_queries(self.query_instance.query_type, Dv, member, queries)
         return np.array(answer_baseline2)
+
+    def answer_queries_baseline3(self, nodes, cur_index, queries, member, epsilon=1, delta=0, iteration=500, logger=None):
+        epsilon_budget = {node: 6 * epsilon / (2 * np.square(np.pi * (node.height + 1))) for node in nodes}
+        delta_budget = {node: 6 * delta / (2 * np.square(np.pi * (node.height + 1))) for node in nodes}
+        answer_baseline3 = np.array([0] * self.query_instance.query_size)
+        for node in nodes:
+            approximation_instance = ApproximationInstance(node.df, self.domain, epsilon_budget[node], [member], 'Data', iteration)
+            answer_baseline3 = answer_baseline3 + np.array(auxiliary1.answer_queries(self.query_instance.query_type, approximation_instance.approximated_data.df, member, queries))
+        return np.array(answer_baseline3)
+
+    def answer_queries_baseline4(self, nodes, cur_index, queries, member, epsilon=1, delta=0, iteration=500, logger=None):
+        epsilon_budget = {node: 6 * epsilon / (2 * np.square(np.pi * (node.height + 1))) for node in nodes}
+        delta_budget = {node: 6 * delta / (2 * np.square(np.pi * (node.height + 1))) for node in nodes}
+        answer_baseline4 = np.array([0] * self.query_instance.query_size)
+        for node in nodes:
+            noise = lambda privacy_budget: np.random.laplace(loc=0, scale=1 / privacy_budget)
+            noise_list = np.array([noise(epsilon_budget[node]) for i in range(self.query_instance.query_size)])
+            answer_baseline4 = auxiliary1.answer_queries(self.query_instance.query_type, node.df, member, queries)
+            answer_baseline4 = noise_list + np.array(answer_baseline4)
+        return np.array(answer_baseline4)
 
     def answer_queries_dict(self, dataset, member, queries):
         answer = {}

@@ -20,7 +20,7 @@ member = 'age'
 iteration = 1000
 query_instance = Query(config, query_type='linear query', random_query=True, query_size=100)
 error = []
-index_range = list(range(500, 40000, 5000))
+index_range = list(range(100, 40000, 500))
 
 for size in index_range:
     data_sized = data[0:size]
