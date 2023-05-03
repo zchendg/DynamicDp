@@ -154,5 +154,5 @@ def l1_absolute_error(ground_truth, mechanism):
 
 
 def RMSE_error(ground_truth, mechanism):
-    mse = np.linalg.norm(np.array(ground_truth) - np.array(mechanism), 2) / len(ground_truth)
+    mse = np.square(np.linalg.norm(np.array(ground_truth) - np.array(mechanism), 2)) / len(ground_truth)
     return np.sqrt(mse)

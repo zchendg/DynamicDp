@@ -14,7 +14,7 @@ from mbi import Domain, Dataset
 
 # This mechanmism implement the baseline mechanism, that using insertion and deletion only mechanmism
 
-class Insertion_Mechanism:
+class InsertionMechanism:
     def __init__(self, config, query_instance=None):
         self.node_list = [Node(0, config.keys(), 0)]
         self.config = config
@@ -64,7 +64,7 @@ class Insertion_Mechanism:
             self.answer_ground_truth[member][index] = self.answer_queries_ground_truth(index,
                                                                                        self.query_instance.queries,
                                                                                        member, logger)
-            self.answer_mechanism[member][index] = self.answer_queries_baseline4(query_nodes, index, self.query_instance.queries, member, epsilon, beta, iteration, logger)
+            self.answer_mechanism[member][index] = self.answer_queries_baseline3(query_nodes, index, self.query_instance.queries, member, epsilon, beta, iteration, logger)
             logger.info('The testing is implemented at %s' % member)
             logger.info('Ground truth: gives answer')
             auxiliary1.output_answer(self.answer_ground_truth[member][index], member, self.query_instance, logger)

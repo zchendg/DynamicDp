@@ -81,14 +81,14 @@ class DataLoader():
         return data_output
 
     def generate_insertion_only_data(self):
-        insertion_only_data = self.dynamic_data
+        insertion_only_data = self.dynamic_data.copy()
         for i in range(len(insertion_only_data)):
             if insertion_only_data.loc[i, 'update'] == -1:
                 insertion_only_data.loc[i, 'update'] = np.nan
         return insertion_only_data
 
     def generate_deletion_only_data(self):
-        deletion_only_data = self.dynamic_data
+        deletion_only_data = self.dynamic_data.copy()
         for i in range(len(deletion_only_data)):
             if deletion_only_data.loc[i, 'update'] == 1:
                 deletion_only_data.loc[i, 'update'] = np.nan

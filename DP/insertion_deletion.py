@@ -8,16 +8,16 @@ import argparse
 import auxiliary
 from node import Node
 from approximation_instance import ApproximationInstance
-from insertion_mechanism import Insertion_Mechanism
+from insertion_mechanism import InsertionMechanism
 import auxiliary
 import auxiliary1
 from mbi import Domain, Dataset
 
 
-class Insertion_Deletion_Mechanism:
+class InsertionDeletionMechanism:
     def __init__(self, config, query_instance=None):
-        self.insertion_tree = Insertion_Mechanism(config, query_instance)
-        self.deletion_tree = Insertion_Mechanism(config, query_instance)
+        self.insertion_tree = InsertionMechanism(config, query_instance)
+        self.deletion_tree = InsertionMechanism(config, query_instance)
         self.query_instance = query_instance
         self.answer_ground_truth = {}
         self.answer_mechanism = {}

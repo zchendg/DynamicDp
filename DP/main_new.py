@@ -12,7 +12,7 @@ from tqdm import tqdm
 from data_loader import DataLoader
 from tqdm._tqdm import trange
 from dynamic_tree import DynamicTree
-from insertion_deletion import Insertion_Deletion_Mechanism
+from insertion_deletion import InsertionDeletionMechanism
 from ipp import IPP
 from query import Query
 from current_df import CurrentDf
@@ -75,7 +75,6 @@ def main():
     data = data_loader_instance.dynamic_data
     insertion_only_data = data_loader_instance.insertion_only_data
     deletion_only_data = data_loader_instance.deletion_only_data
-    print(data)
     # data = auxiliary.sparse_data(data, 1, 10)
     # data = auxiliary.insert_deletion_data(data, False)
     config = json.load(open(args.domain_path))
@@ -84,7 +83,7 @@ def main():
     # ---- Construction Section --------
     query_instance = Query(config, query_type='linear query', random_query=True, query_size=args.query_size, logger=logger)
     dynamic_tree = DynamicTree(config, query_instance)
-    insertion_deletion_instance = Insertion_Deletion_Mechanism(config, query_instance)
+    insertion_deletion_instance = InsertionDeletionMechanism(config, query_instance)
     ipp_instance = IPP(data, args.epsilon, args.beta)
     # Dataframe that stores the current dataset
     # cur_data: current data upto the timestamp t
@@ -96,8 +95,8 @@ def main():
     cur_deleted_data = CurrentDf(config.keys())
 
     # ---- Establish Dynamic Tree --------
-    print('******** Create Dynamic Tree ********')
-    logger.info('******** Create Dynamic Tree ********')
+    print('******** Create Dynamic Tree Starts********')
+    logger.info('******** Create Dynamic Tree Starts********')
     for t in trange(UPPERBOUND):
         ipp_instance.update_segment(t)
         if t == (UPPERBOUND - 1):
@@ -130,10 +129,12 @@ def main():
         cur_deletion_data.add_deletion_item(data.iloc[[t]], t)
         cur_inserted_data.add_insertion_item(data.iloc[[t]], t)
         cur_deleted_data.add_deletion_item(data.iloc[[t]], t)
+    print('******** Create Dynamic Tree Finishes********')
+    logger.info('******** Create Dynamic Tree Finishes********')
+    logger.info('Infinite Private Partitioning: %s' % ipp_instance)
     logger.info('The dynamic interval tree consists of nodes: %s' % dynamic_tree.node_list[1:])
     logger.info('The insertion tree consists of nodes: %s ' % insertion_deletion_instance.insertion_tree.node_list[1:])
     logger.info('The deletion tree consists of nodes: %s ' % insertion_deletion_instance.deletion_tree.node_list[1:])
-    logger.info('Infinite Private Partitioning: %s' % ipp_instance)
     print('******** Testing Started ********')
     logger.info('******** Testing Started ********')
     # Modification
@@ -150,7 +151,7 @@ def main():
     analysis_data_1.draw_mean_diagram(dynamic_tree, insertion_deletion_instance, query_instance, ipp_instance, figure_file_name)
     analysis_data_1.draw_error_diagram(dynamic_tree, insertion_deletion_instance, query_instance, ipp_instance, figure_file_name)
     logger.info('******** Drawing Figure finished ********')
-    logger.info('******** Results stored in %s ********' % result_path)
+    print('******** Results stored in %s ********' % result_path)
     return -1
 
 
