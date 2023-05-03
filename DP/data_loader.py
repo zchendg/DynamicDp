@@ -6,17 +6,26 @@ from tqdm import tqdm
 
 class DataLoader():
     def __init__(self, process_type, data, dynamic_size, delete_tail=True, sparsification=False, logger=None):
+        assert process_type in ['original dataset', 'fixed size', 'insertion deletion', 'random delete']
         self.start = time.perf_counter()
         self.original_data = data
-        if process_type == 'fixed size':
+        if process_type == 'original dataset':
+            self.dynamic_data = self.generate_original_data()
+        elif process_type == 'fixed size':
             self.dynamic_data = self.generate_fixed_size_data(dynamic_size, delete_tail)
         elif process_type == 'insertion deletion':
             self.dynamic_data = self.generate_insertion_deletion_data()
         elif process_type == 'random delete':
             self.dynamic_data = self.generate_random_delete_data()
+        self.insertion_only_data = self.generate_insertion_only_data()
+        self.deletion_only_data = self.generate_deletion_only_data()
         self.end = time.perf_counter()
         logger.info('Process Type: %s, cost %ds' % (process_type, self.end - self.start))
 
+    def generate_original_data(self):
+        data = self.original_data
+        data.insert(data.shape[1], 'update', 1)
+        return data
 
     def generate_fixed_size_data(self, dynamic_size=1024, delete_tail=True):
         data = self.original_data
@@ -70,3 +79,17 @@ class DataLoader():
                 data.loc[row_index] = deletion_row.iloc[0]
         data_output = data.reset_index(drop=True)
         return data_output
+
+    def generate_insertion_only_data(self):
+        insertion_only_data = self.dynamic_data
+        for i in range(len(insertion_only_data)):
+            if insertion_only_data.loc[i, 'update'] == -1:
+                insertion_only_data.loc[i, 'update'] = np.nan
+        return insertion_only_data
+
+    def generate_deletion_only_data(self):
+        deletion_only_data = self.dynamic_data
+        for i in range(len(deletion_only_data)):
+            if deletion_only_data.loc[i, 'update'] == 1:
+                deletion_only_data.loc[i, 'update'] = np.nan
+        return deletion_only_data

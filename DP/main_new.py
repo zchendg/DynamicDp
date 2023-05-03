@@ -71,7 +71,10 @@ def main():
     data = pd.read_csv(args.dataset_path, sep=',').iloc[0:args.data_size]
     # data = auxiliary.process_data(data, sparse=False)
     # data = auxiliary.generate_fixed_size_data(data, args.dynamic_size)
-    data = DataLoader('fixed size', data, args.dynamic_size, logger=logger).dynamic_data
+    data_loader_instance = DataLoader('fixed size', data, args.dynamic_size, logger=logger)
+    data = data_loader_instance.dynamic_data
+    insertion_only_data = data_loader_instance.insertion_only_data
+    deletion_only_data = data_loader_instance.deletion_only_data
     print(data)
     # data = auxiliary.sparse_data(data, 1, 10)
     # data = auxiliary.insert_deletion_data(data, False)

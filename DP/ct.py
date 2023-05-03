@@ -12,17 +12,15 @@ from my_logger import Logger
 data = pd.read_csv('./data/adult.csv')
 config = json.load(open('./data/adult-domain.json'))
 domain = Domain(config.keys(), config.values())
-data_small_size = data[0: 100]
-data_large_size = data[0: 10000]
 epsilon = 1
 clique = ['age']
 member = 'age'
 iteration = 1000
 query_instance = Query(config, query_type='linear query', random_query=True, query_size=100)
 error = []
-index_range = list(range(100, 40000, 500))
+index_range = list(range(1, 40000, 10000))
 
-for size in index_range:
+for size in [1]:
     data_sized = data[0:size]
     approximation_instance = ApproximationInstance(data_sized, domain, epsilon, clique, 'Data', iteration)
     answer_ground_truth = auxiliary1.answer_queries(query_instance.query_type, data_sized, member, query_instance.queries)
