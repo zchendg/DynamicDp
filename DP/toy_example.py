@@ -19,7 +19,7 @@ Iab = np.eye(ab.size)
 Ibc = np.eye(bc.size)
 # measurements = [(Iab, yab, sigma, ('A','B')), (Ibc, ybc, sigma, ('B','C'))]
 # measurements = [(Iab, yab, sigma, ('A','B'))]
-measurements = [(Iab, yab, sigma, ('A','B'))]
+measurements = [(Iab, yab, sigma, ('A', 'B'))]
 engine = FactoredInference(domain, log=True)
 model = engine.estimate(measurements, engine='MD')
 print('model\n', model.synthetic_data().df)

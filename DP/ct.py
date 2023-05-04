@@ -14,8 +14,8 @@ data = pd.read_csv('./data/adult.csv')
 config = json.load(open('./data/adult-domain.json'))
 domain = Domain(config.keys(), config.values())
 epsilon = 1
-clique = ['age']
-member = 'age'
+clique = ['workclass']
+member = 'workclass'
 iteration = 1000
 query_instance = Query(config, query_type='linear query', random_query=True, query_size=100)
 error = []

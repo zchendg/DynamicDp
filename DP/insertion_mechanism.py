@@ -52,25 +52,27 @@ class InsertionMechanism:
 
     def testing(self, ipp_instance, epsilon=1, delta=0, beta=0.05, iteration=500,
                 logger=None):
-        for index in range(1, len(ipp_instance.get_segment()) - 1):
-            logger.info('++++++++ Testing on node %d Started ++++++++' % index)
-            self.testing_index(index, epsilon, delta, beta, iteration, logger)
-            logger.info('++++++++ Testing on node %d Finished ++++++++' % index)
+        for member in self.query_instance.queries.keys():
+            self.answer_ground_truth[member] = {}
+            self.answer_mechanism[member] = {}
+            logger.info('++++++++ Testing on Insertion-Only Mechanism ++++++++')
+            logger.info('########  The testing is implemented at %s ########' % member)
+            for index in range(1, len(ipp_instance.get_segment()) - 1):
+                logger.info('++++++++ Testing on node %d Started ++++++++' % index)
+                self.testing_index(index, member, epsilon, delta, beta, iteration, logger)
+                logger.info('++++++++ Testing on node %d Finished ++++++++' % index)
 
-    def testing_index(self, index, epsilon=1, delta=0, beta=0.05, iteration=500, logger=None):
+    def testing_index(self, index, member, epsilon=1, delta=0, beta=0.05, iteration=500, logger=None):
         query_nodes = self.query_nodes(index)
         query_nodes.reverse()
-        for member in self.query_instance.queries.keys():
-            self.answer_ground_truth[member][index] = self.answer_queries_ground_truth(index,
-                                                                                       self.query_instance.queries,
-                                                                                       member, logger)
-            self.answer_mechanism[member][index] = self.answer_queries_baseline3(query_nodes, index, self.query_instance.queries, member, epsilon, beta, iteration, logger)
-            logger.info('The testing is implemented at %s' % member)
-            logger.info('Ground truth: gives answer')
-            auxiliary1.output_answer(self.answer_ground_truth[member][index], member, self.query_instance, logger)
-            logger.info('Mechanism: gives answer')
-            auxiliary1.output_answer(self.answer_mechanism[member][index], member, self.query_instance, logger)
-        return
+        self.answer_ground_truth[member][index] = self.answer_queries_ground_truth(index,
+                                                                                   self.query_instance.queries,
+                                                                                   member, logger)
+        self.answer_mechanism[member][index] = self.answer_queries_baseline3(query_nodes, index, self.query_instance.queries, member, epsilon, beta, iteration, logger)
+        logger.info('Ground truth: gives answer')
+        auxiliary1.output_answer(self.query_instance.query_type, self.answer_ground_truth[member][index], member, self.query_instance, logger)
+        logger.info('Mechanism: gives answer')
+        auxiliary1.output_answer(self.query_instance.query_type, self.answer_mechanism[member][index], member, self.query_instance, logger)
 
     def answer_queries_ground_truth(self, cur_index, queries, member, logger=None):
         current_dataset = self.find_current_dataset(cur_index, logger)

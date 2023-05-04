@@ -69,6 +69,8 @@ class DynamicTree:
             self.answer_golden_standard[member] = {}
             self.answer_mechanism[member] = {}
             self.node_answer_dict[member] = self.answer_node_mechanism2(self.query_instance.queries, member, epsilon, beta, delta, iteration, logger)
+            logger.info('++++++++ Testing on New Mechanism ++++++++')
+            logger.info('########  The testing is implemented at %s ########' % member)
             for index in range(1, len(ipp_instance.get_segment()) - 1):
                 logger.info('++++++++ Testing on node %d Started ++++++++' % index)
                 self.testing_index(index, member, epsilon, delta, beta, iteration, logger)
@@ -77,8 +79,6 @@ class DynamicTree:
     # Implement testing for at particular position, this function
     def testing_index(self, index, member, epsilon=1, delta=0, beta=0.05, iteration=500,
                       logger=None):
-        logger.info(
-            'At node with index %d, we implement queries on member: %s:' % (index, member))
         query_nodes = self.query_nodes(index)
         query_nodes.reverse()
         self.answer_ground_truth[member][index] = self.answer_queries_ground_truth(query_nodes, index,
@@ -97,10 +97,10 @@ class DynamicTree:
         logger.info('Ground truth: gives answer')
         auxiliary1.output_answer(self.query_instance.query_type, self.answer_ground_truth[member][index], member,
                                  self.query_instance, logger)
-        logger.info('Golden standard: gives answer')
+        logger.info('Golden standard: gives answer\n')
         auxiliary1.output_answer(self.query_instance.query_type, self.answer_golden_standard[member][index], member,
                                  self.query_instance, logger)
-        logger.info('Mechanism: gives answer')
+        logger.info('Mechanism: gives answer\n')
         auxiliary1.output_answer(self.query_instance.query_type, self.answer_mechanism[member][index], member,
                                  self.query_instance, logger)
 

@@ -26,5 +26,5 @@ class ApproximationInstance:
             measurements.append((I, y, sigma, cl))
         engine = FactoredInference(self.domain, log=True, iters=iters)
         # model = engine.estimate(measurements, total=self.total)
-        model = engine.estimate(measurements, total=self.total+1)
+        model = engine.estimate(measurements, total=self.total + 1)
         return model.synthetic_data(), model

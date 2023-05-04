@@ -200,7 +200,7 @@ class Query:
         logger.info('Query instance consist of clique: %s' % self.clique)
         for member in self.clique:
             if self.query_type == 'linear query':
-                logger.info('linear query parameters are: %s' % self.parameters[member])
+                logger.info('linear query parameters are: \n%s' % self.parameters[member])
             elif self.query_type == 'range query':
                 logger.info('range query_instance.length_size[%s]: %s' % (member, self.length_size[member]))
                 for length in self.parameters[member].keys():

@@ -1,10 +1,10 @@
+import json
+
 import numpy as np
 import pandas as pd
-import json
-from approximation_instance import ApproximationInstance
-from mbi import Domain, Dataset
+from mbi import Domain
+
 from query import Query
-from my_logger import Logger
 
 domain = "/Users/chenzijun/Library/CloudStorage/OneDrive-HKUSTConnect/Study/Program/DP/data/adult-domain.json"
 config = json.load(open(domain))
